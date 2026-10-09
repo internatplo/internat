@@ -1,0 +1,3297 @@
+<!DOCTYPE html>
+<!--
+  SYSTEM OBECNOŚCI W INTERNACIE – APLIKACJA (stanowisko przy drzwiach + panel wychowawcy)
+  Wersja 1.0
+
+  Ten plik umieść na GitHub Pages jako index.html (patrz instrukcja instalacji).
+  Adres serwera możesz wpisać niżej w stałej ADRES_SERWERA albo podać przy pierwszym uruchomieniu.
+  Plik nie zawiera żadnych danych uczniów – dane są tylko w Twoim arkuszu Google.
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16202c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Internat – obecność</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232453c4'/%3E%3Cpath d='M18 50V24l14-10 14 10v26H36V38h-8v12z' fill='white'/%3E%3C/svg%3E">
+<style>
+:root {
+  --tlo: #eef2f6; --karta: #ffffff; --tekst: #17212b; --tekst2: #546170; --tekst3: #8592a1; --linia: #dce3ea; --linia2: #edf1f5;
+  --akcent: #2453c4; --akcent2: #1b3f97; --akcent-tlo: #e8eefc;
+  --in: #157a40; --in-tlo: #e0f2e7; --in-mocny: #1d8f4d;
+  --out: #a55200; --out-tlo: #fff0da; --out-mocny: #d9730d;
+  --home: #2453c4; --home-tlo: #e5ecfc; --home-mocny: #2f63d8;
+  --late: #bd2525; --late-tlo: #fde4e4;
+  --nota: #6b4f00; --nota-tlo: #fff4cc;
+  --cien: 0 1px 2px rgba(16, 24, 40, .05), 0 3px 12px rgba(16, 24, 40, .06);
+  --cien2: 0 10px 40px rgba(16, 24, 40, .22);
+  --r: 14px;
+  --czcionka: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--tlo); color: var(--tekst); -webkit-text-size-adjust: 100%; }
+body { font: 16px/1.45 var(--czcionka); min-height: 100vh; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } h3 { font-size: 1rem; }
+p { margin: 0 0 .75em; }
+a { color: var(--akcent); }
+.ukryte { display: none !important; }
+.szary { color: var(--tekst2); font-size: .88em; }
+.maly-tekst { font-size: .85rem; color: var(--tekst2); }
+.ikona { width: 1.25em; height: 1.25em; flex: none; display: inline-block; vertical-align: -0.22em; }
+.ikona svg { width: 100%; height: 100%; display: block; }
+
+/* przyciski i pola */
+.przycisk { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border: 1px solid transparent; border-radius: 10px;
+  padding: .6em 1em; font-weight: 600; background: var(--akcent); color: #fff; min-height: 44px; transition: filter .15s, transform .05s; text-decoration: none; }
+.przycisk:hover { filter: brightness(1.06); }
+.przycisk:active { transform: translateY(1px); }
+.przycisk:disabled { opacity: .55; cursor: default; filter: none; transform: none; }
+.przycisk.drugi { background: var(--karta); color: var(--tekst); border-color: var(--linia); }
+.przycisk.drugi:hover { background: #f6f8fa; filter: none; }
+.przycisk.niebezp { background: var(--late); }
+.przycisk.maly { min-height: 34px; padding: .35em .75em; font-size: .9rem; border-radius: 8px; }
+.przycisk.duzy { min-height: 54px; font-size: 1.05rem; padding: .8em 1.4em; }
+.przycisk.szeroki { width: 100%; }
+.link { background: none; border: 0; color: var(--akcent); padding: .4em 0; text-decoration: underline; font-size: .9rem; }
+.ikona-btn { background: transparent; border: 0; color: inherit; width: 44px; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; }
+.ikona-btn:hover { background: rgba(255, 255, 255, .1); }
+.ikona-btn .ikona { width: 24px; height: 24px; }
+label { display: block; font-weight: 600; font-size: .9rem; margin: .8em 0 .35em; }
+.pole, input[type=text], input[type=password], input[type=search], input[type=date], input[type=datetime-local], select, textarea {
+  width: 100%; border: 1px solid var(--linia); border-radius: 10px; padding: .6em .75em; background: #fff; min-height: 44px; }
+textarea { min-height: 90px; resize: vertical; }
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px solid rgba(36, 83, 196, .3); outline-offset: 1px; border-color: var(--akcent); }
+.blad-tekst { color: var(--late); font-weight: 600; min-height: 1.4em; margin: .6em 0 0; }
+.przyciski { display: flex; gap: .6em; flex-wrap: wrap; align-items: center; }
+
+/* karty i chipy */
+.karta { background: var(--karta); border-radius: var(--r); box-shadow: var(--cien); padding: 20px; }
+.chip { display: inline-flex; align-items: center; gap: .35em; padding: .2em .65em; border-radius: 999px; font-size: .85rem; font-weight: 600; white-space: nowrap; }
+.chip::before { content: ""; width: .5em; height: .5em; border-radius: 50%; background: currentColor; }
+.chip.s-IN { background: var(--in-tlo); color: var(--in); }
+.chip.s-OUT { background: var(--out-tlo); color: var(--out); }
+.chip.s-HOME { background: var(--home-tlo); color: var(--home); }
+.chip.s-LATE { background: var(--late-tlo); color: var(--late); }
+.chip.s-NOTA { background: var(--nota-tlo); color: var(--nota); }
+.chip.s-NOTA::before { display: none; }
+
+/* ekran logowania / konfiguracji */
+.ekran-srodek { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+.okno-wejscia { width: 100%; max-width: 440px; }
+.okno-wejscia .logo { width: 56px; height: 56px; border-radius: 16px; background: var(--akcent); color: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.okno-wejscia .logo .ikona { width: 30px; height: 30px; }
+.okno-wejscia h1 { margin-bottom: .2em; }
+.okno-wejscia .podtytul { color: var(--tekst2); margin-bottom: 1.2em; }
+.okno-wejscia details { margin-top: 1em; font-size: .9rem; color: var(--tekst2); }
+.okno-wejscia summary { cursor: pointer; color: var(--akcent); }
+.okno-wejscia ol { padding-left: 1.2em; }
+
+/* ── STANOWISKO PRZY DRZWIACH ── */
+.sk { min-height: 100vh; display: flex; flex-direction: column; background: #16202c; color: #f1f5f9; }
+.sk-gora { display: flex; align-items: center; gap: 16px; padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top)); flex-wrap: wrap; }
+.sk-tytul { flex: 1 1 200px; min-width: 0; }
+.sk-nazwa { font-weight: 700; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk-zegar { font-size: .9rem; color: #9fb0c3; font-variant-numeric: tabular-nums; }
+.sk-licz { display: flex; gap: 8px; flex-wrap: wrap; }
+.sk-licz .l { background: rgba(255, 255, 255, .07); border-radius: 10px; padding: 6px 12px; text-align: center; min-width: 92px; }
+.sk-licz .l b { display: block; font-size: 1.35rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.sk-licz .l span { font-size: .75rem; color: #b9c6d4; }
+.sk-licz .l.IN b { color: #6fdc9b; } .sk-licz .l.OUT b { color: #ffb45c; } .sk-licz .l.HOME b { color: #8fb1ff; }
+.sk-prawa { display: flex; align-items: center; gap: 6px; }
+.siec { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, .08); color: #c8d4e0; white-space: nowrap; }
+.siec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #8592a1; }
+.siec.ok::before { background: #4ade80; } .siec.czeka::before { background: #fbbf24; } .siec.brak::before { background: #f87171; }
+.sk-glowna { flex: 1; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 16px; padding: 0 16px 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.sk-kamera-pole { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.sk-kamera { position: relative; flex: 1; min-height: 300px; border-radius: 18px; overflow: hidden; background: #0b1119; }
+.sk-kamera video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sk-kamera.lustro video { transform: scaleX(-1); }
+.sk-ramka { position: absolute; left: 50%; top: 50%; width: min(62%, 62vh); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 22px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, .28); border: 3px solid rgba(255, 255, 255, .85); pointer-events: none; }
+.sk-ramka::after { content: ""; position: absolute; left: 8%; right: 8%; height: 2px; top: 50%; background: rgba(111, 220, 155, .9); box-shadow: 0 0 12px rgba(111, 220, 155, .9); animation: skan 2.2s ease-in-out infinite; }
+@keyframes skan { 0%, 100% { top: 12%; } 50% { top: 88%; } }
+@media (prefers-reduced-motion: reduce) { .sk-ramka::after { animation: none; } }
+.sk-kamera-info { position: absolute; inset: auto 12px 12px 12px; background: rgba(11, 17, 25, .78); border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+.sk-kamera-info:empty { display: none; }
+.sk-kamera-info .przycisk { margin-top: 8px; }
+.sk-wskazowka { text-align: center; font-size: 1.25rem; font-weight: 700; }
+.sk-wskazowka small { display: block; font-size: .85rem; font-weight: 400; color: #9fb0c3; }
+.sk-boczny { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.sk-boczny .przycisk.drugi { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .14); color: #f1f5f9; min-height: 64px; font-size: 1.1rem; }
+.sk-boczny .przycisk.drugi:hover { background: rgba(255, 255, 255, .13); }
+.sk-info { background: rgba(255, 255, 255, .06); border-radius: 14px; padding: 12px 14px; font-size: .92rem; color: #c8d4e0; }
+.sk-info b { color: #fff; }
+.sk-ostatnie-pole { background: rgba(255, 255, 255, .04); border-radius: 14px; padding: 12px 14px; flex: 1; min-height: 0; overflow: auto; }
+.sk-ostatnie-pole h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: #9fb0c3; margin-bottom: 8px; }
+.sk-ostatnie { list-style: none; margin: 0; padding: 0; }
+.sk-ostatnie li { display: grid; grid-template-columns: 46px 1fr auto 18px; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: .92rem; }
+.sk-ostatnie li:last-child { border-bottom: 0; }
+.sk-ostatnie .czas { color: #9fb0c3; font-variant-numeric: tabular-nums; }
+.sk-ostatnie .kto { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk-ostatnie .co { font-size: .8rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.co.a-WEJSCIE { background: rgba(111, 220, 155, .16); color: #8be3ad; }
+.co.a-WYJSCIE { background: rgba(255, 180, 92, .16); color: #ffc47f; }
+.co.a-DOM { background: rgba(143, 177, 255, .18); color: #a9c3ff; }
+.sk-ostatnie .sync { text-align: center; }
+.sync.czeka { color: #fbbf24; } .sync.ok { color: #4ade80; } .sync.blad { color: #f87171; }
+.sk-pusto { color: #8592a1; font-size: .9rem; }
+@media (max-width: 860px), (orientation: portrait) {
+  .sk-glowna { grid-template-columns: 1fr; }
+  .sk-kamera { min-height: 46vh; }
+}
+
+/* nakładki */
+.nakladka { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(10, 16, 24, .62); animation: pojaw .15s ease-out; overflow: auto; }
+@keyframes pojaw { from { opacity: 0; } to { opacity: 1; } }
+.okno { background: var(--karta); color: var(--tekst); border-radius: 18px; box-shadow: var(--cien2); width: 100%; max-width: 560px; padding: 22px; max-height: calc(100vh - 32px); overflow: auto; }
+.okno.szerokie { max-width: 860px; }
+.okno .stopka { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 18px; }
+.okno ul.ostrzezenia { padding-left: 1.2em; margin: 0 0 .5em; }
+.okno ul.ostrzezenia li { margin-bottom: .4em; }
+
+/* karta ucznia na stanowisku */
+.ku { max-width: 980px; padding: 26px; }
+.ku-glowa { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; }
+.ku-awatar { width: 72px; height: 72px; border-radius: 50%; background: var(--akcent-tlo); color: var(--akcent); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex: none; }
+.ku-nazwa { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; line-height: 1.1; }
+.ku-info { color: var(--tekst2); font-size: 1.05rem; margin-top: 4px; }
+.ku-status { margin: 4px 0 20px; font-size: 1.05rem; }
+.ku-akcje { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.akcja { border: 0; border-radius: 18px; padding: 22px 14px; color: #fff; display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 170px; justify-content: center; text-align: center; transition: transform .06s, filter .15s; }
+.akcja:active { transform: scale(.98); }
+.akcja .ikona { width: 46px; height: 46px; }
+.akcja .opis { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.akcja b { font-size: 1.45rem; }
+.akcja small { font-size: .95rem; opacity: .92; }
+.akcja.a-WEJSCIE { background: var(--in-mocny); }
+.akcja.a-WYJSCIE { background: var(--out-mocny); }
+.akcja.a-DOM { background: var(--home-mocny); }
+.akcja.ten-sam { filter: saturate(.25) brightness(1.05); opacity: .7; }
+.ku-dol { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .ku-akcje { grid-template-columns: 1fr; }
+  .akcja { min-height: 92px; flex-direction: row; justify-content: flex-start; padding: 16px 20px; text-align: left; }
+  .akcja .ikona { width: 36px; height: 36px; }
+  .akcja .opis { align-items: flex-start; }
+}
+
+/* potwierdzenie */
+.potw { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; color: #fff; padding: 24px; animation: pojaw .12s ease-out; cursor: pointer; }
+.potw.a-WEJSCIE { background: var(--in-mocny); } .potw.a-WYJSCIE { background: var(--out-mocny); } .potw.a-DOM { background: var(--home-mocny); }
+.potw .znak { width: 120px; height: 120px; border-radius: 50%; background: rgba(255, 255, 255, .2); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+.potw .znak .ikona { width: 72px; height: 72px; }
+.potw .imie { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1; }
+.potw .co { font-size: clamp(1.3rem, 3vw, 1.8rem); margin-top: 8px; background: none; }
+.potw .dodatkowe { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.potw .dodatkowe div { background: rgba(255, 255, 255, .18); border-radius: 12px; padding: 8px 16px; font-size: 1.15rem; font-weight: 600; }
+.potw .dodatkowe .wazne { background: #fff; color: var(--late); }
+
+/* wyszukiwarka */
+.szukaj-lista { list-style: none; margin: 12px 0 0; padding: 0; max-height: 55vh; overflow: auto; }
+.szukaj-lista li button { width: 100%; text-align: left; display: flex; align-items: center; gap: 12px; padding: 12px; border: 0; background: none; border-radius: 10px; }
+.szukaj-lista li button:hover, .szukaj-lista li button:focus { background: var(--tlo); }
+.szukaj-lista .n { font-weight: 700; } .szukaj-lista .d { color: var(--tekst2); font-size: .9rem; }
+.szukaj-lista .prawo { margin-left: auto; }
+
+/* ── PANEL ── */
+.pn { min-height: 100vh; }
+.pn-gora { background: #16202c; color: #f1f5f9; padding: 14px 20px; padding-top: max(14px, env(safe-area-inset-top)); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.pn-gora .tytul { flex: 1 1 220px; min-width: 0; }
+.pn-gora .tytul b { font-size: 1.15rem; display: block; }
+.pn-gora .tytul span { color: #9fb0c3; font-size: .85rem; }
+.pn-gora .przycisk.drugi { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .16); color: #f1f5f9; }
+.pn-srodek { max-width: 1240px; margin: 0 auto; padding: 18px 16px 40px; }
+.pn-kpi { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi { background: var(--karta); border-radius: var(--r); box-shadow: var(--cien); padding: 14px 16px; border: 2px solid transparent; text-align: left; cursor: pointer; }
+.kpi:hover { border-color: var(--linia); }
+.kpi.aktywny { border-color: var(--akcent); }
+.kpi .liczba { font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.kpi .opis { color: var(--tekst2); font-size: .9rem; font-weight: 600; }
+.kpi .pod { font-size: .8rem; color: var(--tekst3); margin-top: 2px; }
+.kpi.k-IN .liczba { color: var(--in); } .kpi.k-OUT .liczba { color: var(--out); } .kpi.k-HOME .liczba { color: var(--home); }
+.kpi.k-LATE .liczba { color: var(--tekst3); } .kpi.k-LATE.jest { background: var(--late-tlo); } .kpi.k-LATE.jest .liczba { color: var(--late); }
+@media (max-width: 900px) { .pn-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kpi.k-ALL { grid-column: 1 / -1; } }
+.zakladki { display: flex; gap: 4px; border-bottom: 1px solid var(--linia); margin-bottom: 16px; overflow-x: auto; scrollbar-width: none; }
+.zakladki button { background: none; border: 0; padding: 12px 16px; font-weight: 600; color: var(--tekst2); border-bottom: 3px solid transparent; white-space: nowrap; }
+.zakladki button.aktywna { color: var(--akcent); border-bottom-color: var(--akcent); }
+.narzedzia { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.narzedzia input[type=search] { flex: 1 1 260px; width: auto; }
+.narzedzia select { width: auto; }
+.filtry { display: flex; gap: 6px; flex-wrap: wrap; }
+.filtr { border: 1px solid var(--linia); background: var(--karta); border-radius: 999px; padding: 6px 12px; font-size: .9rem; font-weight: 600; color: var(--tekst2); min-height: 38px; }
+.filtr span { color: var(--tekst3); font-weight: 700; margin-left: 2px; }
+.filtr.aktywny { background: var(--akcent); border-color: var(--akcent); color: #fff; }
+.filtr.aktywny span { color: rgba(255, 255, 255, .8); }
+.tabela-opak { background: var(--karta); border-radius: var(--r); box-shadow: var(--cien); overflow: auto; }
+table.tabela { width: 100%; border-collapse: collapse; font-size: .93rem; }
+.tabela th { text-align: left; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--tekst2); padding: 10px 12px; border-bottom: 1px solid var(--linia); background: #f8fafc; position: sticky; top: 0; z-index: 1; white-space: nowrap; }
+.tabela td { padding: 10px 12px; border-bottom: 1px solid var(--linia2); vertical-align: middle; }
+.tabela tr:last-child td { border-bottom: 0; }
+.tabela tr.w-LATE td { background: #fff7f7; }
+.tabela .uczen-nazwa { font-weight: 700; }
+.tabela .uczen-pod { display: none; color: var(--tekst2); font-size: .85rem; }
+.tabela .num { text-align: right; font-variant-numeric: tabular-nums; }
+.tabela td.akcje { text-align: right; white-space: nowrap; }
+.tabela .nota { display: inline-block; background: var(--nota-tlo); color: var(--nota); border-radius: 8px; padding: 2px 8px; font-size: .85rem; }
+@media (max-width: 720px) {
+  .tabela .tylko-szeroki { display: none; }
+  .tabela .uczen-pod { display: block; }
+  .tabela td, .tabela th { padding: 9px 8px; }
+}
+.pusto { padding: 28px; text-align: center; color: var(--tekst2); }
+.siatka2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .siatka2 { grid-template-columns: 1fr; } }
+.stos { display: flex; flex-direction: column; gap: 16px; }
+.naglowek-karty { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.naglowek-karty h2 { margin: 0; }
+.licznik-duzy { font-size: 1.1rem; font-weight: 800; color: var(--tekst2); }
+.podsumowanie { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+.podsumowanie .chip::before { display: none; }
+.chip.neutral { background: #eef2f6; color: var(--tekst); }
+.siatka-qr { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-top: 12px; }
+.kafel-qr { border: 1px solid var(--linia); border-radius: 12px; padding: 10px; text-align: center; background: #fff; }
+.kafel-qr canvas { width: 108px; height: 108px; image-rendering: pixelated; }
+.kafel-qr .n { font-weight: 700; font-size: .92rem; margin-top: 4px; }
+.kafel-qr .d { font-size: .8rem; color: var(--tekst2); margin-bottom: 6px; }
+.podglad-importu { max-height: 340px; overflow: auto; margin: 12px 0; border: 1px solid var(--linia); border-radius: 10px; }
+.podglad-importu table { font-size: .88rem; }
+.zly td { color: var(--late); }
+.istnieje td { color: var(--tekst3); }
+.urzadzenie-qr { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.urzadzenie-qr canvas { width: 160px; height: 160px; image-rendering: pixelated; border: 1px solid var(--linia); border-radius: 10px; }
+.kod-tekst { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .82rem; word-break: break-all; background: #f3f5f8; padding: 8px 10px; border-radius: 8px; }
+.ustawienia-lista { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: .93rem; }
+.ustawienia-lista dt { color: var(--tekst2); } .ustawienia-lista dd { margin: 0; font-weight: 600; }
+.formularz-historii { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 10px; align-items: end; }
+.formularz-historii label { margin-top: 0; }
+@media (max-width: 900px) { .formularz-historii { grid-template-columns: 1fr 1fr; } }
+.szybkie { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.trzy { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.wybor { border: 2px solid var(--linia); background: #fff; border-radius: 12px; padding: 12px 8px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.wybor .ikona { width: 26px; height: 26px; }
+.wybor.a-WEJSCIE { color: var(--in); } .wybor.a-WYJSCIE { color: var(--out); } .wybor.a-DOM { color: var(--home); }
+.wybor.wybrany.a-WEJSCIE { background: var(--in-tlo); border-color: var(--in); }
+.wybor.wybrany.a-WYJSCIE { background: var(--out-tlo); border-color: var(--out); }
+.wybor.wybrany.a-DOM { background: var(--home-tlo); border-color: var(--home); }
+hr.cienka { border: 0; border-top: 1px solid var(--linia); margin: 18px 0; }
+
+/* powiadomienia */
+#powiadomienia { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 100; display: flex; flex-direction: column; gap: 8px; align-items: center; width: min(560px, calc(100% - 24px)); pointer-events: none; }
+.toast { background: #16202c; color: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: var(--cien2); font-weight: 600; pointer-events: auto; animation: pojaw .15s ease-out; max-width: 100%; }
+.toast.blad { background: var(--late); } .toast.ok { background: var(--in); }
+
+/* wydruk */
+#wydruk { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body.drukowanie { background: #fff; }
+  body.drukowanie > *:not(#wydruk) { display: none !important; }
+  body.drukowanie #wydruk { display: block; color: #000; font: 11pt/1.35 var(--czcionka); }
+  #wydruk h1 { font-size: 16pt; margin: 0 0 4mm; }
+  #wydruk .meta { color: #444; margin-bottom: 5mm; }
+  #wydruk table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 6mm; }
+  #wydruk th, #wydruk td { border: 0.3mm solid #999; padding: 1.4mm 2mm; text-align: left; }
+  #wydruk th { background: #eee; }
+  #wydruk .dwie { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  #wydruk .karty { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  #wydruk .karta-qr { border: 0.3mm dashed #999; padding: 2mm; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+  #wydruk .karta-qr img { width: 100%; height: auto; display: block; }
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:20px">Ta aplikacja wymaga włączonej obsługi JavaScript.</p></noscript>
+<div id="aplikacja"></div>
+<div id="nakladki"></div>
+<div id="powiadomienia" aria-live="polite"></div>
+<div id="wydruk"></div>
+
+<script>
+/*! Koder QR: „QRCode for JavaScript” – Copyright (c) 2009 Kazuhiko Arase, licencja MIT
+ *  (http://www.opensource.org/licenses/mit-license.php). „QR Code” jest znakiem towarowym DENSO WAVE INCORPORATED. */
+var QRMacierz = (function () {
+'use strict';
+var QRMode = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+var QRErrorCorrectLevel = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+var QRMaskPattern = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+
+  return function (tekst) {
+    var bajty = unescape(encodeURIComponent(String(tekst)));   // UTF-8
+    var qr = new QRCode(-1, QRErrorCorrectLevel.M);
+    qr.addData(bajty);
+    qr.make();
+    var n = qr.getModuleCount(), m = [];
+    for (var r = 0; r < n; r++) { var w = []; for (var c = 0; c < n; c++) w.push(qr.isDark(r, c)); m.push(w); }
+    return m;
+  };
+})();
+</script>
+<script>
+'use strict';
+
+// ═══════════════════════════ KONFIGURACJA ═══════════════════════════
+// Adres serwera z Google Apps Script (Wdróż → Zarządzaj wdrożeniami → „Adres URL aplikacji internetowej”, kończy się na /exec).
+// Możesz wkleić go między apostrofy – wtedy każde urządzenie od razu łączy się z serwerem.
+// Jeśli zostawisz puste, aplikacja zapyta o adres przy pierwszym uruchomieniu.
+const ADRES_SERWERA = '';
+
+const WERSJA = '1.0';
+const STREFA = 'Europe/Warsaw';
+const GRANICA_DOBY = 5 * 60;
+const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
+const ODSWIEZANIE_SKANER_MS = 90 * 1000;
+const ODSWIEZANIE_PANEL_MS = 30 * 1000;
+
+const STATUS_AKCJI = { WEJSCIE: 'IN', WYJSCIE: 'OUT', DOM: 'HOME' };
+const STATUS_NAZWA = { IN: 'W internacie', OUT: 'Poza internatem', HOME: 'W domu' };
+const AKCJA_NAZWA = { WEJSCIE: 'Wejście', WYJSCIE: 'Wyjście', DOM: 'Wyjazd do domu' };
+const DNI = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'];
+const DNI_KROTKO = ['pon.', 'wt.', 'śr.', 'czw.', 'pt.', 'sob.', 'niedz.'];
+
+// ═══════════════════════════ IKONY ═══════════════════════════
+const IKONY = {
+  wejscie: '<path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/>',
+  wyjscie: '<path d="M15 17l5-5-5-5M20 12H8"/><path d="M10 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>',
+  dom: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+  szukaj: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  ustawienia: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  ok: '<path d="M20 6L9 17l-5-5"/>',
+  zegar: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  budynek: '<path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-6h4v6"/>',
+  pobierz: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  drukuj: '<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/>',
+  odswiez: '<path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/>',
+  kamera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+  panel: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+  wyloguj: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  uwaga: '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  kopiuj: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
+};
+function ikona(nazwa) {
+  return '<span class="ikona" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (IKONY[nazwa] || '') + '</svg></span>';
+}
+const IKONA_AKCJI = { WEJSCIE: 'wejscie', WYJSCIE: 'wyjscie', DOM: 'dom' };
+
+// ═══════════════════════════ NARZĘDZIA ═══════════════════════════
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+function esc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+const POLSKIE = { 'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z' };
+function norm(t) {
+  let s = String(t == null ? '' : t).toLowerCase().replace(/[ąćęłńóśźż]/g, z => POLSKIE[z]);
+  try { s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) { /* starsza przeglądarka */ }
+  return s.replace(/\s+/g, ' ').trim();
+}
+const porownaj = (typeof Intl !== 'undefined' && Intl.Collator) ? new Intl.Collator('pl', { sensitivity: 'base', numeric: true }).compare : (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+function nowyUid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+}
+function inicjaly(u) { return ((u.i || '').charAt(0) + (u.n || '').charAt(0)).toUpperCase(); }
+function nazwaUcznia(u) { return (u.n + ' ' + u.i).trim(); }
+function imieNazwisko(u) { return (u.i + ' ' + u.n).trim(); }
+
+const Pamiec = {
+  _m: {},
+  get(k, d) {
+    if (Object.prototype.hasOwnProperty.call(this._m, k)) return this._m[k];
+    try { const v = localStorage.getItem('internat_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; }
+  },
+  set(k, v) { this._m[k] = v; try { localStorage.setItem('internat_' + k, JSON.stringify(v)); } catch (e) { /* tryb prywatny – zostaje w pamięci */ } },
+  del(k) { delete this._m[k]; try { localStorage.removeItem('internat_' + k); } catch (e) { /* brak */ } }
+};
+
+// ── czas (zawsze w strefie Europe/Warsaw)
+const fCzesci = new Intl.DateTimeFormat('en-GB', { timeZone: STREFA, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
+const fGodz = new Intl.DateTimeFormat('pl-PL', { timeZone: STREFA, hour: '2-digit', minute: '2-digit' });
+const fGodzSek = new Intl.DateTimeFormat('pl-PL', { timeZone: STREFA, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const fDzienPelny = new Intl.DateTimeFormat('pl-PL', { timeZone: STREFA, weekday: 'long', day: 'numeric', month: 'long' });
+function czesciCzasu(ms) {
+  const p = {};
+  fCzesci.formatToParts(new Date(ms)).forEach(x => { p[x.type] = x.value; });
+  const y = +p.year, mo = +p.month, d = +p.day, h = (+p.hour) % 24, mi = +p.minute, s = +p.second;
+  const dt = new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
+  return { y, mo, d, h, mi, s, min: h * 60 + mi, dzien: dt === 0 ? 7 : dt };
+}
+function teraz() { return Date.now() + (Stan.przesuniecie || 0); }
+function dwa(n) { return String(n).padStart(2, '0'); }
+function godz(ms) { return fGodz.format(new Date(ms)); }
+function godzMin(min) { return dwa(Math.floor(min / 60)) + ':' + dwa(min % 60); }
+function dataISO(ms) { const c = czesciCzasu(ms); return c.y + '-' + dwa(c.mo) + '-' + dwa(c.d); }
+function dataPl(ms) { const c = czesciCzasu(ms); return dwa(c.d) + '.' + dwa(c.mo) + '.' + c.y; }
+function dataGodz(ms) { return dataPl(ms) + ' ' + godz(ms); }
+function kiedy(ms) {
+  const c = czesciCzasu(ms), n = czesciCzasu(teraz());
+  const dni = Math.round((Date.UTC(n.y, n.mo - 1, n.d) - Date.UTC(c.y, c.mo - 1, c.d)) / 864e5);
+  if (dni === 0) return 'dziś ' + godz(ms);
+  if (dni === 1) return 'wczoraj ' + godz(ms);
+  if (dni > 1 && dni < 7) return DNI_KROTKO[c.dzien - 1] + ' ' + godz(ms);
+  return dwa(c.d) + '.' + dwa(c.mo) + ' ' + godz(ms);
+}
+function czasTrwania(min) {
+  min = Math.max(0, Math.round(min));
+  if (min < 60) return min + ' min';
+  const h = Math.floor(min / 60), m = min % 60;
+  if (h < 24) return h + ' h' + (m ? ' ' + m + ' min' : '');
+  const d = Math.floor(h / 24), hh = h % 24;
+  return d + ' d' + (hh ? ' ' + hh + ' h' : '');
+}
+/** Lokalny czas Warszawy (rok, miesiąc, dzień, godzina, minuta) → ms */
+function lokalnyNaMs(y, mo, d, h, mi) {
+  const zgad = Date.UTC(y, mo - 1, d, h, mi);
+  const przes = ms => { const c = czesciCzasu(ms); return Date.UTC(c.y, c.mo - 1, c.d, c.h, c.mi, c.s) - (ms - ms % 1000); };
+  let ms = zgad - przes(zgad);
+  ms = zgad - przes(ms);
+  return ms;
+}
+function dodajDni(iso, n) {
+  const p = iso.split('-').map(Number);
+  return new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)).toISOString().slice(0, 10);
+}
+/** Termin powrotu – ta sama zasada co na serwerze. */
+function terminPowrotu(odMs) {
+  if (!odMs) return null;
+  const c = czesciCzasu(odMs);
+  let dzien = c.dzien, minW = c.min;
+  if (c.min < GRANICA_DOBY) { dzien = dzien === 1 ? 7 : dzien - 1; minW += 1440; }
+  const g = (Stan.ustawienia.powroty || [])[dzien - 1];
+  if (g === null || g === undefined) return null;
+  return odMs - (odMs % 60000) + (g - minW) * 60000;
+}
+function powrotDzis() {
+  const c = czesciCzasu(teraz());
+  let dzien = c.dzien;
+  if (c.min < GRANICA_DOBY) dzien = dzien === 1 ? 7 : dzien - 1;
+  const g = (Stan.ustawienia.powroty || [])[dzien - 1];
+  return g === null || g === undefined ? null : g;
+}
+function czyDzienWyjazdu(ms) {
+  const dni = Stan.ustawienia.dniWyjazdow || [];
+  return !dni.length || dni.indexOf(czesciCzasu(ms).dzien) >= 0;
+}
+function opisDniWyjazdow() {
+  const dni = Stan.ustawienia.dniWyjazdow || [];
+  return dni.length ? dni.map(d => DNI[d - 1]).join(', ') : 'każdy dzień';
+}
+function spozniony(u) { return u.s === 'OUT' && !!u.t && teraz() > u.t; }
+function minutySpoznienia(u) { return spozniony(u) ? Math.round((teraz() - u.t) / 60000) : 0; }
+
+// ═══════════════════════════ POŁĄCZENIE Z SERWEREM ═══════════════════════════
+class BladApi extends Error { constructor(tekst, rodzaj) { super(tekst); this.rodzaj = rodzaj; } }
+function adresSerwera() { return String(ADRES_SERWERA || Pamiec.get('serwer', '') || '').trim(); }
+/** Akceptujemy tylko adresy Google Apps Script (…/exec) – link z obcym adresem nie przejmie logowania. */
+function poprawnyAdres(a) {
+  return /^https:\/\/script\.google\.com\/[^\s?#]+\/exec\/?$/.test(a) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^\s?#]*exec$/.test(a);
+}
+
+async function api(f, a, opcje) {
+  const url = (opcje && opcje.url) || adresSerwera();
+  if (!url) throw new BladApi('Brak adresu serwera.', 'konfig');
+  const limit = (opcje && opcje.limit) || 45000;
+  const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), limit) : null;
+  let odp;
+  try {
+    odp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ f: f, token: Stan.token || '', a: a || {} }),
+      redirect: 'follow',
+      signal: ctrl ? ctrl.signal : undefined
+    });
+  } catch (e) {
+    throw new BladApi(navigator.onLine === false ? 'Brak internetu.' : 'Nie udało się połączyć z serwerem.', 'siec');
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+  if (!odp.ok) throw new BladApi('Serwer odpowiedział błędem (' + odp.status + ').', 'siec');
+  let dane;
+  try { dane = await odp.json(); } catch (e) { throw new BladApi('Serwer zwrócił nieoczekiwaną odpowiedź. Sprawdź adres serwera i ustawienia wdrożenia.', 'serwer'); }
+  Stan.ostatniKontakt = Date.now();
+  Stan.bladSieci = false;
+  if (dane && dane.auth) {
+    sesjaWygasla(dane.blad);
+    throw new BladApi(dane.blad || 'Zaloguj się ponownie.', 'auth');
+  }
+  return dane || {};
+}
+
+// ═══════════════════════════ STAN APLIKACJI ═══════════════════════════
+const Stan = {
+  token: Pamiec.get('token', null),
+  rola: Pamiec.get('rola', null),
+  nazwa: Pamiec.get('nazwa', 'Internat'),
+  uczniowie: Pamiec.get('uczniowie', []),
+  ustawienia: Pamiec.get('ustawienia', { powroty: [1260, 1260, 1260, 1260, 1260, 1260, 1260], dniWyjazdow: [5] }),
+  kolejka: Pamiec.get('kolejka', []),
+  ostatnie: Pamiec.get('ostatnie', []),
+  urzadzenie: Pamiec.get('urzadzenie', 'Stanowisko przy drzwiach'),
+  przesuniecie: 0,
+  widok: null,
+  poKodzie: new Map(),
+  poId: new Map(),
+  timery: [],
+  bladSieci: false,
+  ostatnieOdswiezenie: 0,
+  // panel
+  zakladka: Pamiec.get('zakladka', 'stan'),
+  filtr: 'wszyscy',
+  filtrTekst: '',
+  sortowanie: Pamiec.get('sortowanie', 'status'),
+  hist: null
+};
+
+function normKod(t) {
+  let k = String(t == null ? '' : t).trim().toUpperCase().replace(/\s+/g, '');
+  if (/^\d+$/.test(k)) k = k.replace(/^0+(?=\d)/, '');
+  return k;
+}
+function indeksuj() {
+  Stan.poKodzie = new Map();
+  Stan.poId = new Map();
+  Stan.uczniowie.forEach(u => {
+    Stan.poId.set(u.id, u);
+    if (u.kod) Stan.poKodzie.set(normKod(u.kod), u);
+    if (u.rf) Stan.poKodzie.set(normKod(u.rf), u);
+  });
+}
+function zastosujZdarzenie(u, ev) {
+  const s = STATUS_AKCJI[ev.akcja];
+  if (u.s !== s && u.nt) u.nt = '';
+  u.s = s;
+  u.od = ev.ts;
+  u.t = s === 'OUT' ? terminPowrotu(ev.ts) : null;
+}
+/** Lista z serwera + zdarzenia, które jeszcze czekają w kolejce. */
+function ustawUczniow(lista) {
+  const mapa = new Map(lista.map(u => [u.id, u]));
+  Stan.kolejka.forEach(ev => { const u = mapa.get(ev.id); if (u && (!u.od || ev.ts >= u.od)) zastosujZdarzenie(u, ev); });
+  Stan.uczniowie = lista;
+  indeksuj();
+  Pamiec.set('uczniowie', lista);
+}
+function aktualizujUcznia(nowy) {
+  if (!nowy || !nowy.id) return;
+  const czeka = Stan.kolejka.some(ev => ev.id === nowy.id);
+  if (czeka) return;            // lokalny stan jest nowszy – poczekaj na wysłanie kolejki
+  const i = Stan.uczniowie.findIndex(u => u.id === nowy.id);
+  if (i >= 0) Stan.uczniowie[i] = nowy; else Stan.uczniowie.push(nowy);
+  indeksuj();
+  Pamiec.set('uczniowie', Stan.uczniowie);
+}
+function liczniki() {
+  const c = { razem: 0, IN: 0, OUT: 0, HOME: 0, LATE: 0 };
+  Stan.uczniowie.forEach(u => { c.razem++; c[u.s] = (c[u.s] || 0) + 1; if (spozniony(u)) c.LATE++; });
+  return c;
+}
+
+async function odswiezStan(cicho) {
+  if (Stan.odswiezanie || !Stan.token) return;
+  Stan.odswiezanie = true;
+  try {
+    const d = await api('stan');
+    if (!d.ok) { if (!cicho) toast(d.blad || 'Nie udało się pobrać danych.', 'blad'); return; }
+    Stan.przesuniecie = d.czas - Date.now();
+    Stan.nazwa = d.nazwa; Pamiec.set('nazwa', d.nazwa);
+    Stan.ustawienia = d.ustawienia; Pamiec.set('ustawienia', d.ustawienia);
+    if (d.rola && d.rola !== Stan.rola) { Stan.rola = d.rola; Pamiec.set('rola', d.rola); }
+    ustawUczniow(d.uczniowie || []);
+    Stan.ostatnieOdswiezenie = teraz();
+    Stan.bladSieci = false;
+    przerysuj();
+  } catch (e) {
+    if (e.rodzaj === 'siec') Stan.bladSieci = true;
+    if (!cicho && e.rodzaj !== 'auth') toast(e.message, 'blad');
+  } finally {
+    Stan.odswiezanie = false;
+    odswiezWskaznik();
+  }
+}
+function przerysuj() {
+  if (Stan.widok === 'skaner') odswiezSkanerInfo();
+  else if (Stan.widok === 'panel') { rysujKpi(); rysujZakladke(true); rysujGorePanelu(); }
+}
+
+// ── kolejka zdarzeń (działa też bez internetu)
+function zapiszKolejke() { Pamiec.set('kolejka', Stan.kolejka); }
+async function wyslijKolejke() {
+  if (Stan.wysylanie || !Stan.kolejka.length || !Stan.token) { odswiezWskaznik(); return; }
+  Stan.wysylanie = true;
+  const bylBlad = Stan.bladSieci || !!Stan.ostatniBladSerwera;
+  odswiezWskaznik();
+  try {
+    while (Stan.kolejka.length && Stan.token) {
+      const paczka = Stan.kolejka.slice(0, 20);
+      const d = await api('zapisz', { zdarzenia: paczka });
+      if (!d.ok) {
+        // błąd po stronie serwera (np. chwilowa awaria Google) – zdarzenia zostają w kolejce i zostaną wysłane ponownie
+        if (!d.ponow && Stan.ostatniBladSerwera !== d.blad) toast('Serwer: ' + (d.blad || 'błąd') + ' – ponowię wysyłanie.', 'blad', 6000);
+        Stan.ostatniBladSerwera = d.blad;
+        throw new BladApi(d.blad || 'Błąd serwera', 'serwer');
+      }
+      Stan.ostatniBladSerwera = null;
+      const wyslane = new Set(paczka.map(e => e.uid));
+      Stan.kolejka = Stan.kolejka.filter(e => !wyslane.has(e.uid));
+      zapiszKolejke();
+      (d.wyniki || []).forEach(w => {
+        oznaczOstatnie(w.uid, w.ok ? 'ok' : 'blad');
+        if (!w.ok) toast('Nie zapisano zdarzenia: ' + w.blad, 'blad', 6000);
+      });
+      if (d.czas) Stan.przesuniecie = d.czas - Date.now();
+      (d.uczniowie || []).forEach(aktualizujUcznia);
+      Stan.bladSieci = false;
+      if (Stan.widok === 'skaner') odswiezSkanerInfo();
+    }
+    if (bylBlad && Stan.token) setTimeout(() => odswiezStan(true), 50);   // po przerwie w łączności pobierz pełny stan
+  } catch (e) {
+    if (e.rodzaj === 'siec') Stan.bladSieci = true;
+    if (e.rodzaj !== 'auth') { clearTimeout(Stan.ponowTimer); Stan.ponowTimer = setTimeout(wyslijKolejke, e.rodzaj === 'siec' ? 20000 : 45000); }
+  } finally {
+    Stan.wysylanie = false;
+    odswiezWskaznik();
+  }
+}
+
+function sesjaWygasla(komunikat) {
+  Stan.token = null;
+  Pamiec.del('token');
+  pokazLogowanie(komunikat || 'Sesja wygasła – zaloguj się ponownie.');
+}
+
+// ═══════════════════════════ POWIADOMIENIA I OKNA ═══════════════════════════
+function toast(tekst, typ, czas) {
+  const el = document.createElement('div');
+  el.className = 'toast ' + (typ || '');
+  el.textContent = tekst;
+  $('#powiadomienia').appendChild(el);
+  setTimeout(() => el.remove(), czas || 3500);
+}
+function otworzNakladke(html, opcje) {
+  opcje = opcje || {};
+  const n = document.createElement('div');
+  n.className = 'nakladka ' + (opcje.klasa || '');
+  n.innerHTML = html;
+  n.addEventListener('mousedown', e => { if (e.target === n && opcje.zamykanieTlem !== false) zamknijNakladke(n); });
+  $('#nakladki').appendChild(n);
+  n._naZamkniecie = opcje.naZamkniecie;
+  const pierwsze = n.querySelector('[autofocus]');
+  if (pierwsze) setTimeout(() => pierwsze.focus(), 30);
+  return n;
+}
+function zamknijNakladke(n) {
+  if (!n || !n.parentNode) return;
+  n.remove();
+  if (typeof n._naZamkniecie === 'function') n._naZamkniecie();
+}
+function nakladkiOtwarte() { return $$('#nakladki .nakladka').length; }
+function potwierdz(o) {
+  return new Promise(ok => {
+    const tresc = Array.isArray(o.tresc) ? '<ul class="ostrzezenia">' + o.tresc.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul>' : '<p>' + esc(o.tresc) + '</p>';
+    let wynik = false;
+    const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true">
+        <h2>${o.ikona === false ? '' : ikona('uwaga') + ' '}${esc(o.tytul)}</h2>${tresc}
+        <div class="stopka"><button class="przycisk drugi duzy" data-w="nie">${esc(o.nie || 'Anuluj')}</button>
+        <button class="przycisk duzy ${o.niebezp ? 'niebezp' : ''}" data-w="tak" autofocus>${esc(o.tak || 'OK')}</button></div></div>`,
+    { klasa: 'nad-wszystkim', naZamkniecie: () => ok(wynik) });
+    n.style.zIndex = 70;
+    n.addEventListener('click', e => {
+      const b = e.target.closest('[data-w]');
+      if (!b) return;
+      wynik = b.dataset.w === 'tak';
+      zamknijNakladke(n);
+    });
+  });
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const n = $$('#nakladki .nakladka').pop();
+    if (n) { zamknijNakladke(n); e.preventDefault(); }
+  }
+});
+
+function zaladujSkrypt(src) {
+  zaladujSkrypt._p = zaladujSkrypt._p || {};
+  if (!zaladujSkrypt._p[src]) {
+    zaladujSkrypt._p[src] = new Promise((ok, zle) => {
+      const s = document.createElement('script');
+      s.src = src; s.async = true; s.crossOrigin = 'anonymous';
+      s.onload = ok;
+      s.onerror = () => { delete zaladujSkrypt._p[src]; s.remove(); zle(new Error('Nie udało się wczytać ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+  return zaladujSkrypt._p[src];
+}
+
+// ═══════════════════════════ START ═══════════════════════════
+function zatrzymajTimery() { Stan.timery.forEach(t => clearInterval(t)); Stan.timery = []; }
+
+function start() {
+  try {
+    const p = new URLSearchParams(location.search);
+    const s = (p.get('serwer') || '').trim();
+    if (s && !ADRES_SERWERA && poprawnyAdres(s)) {
+      if (s !== Pamiec.get('serwer', '')) Pamiec.del('nazwa');
+      Pamiec.set('serwer', s);
+      p.delete('serwer');
+      const q = p.toString();
+      history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash);
+    }
+  } catch (e) { /* brak */ }
+  indeksuj();
+  if (!adresSerwera()) return pokazKonfiguracje();
+  if (!Stan.token) return pokazLogowanie();
+  if (Stan.rola === 'panel' && Pamiec.get('widok', 'panel') === 'panel') pokazPanel();
+  else pokazSkaner();
+}
+
+// ── konfiguracja adresu serwera
+function pokazKonfiguracje(komunikat) {
+  zatrzymajWszystko();
+  Stan.widok = 'konfig';
+  $('#aplikacja').innerHTML = `<div class="ekran-srodek"><div class="karta okno-wejscia">
+    <div class="logo">${ikona('budynek')}</div>
+    <h1>Pierwsze uruchomienie</h1>
+    <p class="podtytul">Połącz aplikację z serwerem w Twoim arkuszu Google.</p>
+    <form id="f-konfig" novalidate>
+      <label for="adres">Adres serwera</label>
+      <input id="adres" type="text" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(Pamiec.get('serwer', ''))}">
+      <p class="blad-tekst" id="konfig-blad">${esc(komunikat || '')}</p>
+      <button class="przycisk duzy szeroki" type="submit">Połącz</button>
+    </form>
+    <details><summary>Gdzie znaleźć adres serwera?</summary>
+      <ol><li>Otwórz arkusz Google z danymi → Rozszerzenia → Apps Script.</li>
+      <li>Kliknij <b>Wdróż → Zarządzaj wdrożeniami</b>.</li>
+      <li>Skopiuj <b>Adres URL aplikacji internetowej</b> (kończy się na <b>/exec</b>).</li></ol>
+      <p>Na kolejnych urządzeniach najprościej zeskanować kod z panelu wychowawcy (zakładka „Uczniowie i kody QR”).</p>
+    </details></div></div>`;
+  $('#f-konfig').addEventListener('submit', async e => {
+    e.preventDefault();
+    const adres = $('#adres').value.trim();
+    const blad = $('#konfig-blad');
+    if (!poprawnyAdres(adres)) {
+      blad.textContent = /\/dev\/?$/.test(adres) ? 'To adres testowy (/dev). Użyj adresu wdrożenia, który kończy się na /exec.' : 'Adres powinien zaczynać się od https://script.google.com/ i kończyć na /exec.';
+      return;
+    }
+    const btn = e.submitter || $('#f-konfig button');
+    btn.disabled = true; btn.textContent = 'Łączenie…';
+    try {
+      const d = await api('ping', {}, { url: adres, limit: 30000 });
+      if (!d.ok) throw new BladApi(d.blad || 'Serwer odpowiedział błędem.', 'serwer');
+      Pamiec.set('serwer', adres);
+      Stan.nazwa = d.nazwa || 'Internat'; Pamiec.set('nazwa', Stan.nazwa);
+      pokazLogowanie();
+      toast('Połączono z serwerem.', 'ok');
+    } catch (err) {
+      blad.textContent = err.message + (err.rodzaj === 'siec' ? ' Sprawdź adres oraz czy we wdrożeniu wybrano „Wykonaj jako: Ja” i „Kto ma dostęp: Każdy”.' : '');
+      btn.disabled = false; btn.textContent = 'Połącz';
+    }
+  });
+}
+
+// ── logowanie
+function pokazLogowanie(komunikat) {
+  zatrzymajWszystko();
+  Stan.widok = 'login';
+  $('#aplikacja').innerHTML = `<div class="ekran-srodek"><div class="karta okno-wejscia">
+    <div class="logo">${ikona('budynek')}</div>
+    <h1>${esc(Stan.nazwa)}</h1>
+    <p class="podtytul">System obecności – logowanie</p>
+    <form id="f-login" novalidate>
+      <label for="haslo">PIN stanowiska lub hasło wychowawcy</label>
+      <input id="haslo" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" autofocus>
+      <p class="blad-tekst" id="login-blad">${esc(komunikat || '')}</p>
+      <button class="przycisk duzy szeroki" type="submit">Zaloguj</button>
+    </form>
+    <p class="maly-tekst" style="margin-top:14px">Tablet przy drzwiach logujemy <b>PIN-em stanowiska</b>, a telefon lub komputer wychowawcy – <b>hasłem panelu</b>. Oba znajdziesz w arkuszu „Ustawienia”.</p>
+    ${ADRES_SERWERA ? '' : '<button class="link" data-a="zmien-serwer" type="button">Zmień adres serwera</button>'}
+  </div></div>`;
+  setTimeout(() => { const h = $('#haslo'); if (h) h.focus(); }, 50);
+  if (!Pamiec.get('nazwa', null)) {      // nowe urządzenie – pobierz nazwę internatu z serwera
+    api('ping', {}, { limit: 20000 }).then(d => {
+      if (d && d.ok && d.nazwa) { Stan.nazwa = d.nazwa; Pamiec.set('nazwa', d.nazwa); const h = $('.okno-wejscia h1'); if (h && Stan.widok === 'login') h.textContent = d.nazwa; }
+    }).catch(() => {});
+  }
+  const zmien = $('[data-a="zmien-serwer"]');
+  if (zmien) zmien.addEventListener('click', () => pokazKonfiguracje());
+  $('#f-login').addEventListener('submit', async e => {
+    e.preventDefault();
+    const haslo = $('#haslo').value.trim();
+    const blad = $('#login-blad');
+    if (!haslo) { blad.textContent = 'Wpisz PIN lub hasło.'; return; }
+    const btn = $('#f-login button');
+    btn.disabled = true; btn.textContent = 'Logowanie…';
+    odblokujDzwiek();
+    try {
+      const d = await api('login', { haslo: haslo, urzadzenie: Stan.urzadzenie });
+      if (!d.ok) { blad.textContent = d.blad || 'Nie udało się zalogować.'; btn.disabled = false; btn.textContent = 'Zaloguj'; return; }
+      Stan.token = d.token; Pamiec.set('token', d.token);
+      Stan.rola = d.rola; Pamiec.set('rola', d.rola);
+      if (d.nazwa) { Stan.nazwa = d.nazwa; Pamiec.set('nazwa', d.nazwa); }
+      if (d.rola === 'panel') pokazPanel(); else pokazSkaner();
+    } catch (err) {
+      if (err.rodzaj !== 'auth') blad.textContent = err.message;
+      btn.disabled = false; btn.textContent = 'Zaloguj';
+    }
+  });
+}
+
+async function wyloguj() {
+  const n = Stan.kolejka.length;
+  const ok = await potwierdz(n
+    ? { tytul: 'Niewysłane zdarzenia', tresc: 'Na tym urządzeniu ' + (n === 1 ? 'jest 1 zdarzenie, które jeszcze nie trafiło' : 'są zdarzenia (' + n + '), które jeszcze nie trafiły') + ' na serwer. Wylogowanie je usunie.', tak: 'Wyloguj mimo to', niebezp: true }
+    : { tytul: 'Wylogować to urządzenie?', tresc: 'Do ponownego zalogowania potrzebny będzie PIN lub hasło.', tak: 'Wyloguj' });
+  if (!ok) return;
+  try { await api('wyloguj', {}, { limit: 8000 }); } catch (e) { /* bez znaczenia */ }
+  ['token', 'rola', 'uczniowie', 'kolejka', 'ostatnie', 'widok'].forEach(k => Pamiec.del(k));
+  Stan.token = null; Stan.rola = null; Stan.uczniowie = []; Stan.kolejka = []; Stan.ostatnie = [];
+  indeksuj();
+  pokazLogowanie();
+}
+
+function zatrzymajWszystko() {
+  zatrzymajTimery();
+  const apl = $('#aplikacja');
+  if (apl) apl.onclick = null;
+  Kamera.stop();
+  zwolnijWakeLock();
+  $$('#nakladki .nakladka').forEach(n => n.remove());
+  document.querySelectorAll('.potw').forEach(n => n.remove());
+}
+
+// ═══════════════════════════ KAMERA I SKANOWANIE ═══════════════════════════
+const Kamera = {
+  strumien: null, wideo: null, detektor: null, dziala: false, zajety: false, ostatnia: 0, plotno: null, ctx: null, naKod: null, uruchamianie: null,
+  gen: 0,
+  async start(tryb) {
+    this.stop();
+    const gen = ++this.gen;
+    const wideo = $('#wideo');
+    if (!wideo) return;
+    if (!window.isSecureContext) throw new Error('Kamera działa tylko na stronie https (np. GitHub Pages).');
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Ta przeglądarka nie udostępnia kamery.');
+    await this.przygotujDekoder();
+    if (gen !== this.gen) return;
+    const strumien = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: tryb }, width: { ideal: 1280 }, height: { ideal: 720 } } });
+    if (gen !== this.gen || !document.body.contains(wideo)) { strumien.getTracks().forEach(t => t.stop()); return; }
+    this.wideo = wideo;
+    this.strumien = strumien;
+    wideo.srcObject = strumien;
+    wideo.setAttribute('playsinline', '');
+    wideo.muted = true;
+    await wideo.play().catch(() => {});
+    if (gen !== this.gen) return;
+    this.dziala = true;
+    this.petla();
+  },
+  async przygotujDekoder() {
+    if (this.detektor || window.jsQR) return;
+    if ('BarcodeDetector' in window) {
+      try {
+        const f = await window.BarcodeDetector.getSupportedFormats();
+        if (f.indexOf('qr_code') >= 0) { this.detektor = new window.BarcodeDetector({ formats: ['qr_code'] }); return; }
+      } catch (e) { /* przejdź do jsQR */ }
+    }
+    let ostatniBlad;
+    for (const src of JSQR_ZRODLA) {
+      try { await zaladujSkrypt(src); if (window.jsQR) return; } catch (e) { ostatniBlad = e; }
+    }
+    throw new Error('Nie udało się wczytać modułu rozpoznawania kodów QR – sprawdź internet.' + (ostatniBlad ? '' : ''));
+  },
+  petla() {
+    if (!this.dziala) return;
+    const t = performance.now();
+    if (!this.zajety && t - this.ostatnia >= 180 && this.wideo && this.wideo.readyState >= 2) {
+      this.ostatnia = t;
+      this.zajety = true;
+      this.skanuj().catch(() => {}).then(() => { this.zajety = false; });
+    }
+    this.raf = requestAnimationFrame(() => this.petla());
+  },
+  async skanuj() {
+    const v = this.wideo;
+    let tekst = null;
+    if (this.detektor) {
+      const wynik = await this.detektor.detect(v);
+      if (wynik && wynik.length) tekst = wynik[0].rawValue;
+    } else if (window.jsQR) {
+      const vw = v.videoWidth, vh = v.videoHeight;
+      if (!vw || !vh) return;
+      const sk = Math.min(1, 720 / Math.max(vw, vh));
+      const w = Math.round(vw * sk), h = Math.round(vh * sk);
+      if (!this.plotno) { this.plotno = document.createElement('canvas'); this.ctx = this.plotno.getContext('2d', { willReadFrequently: true }); }
+      this.plotno.width = w; this.plotno.height = h;
+      this.ctx.drawImage(v, 0, 0, w, h);
+      const obraz = this.ctx.getImageData(0, 0, w, h);
+      const kod = window.jsQR(obraz.data, w, h, { inversionAttempts: 'attemptBoth' });
+      if (kod && kod.data) tekst = kod.data;
+    }
+    if (tekst && this.naKod) this.naKod(tekst);
+  },
+  stop() {
+    this.gen++;
+    this.dziala = false;
+    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.strumien) { this.strumien.getTracks().forEach(t => t.stop()); this.strumien = null; }
+    if (this.wideo) { try { this.wideo.srcObject = null; } catch (e) { /* brak */ } }
+  }
+};
+
+async function uruchomKamere() {
+  const info = $('#sk-kamera-info');
+  const pole = $('#sk-kamera');
+  if (!info || !pole) return;
+  const tryb = Pamiec.get('kamera', 'user');
+  pole.classList.toggle('lustro', tryb === 'user');
+  info.textContent = 'Uruchamiam kamerę…';
+  try {
+    await Kamera.start(tryb);
+    if ($('#sk-kamera-info')) $('#sk-kamera-info').textContent = '';
+  } catch (e) {
+    if (!$('#sk-kamera-info')) return;
+    let opis = e && e.message ? e.message : String(e);
+    if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) opis = 'Brak zgody na użycie kamery. Zezwól na kamerę w ustawieniach przeglądarki (ikona kłódki obok adresu → Kamera → Zezwól).';
+    else if (e && (e.name === 'NotFoundError' || e.name === 'OverconstrainedError')) opis = 'Nie znaleziono kamery w tym urządzeniu.';
+    else if (e && e.name === 'NotReadableError') opis = 'Kamera jest używana przez inną aplikację.';
+    $('#sk-kamera-info').innerHTML = '<b>Kamera niedostępna.</b> ' + esc(opis) +
+      '<br>Możesz używać przycisku „Wyszukaj ucznia” albo czytnika USB/RFID.<br><button class="przycisk maly" data-a="kamera-ponow">' + ikona('odswiez') + ' Spróbuj ponownie</button>';
+  }
+}
+
+// czytnik USB (QR / RFID) działa jak klawiatura: wpisuje kod i naciska Enter
+const Czytnik = { bufor: '', ostatni: 0 };
+document.addEventListener('keydown', e => {
+  if (Stan.widok !== 'skaner') return;
+  const a = document.activeElement;
+  if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return;
+  const t = Date.now();
+  if (t - Czytnik.ostatni > 800) Czytnik.bufor = '';
+  Czytnik.ostatni = t;
+  if (e.key === 'Enter') {
+    const kod = Czytnik.bufor.trim();
+    Czytnik.bufor = '';
+    if (kod.length >= 3) { e.preventDefault(); obsluzKod(kod, 'czytnik'); }
+    return;
+  }
+  if (e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) Czytnik.bufor += e.key;
+});
+
+// dźwięk przy skanie
+function odblokujDzwiek() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    Stan.audio = Stan.audio || new AC();
+    if (Stan.audio.state === 'suspended') Stan.audio.resume();
+  } catch (e) { /* brak dźwięku */ }
+}
+function piknij(dobrze) {
+  if (!Pamiec.get('dzwiek', true)) return;
+  try {
+    odblokujDzwiek();
+    const ctx = Stan.audio;
+    if (!ctx) return;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = dobrze ? 1175 : 220;
+    const t0 = ctx.currentTime, dl = dobrze ? 0.14 : 0.35;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dl);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t0); o.stop(t0 + dl + 0.05);
+  } catch (e) { /* brak dźwięku */ }
+}
+async function wlaczWakeLock() {
+  try {
+    if ('wakeLock' in navigator && document.visibilityState === 'visible' && !Stan.wakeLock) {
+      Stan.wakeLock = await navigator.wakeLock.request('screen');
+      Stan.wakeLock.addEventListener('release', () => { Stan.wakeLock = null; });
+    }
+  } catch (e) { Stan.wakeLock = null; }
+}
+function zwolnijWakeLock() {
+  try { if (Stan.wakeLock) Stan.wakeLock.release(); } catch (e) { /* brak */ }
+  Stan.wakeLock = null;
+}
+
+// ═══════════════════════════ STANOWISKO PRZY DRZWIACH ═══════════════════════════
+function pokazSkaner() {
+  zatrzymajWszystko();
+  Stan.widok = 'skaner';
+  Pamiec.set('widok', 'skaner');
+  $('#aplikacja').innerHTML = `<div class="sk">
+    <header class="sk-gora">
+      <div class="sk-tytul"><div class="sk-nazwa">${esc(Stan.nazwa)}</div><div class="sk-zegar" id="sk-zegar"></div></div>
+      <div class="sk-licz" id="sk-licz"></div>
+      <div class="sk-prawa"><span class="siec" id="sk-siec">Łączenie…</span>
+        <button class="ikona-btn" data-a="menu" aria-label="Ustawienia stanowiska" title="Ustawienia stanowiska">${ikona('ustawienia')}</button></div>
+    </header>
+    <main class="sk-glowna">
+      <section class="sk-kamera-pole">
+        <div class="sk-kamera" id="sk-kamera"><video id="wideo" playsinline muted autoplay></video><div class="sk-ramka"></div><div class="sk-kamera-info" id="sk-kamera-info"></div></div>
+        <div class="sk-wskazowka">Pokaż kod QR z telefonu<small>Przytrzymaj ekran telefonu ok. 20 cm od kamery</small></div>
+      </section>
+      <aside class="sk-boczny">
+        <button class="przycisk drugi szeroki" data-a="szukaj">${ikona('szukaj')} Nie mam telefonu – wyszukaj</button>
+        <div class="sk-info" id="sk-info"></div>
+        <div class="sk-ostatnie-pole"><h3>Ostatnie na tym stanowisku</h3><ul class="sk-ostatnie" id="sk-ostatnie"></ul></div>
+      </aside>
+    </main></div>`;
+  $('#aplikacja').onclick = e => {
+    const b = e.target.closest('[data-a]');
+    if (!b) return;
+    odblokujDzwiek();
+    if (b.dataset.a === 'szukaj') pokazWyszukiwarke();
+    else if (b.dataset.a === 'menu') pokazMenuStanowiska();
+    else if (b.dataset.a === 'kamera-ponow') uruchomKamere();
+  };
+  Kamera.naKod = t => obsluzKod(t, 'qr');
+  odswiezSkanerInfo();
+  uruchomKamere();
+  wlaczWakeLock();
+  const zegar = () => { const z = $('#sk-zegar'); if (z) z.textContent = fDzienPelny.format(new Date(teraz())) + ', ' + fGodzSek.format(new Date(teraz())); };
+  zegar();
+  Stan.timery.push(setInterval(zegar, 1000));
+  Stan.timery.push(setInterval(() => { if (document.visibilityState === 'visible') odswiezStan(true); }, ODSWIEZANIE_SKANER_MS));
+  Stan.timery.push(setInterval(() => { odswiezSkanerInfo(); }, 30000));
+  odswiezStan(true);
+  wyslijKolejke();
+}
+
+function odswiezSkanerInfo() {
+  const c = liczniki();
+  const l = $('#sk-licz');
+  if (l) {
+    l.innerHTML = `<div class="l IN"><b>${c.IN}</b><span>w internacie</span></div>
+      <div class="l OUT"><b>${c.OUT}</b><span>poza</span></div>
+      <div class="l HOME"><b>${c.HOME}</b><span>w domu</span></div>`;
+  }
+  const info = $('#sk-info');
+  if (info) {
+    const g = powrotDzis();
+    const dzis = czesciCzasu(teraz()).dzien;
+    const dom = czyDzienWyjazdu(teraz());
+    info.innerHTML = (g !== null ? 'Powrót do internatu dziś do <b>' + godzMin(g) + '</b>.' : 'Dziś bez godziny powrotu.') +
+      '<br>' + (dom ? 'Wyjazdy do domu: <b>dziś tak</b>' : 'Wyjazdy do domu: ' + esc(opisDniWyjazdow()) + ' (dziś ' + DNI[dzis - 1] + ' – wymaga potwierdzenia)') +
+      '<br><span class="maly-tekst" style="color:#9fb0c3">Możesz też przyłożyć kartę lub kod do czytnika USB.</span>';
+  }
+  rysujOstatnie();
+  odswiezWskaznik();
+}
+function odswiezWskaznik() {
+  const s = $('#sk-siec');
+  if (!s) return;
+  const n = Stan.kolejka.length;
+  if (n) { s.className = 'siec ' + (Stan.bladSieci ? 'brak' : 'czeka'); s.textContent = (Stan.bladSieci ? 'Brak internetu – ' : 'Wysyłanie – ') + 'do wysłania: ' + n; }
+  else if (Stan.bladSieci) { s.className = 'siec brak'; s.textContent = 'Brak połączenia'; }
+  else if (Stan.ostatniKontakt) { s.className = 'siec ok'; s.textContent = 'Połączono'; }
+  else { s.className = 'siec'; s.textContent = 'Łączenie…'; }
+}
+function dodajOstatnie(w) {
+  Stan.ostatnie.unshift(w);
+  Stan.ostatnie = Stan.ostatnie.slice(0, 12);
+  Pamiec.set('ostatnie', Stan.ostatnie);
+  rysujOstatnie();
+}
+function oznaczOstatnie(uid, stan) {
+  const w = Stan.ostatnie.find(x => x.uid === uid);
+  if (w) { w.stan = stan; Pamiec.set('ostatnie', Stan.ostatnie); rysujOstatnie(); }
+}
+function rysujOstatnie() {
+  const ul = $('#sk-ostatnie');
+  if (!ul) return;
+  if (!Stan.ostatnie.length) { ul.innerHTML = '<li class="sk-pusto" style="display:block">Jeszcze nikt się nie zeskanował.</li>'; return; }
+  ul.innerHTML = Stan.ostatnie.map(w => `<li><span class="czas">${esc(godz(w.ts))}</span>
+    <span class="kto">${esc(w.imie)} ${esc((w.nazwisko || '').charAt(0))}.</span>
+    <span class="co a-${w.akcja}">${esc(AKCJA_NAZWA[w.akcja])}</span>
+    <span class="sync ${w.stan}" title="${w.stan === 'ok' ? 'Zapisano na serwerze' : w.stan === 'blad' ? 'Błąd zapisu' : 'Czeka na wysłanie'}">${w.stan === 'ok' ? '✓' : w.stan === 'blad' ? '!' : '•'}</span></li>`).join('');
+}
+
+const Skan = { kod: null, czas: 0, karta: null, kartaUczen: null, kartaOd: 0, potw: null };
+
+function obsluzKod(tekst, sposob) {
+  if (Stan.widok !== 'skaner') return;
+  const kod = normKod(tekst);
+  if (!kod) return;
+  const t = Date.now();
+  if (Skan.kod === kod && t - Skan.czas < 4000) { Skan.czas = t; return; }   // ten sam kod wciąż przed kamerą
+  Skan.kod = kod; Skan.czas = t;
+  if ($$('#nakladki .nakladka').some(n => !n.classList.contains('karta-ucznia') && !n.classList.contains('wyszukiwarka'))) return;
+  const u = Stan.poKodzie.get(kod);
+  if (Skan.karta && Skan.karta.parentNode) {
+    if (u && Skan.kartaUczen && u.id === Skan.kartaUczen.id) return;
+    if (t - Skan.kartaOd < 1500) return;
+  }
+  if (!u) {
+    piknij(false);
+    toast(sposob === 'czytnik' ? 'Nieznany kod lub karta: ' + tekst.slice(0, 40) + ' (wpisz go w kolumnie „Karta RFID” w arkuszu)' : 'Nieznany kod QR – ten kod nie należy do żadnego ucznia.', 'blad', 5000);
+    return;
+  }
+  piknij(true);
+  pokazKarteUcznia(u, sposob);
+}
+
+function opisStatusu(u) {
+  const od = u.od ? ' od ' + kiedy(u.od) + ' (' + czasTrwania((teraz() - u.od) / 60000) + ')' : '';
+  let html = '<span class="chip s-' + u.s + '">' + esc(STATUS_NAZWA[u.s]) + '</span><span class="szary">' + esc(od) + '</span>';
+  if (spozniony(u)) html += ' <span class="chip s-LATE">spóźnienie ' + esc(czasTrwania(minutySpoznienia(u))) + '</span>';
+  return html;
+}
+
+function pokazKarteUcznia(u, sposob) {
+  zamknijKarte();
+  zamknijPotwierdzenie();
+  $$('#nakladki .nakladka.wyszukiwarka').forEach(n => zamknijNakladke(n));
+  const opisy = { WEJSCIE: 'wracam do internatu', WYJSCIE: 'wychodzę na miasto', DOM: 'jadę do domu na weekend' };
+  const n = otworzNakladke(`<div class="okno ku" role="dialog" aria-modal="true" aria-label="Wybierz akcję">
+      <div class="ku-glowa"><div class="ku-awatar">${esc(inicjaly(u))}</div>
+        <div><div class="ku-nazwa">${esc(imieNazwisko(u))}</div>
+        <div class="ku-info">${u.k ? 'klasa ' + esc(u.k) : ''}${u.k && u.p ? ' · ' : ''}${u.p ? 'pokój ' + esc(u.p) : ''}</div></div></div>
+      <div class="ku-status">Teraz: ${opisStatusu(u)}</div>
+      <div class="ku-akcje">${['WEJSCIE', 'WYJSCIE', 'DOM'].map(a => `<button class="akcja a-${a} ${u.s === STATUS_AKCJI[a] ? 'ten-sam' : ''}" data-akcja="${a}">
+        ${ikona(IKONA_AKCJI[a])}<span class="opis"><b>${AKCJA_NAZWA[a]}</b><small>${opisy[a]}</small></span></button>`).join('')}</div>
+      <div class="ku-dol"><span class="szary" id="ku-odliczanie"></span><button class="przycisk drugi duzy" data-a="anuluj">Anuluj</button></div>
+    </div>`, { klasa: 'karta-ucznia', naZamkniecie: () => { clearInterval(Skan.odliczanie); Skan.karta = null; Skan.kartaUczen = null; } });
+  Skan.karta = n; Skan.kartaUczen = u; Skan.kartaOd = Date.now();
+  let zostalo = 25;
+  const pokaz = () => { const el = $('#ku-odliczanie'); if (el) el.textContent = 'Zamknie się samo za ' + zostalo + ' s'; };
+  Skan.wznow = () => {
+    zostalo = 25; pokaz();
+    clearInterval(Skan.odliczanie);
+    Skan.odliczanie = setInterval(() => { zostalo--; pokaz(); if (zostalo <= 0) zamknijKarte(); }, 1000);
+  };
+  Skan.wznow();
+  n.addEventListener('click', e => {
+    const b = e.target.closest('[data-akcja],[data-a]');
+    if (!b) return;
+    if (b.dataset.a === 'anuluj') { zamknijKarte(); return; }
+    if (b.dataset.akcja) wybierzAkcje(u, b.dataset.akcja, sposob);
+  });
+}
+function zamknijKarte() { if (Skan.karta) zamknijNakladke(Skan.karta); Skan.karta = null; Skan.kartaUczen = null; clearInterval(Skan.odliczanie); }
+
+async function wybierzAkcje(u, akcja, sposob) {
+  clearInterval(Skan.odliczanie);
+  const ts = teraz();
+  const nowy = STATUS_AKCJI[akcja];
+  const ostrzezenia = [];
+  if (u.s === nowy) ostrzezenia.push(imieNazwisko(u) + ' ma już status „' + STATUS_NAZWA[nowy].toLowerCase() + '”. Może wcześniej ktoś zapomniał się zeskanować?');
+  if (akcja === 'DOM' && !czyDzienWyjazdu(ts)) ostrzezenia.push('Dziś (' + DNI[czesciCzasu(ts).dzien - 1] + ') nie jest ustalony dzień wyjazdów do domu (' + opisDniWyjazdow() + '). Wyjazd musi potwierdzić wychowawca.');
+  if (ostrzezenia.length) {
+    const ok = await potwierdz({ tytul: 'Sprawdź przed zapisem', tresc: ostrzezenia, tak: 'Zapisz mimo to', nie: 'Anuluj' });
+    if (!ok) { if (Skan.karta && Skan.wznow) { Skan.kartaOd = Date.now(); Skan.wznow(); } return; }
+  }
+  u = Stan.poId.get(u.id) || u;     // lista mogła zostać odświeżona, gdy karta była otwarta
+  zamknijKarte();
+  const ev = { uid: nowyUid(), id: u.id, akcja: akcja, ts: ts, sposob: sposob, urzadzenie: Stan.urzadzenie };
+  const spozn = akcja === 'WEJSCIE' && u.s === 'OUT' && u.t && ts > u.t ? Math.round((ts - u.t) / 60000) : 0;
+  const poGodzinie = akcja === 'WYJSCIE' && (() => { const t = terminPowrotu(ts); return t !== null && ts > t; })();
+  Stan.kolejka.push(ev);
+  zapiszKolejke();
+  zastosujZdarzenie(u, ev);
+  Skan.czas = Date.now();            // telefon wciąż przed kamerą – nie otwieraj karty ponownie
+  dodajOstatnie({ uid: ev.uid, ts: ts, imie: u.i, nazwisko: u.n, akcja: akcja, stan: 'czeka' });
+  odswiezSkanerInfo();
+  pokazPotwierdzenie(u, akcja, ts, spozn, poGodzinie);
+  wyslijKolejke();
+}
+
+function pokazPotwierdzenie(u, akcja, ts, spozn, poGodzinie) {
+  zamknijPotwierdzenie();
+  const dodatkowe = [];
+  if (akcja === 'WYJSCIE') {
+    const t = terminPowrotu(ts);
+    if (poGodzinie) dodatkowe.push('<div class="wazne">Wyjście po godzinie powrotu</div>');
+    else if (t !== null) dodatkowe.push('<div>Wróć do ' + esc(godz(t)) + '</div>');
+  }
+  if (akcja === 'WEJSCIE' && spozn > 0) dodatkowe.push('<div class="wazne">Spóźnienie: ' + esc(czasTrwania(spozn)) + '</div>');
+  if (akcja === 'DOM') dodatkowe.push('<div>Szerokiej drogi!</div>');
+  const el = document.createElement('div');
+  el.className = 'potw a-' + akcja;
+  el.setAttribute('role', 'status');
+  el.innerHTML = `<div class="znak">${ikona('ok')}</div><div class="imie">${esc(imieNazwisko(u))}</div>
+    <div class="co">${esc(AKCJA_NAZWA[akcja])} · ${esc(godz(ts))}</div><div class="dodatkowe">${dodatkowe.join('')}</div>`;
+  el.addEventListener('click', zamknijPotwierdzenie);
+  document.body.appendChild(el);
+  Skan.potw = el;
+  clearTimeout(Skan.potwTimer);
+  Skan.potwTimer = setTimeout(zamknijPotwierdzenie, spozn > 0 || poGodzinie ? 4500 : 2600);
+}
+function zamknijPotwierdzenie() { clearTimeout(Skan.potwTimer); if (Skan.potw) Skan.potw.remove(); Skan.potw = null; }
+
+function pokazWyszukiwarke() {
+  const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true">
+      <h2>${ikona('szukaj')} Wyszukaj ucznia</h2>
+      <input type="search" id="ws-tekst" placeholder="Wpisz nazwisko, imię lub klasę" autocomplete="off" autofocus>
+      <ul class="szukaj-lista" id="ws-lista"></ul>
+      <div class="stopka"><button class="przycisk drugi duzy" data-a="zamknij">Zamknij</button></div></div>`, { klasa: 'wyszukiwarka' });
+  const rysuj = () => {
+    const q = norm($('#ws-tekst', n).value);
+    const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.i + ' ' + u.n + ' ' + u.k + ' ' + u.p).indexOf(q) >= 0)
+      .sort((a, b) => porownaj(a.n, b.n) || porownaj(a.i, b.i)).slice(0, 40);
+    $('#ws-lista', n).innerHTML = lista.length ? lista.map(u => `<li><button data-id="${u.id}"><span class="ku-awatar" style="width:40px;height:40px;font-size:.95rem">${esc(inicjaly(u))}</span>
+        <span><span class="n">${esc(nazwaUcznia(u))}</span><br><span class="d">${u.k ? 'klasa ' + esc(u.k) : ''}${u.p ? ' · pokój ' + esc(u.p) : ''}</span></span>
+        <span class="prawo chip s-${u.s}">${esc(STATUS_NAZWA[u.s])}</span></button></li>`).join('')
+      : '<li class="pusto">' + (Stan.uczniowie.length ? 'Brak wyników.' : 'Lista uczniów jest pusta – poczekaj na połączenie z serwerem.') + '</li>';
+  };
+  rysuj();
+  $('#ws-tekst', n).addEventListener('input', rysuj);
+  n.addEventListener('click', e => {
+    if (e.target.closest('[data-a="zamknij"]')) { zamknijNakladke(n); return; }
+    const b = e.target.closest('[data-id]');
+    if (!b) return;
+    const u = Stan.poId.get(Number(b.dataset.id));
+    zamknijNakladke(n);
+    if (u) pokazKarteUcznia(u, 'lista');
+  });
+}
+
+function pokazMenuStanowiska() {
+  const tryb = Pamiec.get('kamera', 'user');
+  const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true">
+      <h2>${ikona('ustawienia')} Ustawienia stanowiska</h2>
+      <label for="m-nazwa">Nazwa stanowiska (widoczna w historii)</label>
+      <input id="m-nazwa" type="text" maxlength="50" value="${esc(Stan.urzadzenie)}">
+      <label>Kamera</label>
+      <div class="przyciski"><button class="przycisk ${tryb === 'user' ? '' : 'drugi'}" data-kamera="user">Przednia (selfie)</button>
+        <button class="przycisk ${tryb === 'environment' ? '' : 'drugi'}" data-kamera="environment">Tylna</button></div>
+      <label><input type="checkbox" id="m-dzwiek" ${Pamiec.get('dzwiek', true) ? 'checked' : ''} style="width:auto;min-height:0;margin-right:8px">Dźwięk przy skanowaniu</label>
+      <hr class="cienka">
+      <p class="maly-tekst">Zdarzenia czekające na wysłanie: <b>${Stan.kolejka.length}</b>${Stan.kolejka.length ? ' <button class="przycisk maly drugi" data-a="wyslij">Wyślij teraz</button>' : ''}<br>
+      Wersja ${WERSJA}${Stan.ostatnieOdswiezenie ? ' · dane z ' + esc(godz(Stan.ostatnieOdswiezenie)) : ''}</p>
+      <div class="stopka">
+        ${Stan.rola === 'panel' ? '<button class="przycisk drugi" data-a="panel">' + ikona('panel') + ' Panel wychowawcy</button>' : ''}
+        <button class="przycisk drugi" data-a="wyloguj">${ikona('wyloguj')} Wyloguj</button>
+        <button class="przycisk" data-a="zamknij">Gotowe</button></div></div>`);
+  n.addEventListener('click', e => {
+    const k = e.target.closest('[data-kamera]');
+    if (k) { Pamiec.set('kamera', k.dataset.kamera); $$('[data-kamera]', n).forEach(x => x.classList.toggle('drugi', x !== k)); uruchomKamere(); return; }
+    const b = e.target.closest('[data-a]');
+    if (!b) return;
+    if (b.dataset.a === 'wyslij') { wyslijKolejke(); zamknijNakladke(n); }
+    if (b.dataset.a === 'panel') { zamknijNakladke(n); pokazPanel(); }
+    if (b.dataset.a === 'wyloguj') { zamknijNakladke(n); wyloguj(); }
+    if (b.dataset.a === 'zamknij') zamknijNakladke(n);
+  });
+  $('#m-nazwa', n).addEventListener('change', e => { Stan.urzadzenie = e.target.value.trim().slice(0, 50) || 'Stanowisko przy drzwiach'; Pamiec.set('urzadzenie', Stan.urzadzenie); });
+  $('#m-dzwiek', n).addEventListener('change', e => Pamiec.set('dzwiek', e.target.checked));
+}
+
+// ═══════════════════════════ PANEL WYCHOWAWCY ═══════════════════════════
+function pokazPanel() {
+  if (Stan.rola !== 'panel') return pokazSkaner();
+  zatrzymajWszystko();
+  Stan.widok = 'panel';
+  Pamiec.set('widok', 'panel');
+  $('#aplikacja').onclick = null;
+  $('#aplikacja').innerHTML = `<div class="pn">
+    <header class="pn-gora">
+      <div class="tytul"><b>${esc(Stan.nazwa)} – panel wychowawcy</b><span id="pn-odswiezono">Pobieranie danych…</span></div>
+      <button class="przycisk drugi maly" data-a="odswiez">${ikona('odswiez')} Odśwież</button>
+      <button class="przycisk drugi maly" data-a="stanowisko" title="Używaj tego urządzenia jako skanera przy drzwiach">${ikona('kamera')} Tryb stanowiska</button>
+      <button class="przycisk drugi maly" data-a="wyloguj">${ikona('wyloguj')} Wyloguj</button>
+    </header>
+    <div class="pn-srodek">
+      <div class="pn-kpi" id="pn-kpi"></div>
+      <nav class="zakladki" id="zakladki">
+        <button data-z="stan">Stan obecności</button><button data-z="weekend">Weekend</button>
+        <button data-z="historia">Historia</button><button data-z="uczniowie">Uczniowie i kody QR</button></nav>
+      <div id="pn-tresc"></div>
+    </div></div>`;
+  $('.pn-gora').addEventListener('click', e => {
+    const b = e.target.closest('[data-a]');
+    if (!b) return;
+    if (b.dataset.a === 'odswiez') odswiezStan(false);
+    if (b.dataset.a === 'stanowisko') pokazSkaner();
+    if (b.dataset.a === 'wyloguj') wyloguj();
+  });
+  $('#zakladki').addEventListener('click', e => {
+    const b = e.target.closest('[data-z]');
+    if (!b) return;
+    Stan.zakladka = b.dataset.z;
+    Pamiec.set('zakladka', Stan.zakladka);
+    rysujZakladke();
+  });
+  $('#pn-kpi').addEventListener('click', e => {
+    const k = e.target.closest('[data-filtr]');
+    if (!k) return;
+    Stan.filtr = k.dataset.filtr;
+    Stan.zakladka = 'stan';
+    Pamiec.set('zakladka', 'stan');
+    rysujZakladke();
+    rysujKpi();
+  });
+  rysujKpi();
+  rysujZakladke();
+  odswiezStan(false);
+  Stan.timery.push(setInterval(() => { if (document.visibilityState === 'visible') odswiezStan(true); }, ODSWIEZANIE_PANEL_MS));
+  Stan.timery.push(setInterval(rysujGorePanelu, 15000));
+  wyslijKolejke();
+}
+function rysujGorePanelu() {
+  const el = $('#pn-odswiezono');
+  if (!el) return;
+  if (Stan.bladSieci) el.textContent = 'Brak połączenia z serwerem – dane mogą być nieaktualne';
+  else if (Stan.ostatnieOdswiezenie) el.textContent = 'Dane z ' + fGodzSek.format(new Date(Stan.ostatnieOdswiezenie)) + ' · odświeżanie co 30 s';
+}
+function rysujKpi() {
+  const el = $('#pn-kpi');
+  if (!el) return;
+  const c = liczniki();
+  const zSpoz = c.LATE;
+  const k = (klucz, filtr, liczba, opis, pod, dodatkowa) => `<button class="kpi k-${klucz} ${dodatkowa || ''} ${Stan.filtr === filtr && Stan.zakladka === 'stan' ? 'aktywny' : ''}" data-filtr="${filtr}">
+    <div class="liczba">${liczba}</div><div class="opis">${opis}</div><div class="pod">${pod || '&nbsp;'}</div></button>`;
+  el.innerHTML = k('ALL', 'wszyscy', c.razem, 'Na stanie internatu', 'wszyscy zapisani uczniowie') +
+    k('IN', 'IN', c.IN, 'Obecnie w internacie', c.razem ? Math.round(100 * c.IN / c.razem) + '% uczniów' : '') +
+    k('OUT', 'OUT', c.OUT, 'Poza internatem', zSpoz ? 'w tym spóźnieni: ' + zSpoz : 'wyszli na miasto') +
+    k('HOME', 'HOME', c.HOME, 'Pojechali do domu', 'wyjazd do domu') +
+    k('LATE', 'LATE', zSpoz, 'Spóźnieni', zSpoz ? 'nie wrócili na czas' : 'wszyscy na czas', zSpoz ? 'jest' : '');
+}
+function rysujZakladke(odswiezenie) {
+  $$('#zakladki [data-z]').forEach(b => b.classList.toggle('aktywna', b.dataset.z === Stan.zakladka));
+  const tresc = $('#pn-tresc');
+  if (!tresc) return;
+  if (!odswiezenie) tresc.onclick = null;
+  if (Stan.zakladka === 'stan') { if (odswiezenie && $('#t-stan')) rysujWierszeStanu(); else rysujStan(); }
+  else if (Stan.zakladka === 'weekend') rysujWeekend();
+  else if (Stan.zakladka === 'historia') { if (!odswiezenie) rysujHistorie(); }
+  else if (Stan.zakladka === 'uczniowie') { if (!odswiezenie) rysujUczniow(); else odswiezSiatkeQr(); }
+}
+
+// ── zakładka: stan obecności
+const NAZWY_FILTROW = { wszyscy: 'Wszyscy', IN: 'W internacie', OUT: 'Poza internatem', HOME: 'W domu', LATE: 'Spóźnieni' };
+function rysujStan() {
+  const t = $('#pn-tresc');
+  t.innerHTML = `<div class="narzedzia">
+      <input type="search" id="st-szukaj" placeholder="Szukaj: nazwisko, imię, klasa, pokój…" value="${esc(Stan.filtrTekst)}" aria-label="Szukaj ucznia">
+      <select id="st-sort" aria-label="Sortowanie">
+        <option value="status" ${Stan.sortowanie === 'status' ? 'selected' : ''}>Sortuj: najpierw nieobecni</option>
+        <option value="nazwisko" ${Stan.sortowanie === 'nazwisko' ? 'selected' : ''}>Sortuj: alfabetycznie</option>
+        <option value="klasa" ${Stan.sortowanie === 'klasa' ? 'selected' : ''}>Sortuj: według klasy</option>
+        <option value="pokoj" ${Stan.sortowanie === 'pokoj' ? 'selected' : ''}>Sortuj: według pokoju</option>
+        <option value="czas" ${Stan.sortowanie === 'czas' ? 'selected' : ''}>Sortuj: ostatnia zmiana</option></select>
+      <button class="przycisk drugi maly" data-a="drukuj-stan">${ikona('drukuj')} Drukuj listę</button>
+    </div>
+    <div class="filtry" id="st-filtry" style="margin-bottom:12px"></div>
+    <div class="tabela-opak"><table class="tabela" id="t-stan"><thead><tr>
+      <th>Uczeń</th><th class="tylko-szeroki">Klasa</th><th class="tylko-szeroki">Pokój</th><th>Status</th><th>Od kiedy</th><th class="tylko-szeroki">Uwagi</th><th></th></tr></thead><tbody></tbody></table></div>`;
+  $('#st-szukaj').addEventListener('input', e => { Stan.filtrTekst = e.target.value; rysujWierszeStanu(); });
+  $('#st-sort').addEventListener('change', e => { Stan.sortowanie = e.target.value; Pamiec.set('sortowanie', Stan.sortowanie); rysujWierszeStanu(); });
+  $('#st-filtry').addEventListener('click', e => { const b = e.target.closest('[data-filtr]'); if (b) { Stan.filtr = b.dataset.filtr; rysujWierszeStanu(); rysujKpi(); } });
+  t.querySelector('[data-a="drukuj-stan"]').addEventListener('click', drukujStan);
+  $('#t-stan').addEventListener('click', e => { const b = e.target.closest('[data-uczen]'); if (b) pokazOknoUcznia(Number(b.dataset.uczen)); });
+  rysujWierszeStanu();
+}
+function listaStanu() {
+  const q = norm(Stan.filtrTekst);
+  const f = Stan.filtr;
+  const priorytet = u => (spozniony(u) ? 0 : u.s === 'OUT' ? 1 : u.s === 'HOME' ? 2 : 3);
+  return Stan.uczniowie.filter(u => {
+    if (f === 'LATE' && !spozniony(u)) return false;
+    if (f !== 'wszyscy' && f !== 'LATE' && u.s !== f) return false;
+    return !q || norm([u.n, u.i, u.i, u.n, u.k, u.p, u.nt].join(' ')).indexOf(q) >= 0;
+  }).sort((a, b) => {
+    const s = Stan.sortowanie;
+    if (s === 'status') return priorytet(a) - priorytet(b) || porownaj(a.n, b.n) || porownaj(a.i, b.i);
+    if (s === 'klasa') return porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i);
+    if (s === 'pokoj') return porownaj(a.p, b.p) || porownaj(a.n, b.n);
+    if (s === 'czas') return (b.od || 0) - (a.od || 0);
+    return porownaj(a.n, b.n) || porownaj(a.i, b.i);
+  });
+}
+function rysujWierszeStanu() {
+  const c = liczniki();
+  const fl = $('#st-filtry');
+  if (fl) {
+    const liczba = { wszyscy: c.razem, IN: c.IN, OUT: c.OUT, HOME: c.HOME, LATE: c.LATE };
+    fl.innerHTML = Object.keys(NAZWY_FILTROW).map(k => `<button class="filtr ${Stan.filtr === k ? 'aktywny' : ''}" data-filtr="${k}">${NAZWY_FILTROW[k]} <span>${liczba[k]}</span></button>`).join('');
+  }
+  const tb = $('#t-stan tbody');
+  if (!tb) return;
+  const lista = listaStanu();
+  if (!lista.length) {
+    tb.innerHTML = '<tr><td colspan="7" class="pusto">' + (Stan.uczniowie.length ? 'Brak uczniów spełniających kryteria.' : 'Lista uczniów jest pusta. Dodaj uczniów w zakładce „Uczniowie i kody QR”.') + '</td></tr>';
+    return;
+  }
+  tb.innerHTML = lista.map(u => {
+    const late = spozniony(u);
+    const uwagi = [];
+    if (late) uwagi.push('<span class="chip s-LATE">spóźnienie ' + esc(czasTrwania(minutySpoznienia(u))) + '</span>');
+    else if (u.s === 'OUT' && u.t) uwagi.push('<span class="szary">powrót do ' + esc(godz(u.t)) + '</span>');
+    if (u.nt) uwagi.push('<span class="nota">' + esc(u.nt) + '</span>');
+    const pod = [u.k ? 'kl. ' + u.k : '', u.p ? 'pok. ' + u.p : ''].filter(Boolean).join(' · ');
+    return `<tr class="${late ? 'w-LATE' : ''}">
+      <td><div class="uczen-nazwa">${esc(nazwaUcznia(u))}</div><div class="uczen-pod">${esc(pod)}${late ? ' · <b style="color:var(--late)">spóźnienie ' + esc(czasTrwania(minutySpoznienia(u))) + '</b>' : ''}${u.nt ? ' · ' + esc(u.nt) : ''}</div></td>
+      <td class="tylko-szeroki">${esc(u.k)}</td><td class="tylko-szeroki">${esc(u.p)}</td>
+      <td><span class="chip s-${u.s}">${esc(STATUS_NAZWA[u.s])}</span></td>
+      <td>${u.od ? esc(kiedy(u.od)) + '<div class="szary">' + esc(czasTrwania((teraz() - u.od) / 60000)) + ' temu</div>' : '<span class="szary">—</span>'}</td>
+      <td class="tylko-szeroki">${uwagi.join(' ')}</td>
+      <td class="akcje"><button class="przycisk drugi maly" data-uczen="${u.id}">Zmień</button></td></tr>`;
+  }).join('');
+}
+function drukujStan() {
+  const lista = listaStanu();
+  const html = `<h1>${esc(Stan.nazwa)} – stan obecności</h1><div class="meta">Stan na ${esc(dataGodz(teraz()))} · filtr: ${esc(NAZWY_FILTROW[Stan.filtr])} · ${lista.length} os.</div>
+    <table><thead><tr><th>Lp.</th><th>Nazwisko i imię</th><th>Klasa</th><th>Pokój</th><th>Status</th><th>Od kiedy</th><th>Uwagi</th></tr></thead><tbody>
+    ${lista.map((u, i) => `<tr><td>${i + 1}</td><td>${esc(nazwaUcznia(u))}</td><td>${esc(u.k)}</td><td>${esc(u.p)}</td><td>${esc(STATUS_NAZWA[u.s])}</td><td>${u.od ? esc(dataGodz(u.od)) : ''}</td>
+      <td>${spozniony(u) ? 'spóźnienie ' + esc(czasTrwania(minutySpoznienia(u))) + ' ' : ''}${esc(u.nt || '')}</td></tr>`).join('')}</tbody></table>`;
+  drukuj(html);
+}
+
+// ── okno ucznia (zmiana statusu, notatka)
+function wartoscDatyLokalnej(ms) { const c = czesciCzasu(ms); return c.y + '-' + dwa(c.mo) + '-' + dwa(c.d) + 'T' + dwa(c.h) + ':' + dwa(c.mi); }
+function pokazOknoUcznia(id) {
+  const u = Stan.poId.get(id);
+  if (!u) return;
+  let wybrana = u.s === 'IN' ? 'WYJSCIE' : 'WEJSCIE';
+  const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true">
+      <h2>${esc(nazwaUcznia(u))}</h2>
+      <p class="szary">${u.k ? 'klasa ' + esc(u.k) : ''}${u.p ? ' · pokój ' + esc(u.p) : ''}</p>
+      <p>Teraz: ${opisStatusu(u)}</p>
+      <hr class="cienka">
+      <h3>Zmień status (korekta)</h3>
+      <div class="trzy">${['WEJSCIE', 'WYJSCIE', 'DOM'].map(a => `<button class="wybor a-${a} ${a === wybrana ? 'wybrany' : ''}" data-wybor="${a}">${ikona(IKONA_AKCJI[a])}${AKCJA_NAZWA[a]}</button>`).join('')}</div>
+      <label for="o-czas">Kiedy to się stało?</label>
+      <input type="datetime-local" id="o-czas" value="${wartoscDatyLokalnej(teraz())}">
+      <label for="o-uwagi">Uwagi do wpisu w historii (opcjonalnie)</label>
+      <input type="text" id="o-uwagi" maxlength="200" placeholder="np. zapomniał zeskanować przy wejściu">
+      <p class="blad-tekst" id="o-blad"></p>
+      <div class="przyciski"><button class="przycisk" data-a="zapisz-status">Zapisz zmianę statusu</button></div>
+      <hr class="cienka">
+      <h3>Notatka wychowawcy</h3>
+      <p class="maly-tekst" style="margin-bottom:6px">Widoczna w panelu przy uczniu (np. „u lekarza, wraca jutro rano”). Znika przy następnej zmianie statusu.</p>
+      <textarea id="o-notatka" maxlength="300">${esc(u.nt || '')}</textarea>
+      <div class="stopka" style="justify-content:space-between">
+        <button class="przycisk drugi" data-a="historia">${ikona('zegar')} Historia ucznia</button>
+        <span class="przyciski"><button class="przycisk drugi" data-a="zapisz-notatke">Zapisz notatkę</button><button class="przycisk drugi" data-a="zamknij">Zamknij</button></span></div>
+    </div>`);
+  n.addEventListener('click', async e => {
+    const w = e.target.closest('[data-wybor]');
+    if (w) { wybrana = w.dataset.wybor; $$('[data-wybor]', n).forEach(x => x.classList.toggle('wybrany', x === w)); return; }
+    const b = e.target.closest('[data-a]');
+    if (!b) return;
+    const blad = $('#o-blad', n);
+    if (b.dataset.a === 'zamknij') zamknijNakladke(n);
+    if (b.dataset.a === 'historia') {
+      zamknijNakladke(n);
+      Stan.hist = Object.assign(domyslnaHistoria(), { od: dodajDni(dataISO(teraz()), -30), id: String(u.id) });
+      Stan.zakladka = 'historia'; Pamiec.set('zakladka', 'historia');
+      rysujZakladke();
+    }
+    if (b.dataset.a === 'zapisz-status') {
+      const v = $('#o-czas', n).value;
+      const m = v.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+      if (!m) { blad.textContent = 'Podaj datę i godzinę.'; return; }
+      const ts = lokalnyNaMs(+m[1], +m[2], +m[3], +m[4], +m[5]);
+      if (ts > teraz() + 60000) { blad.textContent = 'Ta godzina jest w przyszłości.'; return; }
+      if (ts < teraz() - 7 * 864e5) { blad.textContent = 'Korekta może dotyczyć tylko ostatnich 7 dni.'; return; }
+      b.disabled = true; b.textContent = 'Zapisywanie…'; blad.textContent = '';
+      try {
+        const d = await api('zapisz', { zdarzenia: [{ uid: nowyUid(), id: u.id, akcja: wybrana, ts: ts, sposob: 'panel', urzadzenie: 'Panel wychowawcy', notatka: $('#o-uwagi', n).value.trim() }] });
+        if (!d.ok || !d.wyniki || !d.wyniki[0] || !d.wyniki[0].ok) throw new BladApi((d.wyniki && d.wyniki[0] && d.wyniki[0].blad) || d.blad || 'Nie zapisano.', 'serwer');
+        (d.uczniowie || []).forEach(aktualizujUcznia);
+        if (d.czas) Stan.przesuniecie = d.czas - Date.now();
+        zamknijNakladke(n);
+        toast('Zapisano: ' + nazwaUcznia(u) + ' – ' + AKCJA_NAZWA[wybrana].toLowerCase(), 'ok');
+        przerysuj();
+      } catch (err) {
+        if (err.rodzaj !== 'auth') { blad.textContent = err.message; b.disabled = false; b.textContent = 'Zapisz zmianę statusu'; }
+      }
+    }
+    if (b.dataset.a === 'zapisz-notatke') {
+      b.disabled = true;
+      try {
+        const d = await api('notatka', { id: u.id, tekst: $('#o-notatka', n).value.trim(), urzadzenie: 'Panel wychowawcy' });
+        if (!d.ok) throw new BladApi(d.blad || 'Nie zapisano notatki.', 'serwer');
+        aktualizujUcznia(d.uczen);
+        zamknijNakladke(n);
+        toast('Notatka zapisana.', 'ok');
+        przerysuj();
+      } catch (err) {
+        if (err.rodzaj !== 'auth') { blad.textContent = err.message; b.disabled = false; }
+      }
+    }
+  });
+}
+
+// ── zakładka: weekend
+function rysujWeekend() {
+  const dom = Stan.uczniowie.filter(u => u.s === 'HOME').sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  const zostaja = Stan.uczniowie.filter(u => u.s !== 'HOME').sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  const t = $('#pn-tresc');
+  const wiersz = (u, kol3) => `<tr><td><div class="uczen-nazwa">${esc(nazwaUcznia(u))}</div></td><td>${esc(u.k)}</td><td>${kol3}</td></tr>`;
+  t.innerHTML = `<div class="narzedzia"><p class="szary" style="margin:0;flex:1">Wyjazd do domu bez dodatkowego potwierdzenia: <b>${esc(opisDniWyjazdow())}</b>. Lista aktualizuje się na bieżąco.</p>
+      <button class="przycisk drugi maly" data-a="drukuj-weekend">${ikona('drukuj')} Drukuj listę</button></div>
+    <div class="siatka2">
+      <div class="karta"><div class="naglowek-karty"><h2>Pojechali do domu</h2><span class="licznik-duzy">${dom.length}</span></div>
+        ${dom.length ? `<div class="tabela-opak" style="box-shadow:none;border:1px solid var(--linia)"><table class="tabela"><thead><tr><th>Uczeń</th><th>Klasa</th><th>Wyjazd</th></tr></thead><tbody>
+        ${dom.map(u => wiersz(u, u.od ? esc(kiedy(u.od)) : '—')).join('')}</tbody></table></div>` : '<p class="pusto">Nikt nie jest teraz oznaczony jako „w domu”.</p>'}</div>
+      <div class="karta"><div class="naglowek-karty"><h2>Zostają w internacie</h2><span class="licznik-duzy">${zostaja.length}</span></div>
+        ${zostaja.length ? `<div class="tabela-opak" style="box-shadow:none;border:1px solid var(--linia)"><table class="tabela"><thead><tr><th>Uczeń</th><th>Klasa</th><th>Status</th></tr></thead><tbody>
+        ${zostaja.map(u => wiersz(u, '<span class="chip s-' + (spozniony(u) ? 'LATE' : u.s) + '">' + esc(spozniony(u) ? 'spóźniony' : STATUS_NAZWA[u.s]) + '</span>')).join('')}</tbody></table></div>` : '<p class="pusto">Wszyscy pojechali do domu.</p>'}</div>
+    </div>`;
+  t.querySelector('[data-a="drukuj-weekend"]').addEventListener('click', () => {
+    const tab = (lista, kol) => `<table><thead><tr><th>Lp.</th><th>Nazwisko i imię</th><th>Klasa</th><th>${kol}</th></tr></thead><tbody>${lista.map((u, i) => `<tr><td>${i + 1}</td><td>${esc(nazwaUcznia(u))}</td><td>${esc(u.k)}</td><td>${kol === 'Wyjazd' ? (u.od ? esc(dataGodz(u.od)) : '') : esc(STATUS_NAZWA[u.s])}</td></tr>`).join('')}</tbody></table>`;
+    drukuj(`<h1>${esc(Stan.nazwa)} – wyjazdy do domu</h1><div class="meta">Stan na ${esc(dataGodz(teraz()))}</div>
+      <div class="dwie"><div><h2>Pojechali do domu (${dom.length})</h2>${tab(dom, 'Wyjazd')}</div><div><h2>Zostają w internacie (${zostaja.length})</h2>${tab(zostaja, 'Status')}</div></div>`);
+  });
+}
+
+// ── zakładka: historia
+function domyslnaHistoria() { const d = dataISO(teraz()); return { od: d, do: d, id: '', rodzaj: '', wpisy: null, obciete: false, laduje: false, blad: '' }; }
+function rysujHistorie() {
+  if (!Stan.hist) Stan.hist = domyslnaHistoria();
+  const h = Stan.hist;
+  const t = $('#pn-tresc');
+  const uczniowie = Stan.uczniowie.slice().sort((a, b) => porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  t.innerHTML = `<div class="karta" style="margin-bottom:16px"><form id="f-hist" class="formularz-historii">
+      <div><label for="h-od">Od</label><input type="date" id="h-od" value="${h.od}"></div>
+      <div><label for="h-do">Do</label><input type="date" id="h-do" value="${h.do}"></div>
+      <div><label for="h-uczen">Uczeń</label><select id="h-uczen"><option value="">Wszyscy uczniowie</option>${uczniowie.map(u => `<option value="${u.id}" ${String(u.id) === String(h.id) ? 'selected' : ''}>${esc(nazwaUcznia(u))}${u.k ? ' (' + esc(u.k) + ')' : ''}</option>`).join('')}</select></div>
+      <div><label for="h-rodzaj">Rodzaj</label><select id="h-rodzaj">
+        ${[['', 'Wszystkie zdarzenia'], ['WYJSCIE', 'Tylko wyjścia'], ['WEJSCIE', 'Tylko wejścia'], ['DOM', 'Tylko wyjazdy do domu'], ['SPOZNIENIA', 'Tylko spóźnienia'], ['NOTATKA', 'Tylko notatki']].map(o => `<option value="${o[0]}" ${o[0] === h.rodzaj ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></div>
+      <div><button class="przycisk" type="submit">Pokaż</button></div></form>
+      <div class="szybkie"><button class="filtr" data-zakres="dzis">Dziś</button><button class="filtr" data-zakres="wczoraj">Wczoraj</button>
+        <button class="filtr" data-zakres="7">Ostatnie 7 dni</button><button class="filtr" data-zakres="30">Ostatnie 30 dni</button><button class="filtr" data-zakres="miesiac">Ten miesiąc</button></div></div>
+    <div id="h-wyniki"></div>`;
+  const czytaj = () => { h.od = $('#h-od').value; h.do = $('#h-do').value; h.id = $('#h-uczen').value; h.rodzaj = $('#h-rodzaj').value; };
+  $('#f-hist').addEventListener('submit', e => { e.preventDefault(); czytaj(); zaladujHistorie(); });
+  t.querySelector('.szybkie').addEventListener('click', e => {
+    const b = e.target.closest('[data-zakres]');
+    if (!b) return;
+    const dzis = dataISO(teraz());
+    const z = b.dataset.zakres;
+    let od = dzis, doD = dzis;
+    if (z === 'wczoraj') { od = doD = dodajDni(dzis, -1); }
+    else if (z === '7') od = dodajDni(dzis, -6);
+    else if (z === '30') od = dodajDni(dzis, -29);
+    else if (z === 'miesiac') od = dzis.slice(0, 8) + '01';
+    $('#h-od').value = od; $('#h-do').value = doD;
+    czytaj(); zaladujHistorie();
+  });
+  rysujWynikiHistorii();
+  if (h.wpisy === null && !h.laduje) zaladujHistorie();
+}
+async function zaladujHistorie() {
+  const h = Stan.hist;
+  if (!h.od || !h.do) { h.blad = 'Wybierz daty.'; rysujWynikiHistorii(); return; }
+  if (h.do < h.od) { h.blad = 'Data „do” jest wcześniejsza niż „od”.'; rysujWynikiHistorii(); return; }
+  h.laduje = true; h.blad = '';
+  rysujWynikiHistorii();
+  try {
+    const d = await api('historia', { od: h.od, do: h.do, id: h.id ? Number(h.id) : '', rodzaj: h.rodzaj });
+    if (!d.ok) throw new BladApi(d.blad || 'Nie udało się pobrać historii.', 'serwer');
+    h.wpisy = d.wpisy || []; h.obciete = !!d.obciete;
+  } catch (e) {
+    if (e.rodzaj !== 'auth') h.blad = e.message;
+  } finally {
+    h.laduje = false;
+    if (Stan.zakladka === 'historia') rysujWynikiHistorii();
+  }
+}
+function rysujWynikiHistorii() {
+  const el = $('#h-wyniki');
+  if (!el) return;
+  const h = Stan.hist;
+  if (h.laduje) { el.innerHTML = '<div class="karta pusto">Pobieranie historii…</div>'; return; }
+  if (h.blad) { el.innerHTML = '<div class="karta pusto" style="color:var(--late)">' + esc(h.blad) + '</div>'; return; }
+  if (!h.wpisy) { el.innerHTML = ''; return; }
+  const w = h.wpisy;
+  const licz = a => w.filter(x => x.a === a).length;
+  const sp = w.filter(x => x.sp > 0);
+  const suma = sp.reduce((s, x) => s + x.sp, 0);
+  const poUczniu = {};
+  sp.forEach(x => { const k = x.u + '|' + x.k; poUczniu[k] = poUczniu[k] || { u: x.u, k: x.k, ile: 0, min: 0 }; poUczniu[k].ile++; poUczniu[k].min += x.sp; });
+  const ranking = Object.values(poUczniu).sort((a, b) => b.ile - a.ile || b.min - a.min);
+  const pl = iso => esc(iso.split('-').reverse().join('.'));
+  const zakres = h.od === h.do ? pl(h.od) : pl(h.od) + ' – ' + pl(h.do);
+  el.innerHTML = `<div class="naglowek-karty"><div><h2 style="margin-bottom:4px">Historia: ${zakres}</h2>
+      <div class="podsumowanie"><span class="chip neutral">Zdarzeń: ${w.length}</span><span class="chip s-OUT">Wyjścia: ${licz('Wyjście')}</span>
+      <span class="chip s-IN">Wejścia: ${licz('Wejście')}</span><span class="chip s-HOME">Wyjazdy do domu: ${licz('Wyjazd do domu')}</span>
+      <span class="chip s-LATE">Spóźnienia: ${sp.length}${sp.length ? ' (łącznie ' + esc(czasTrwania(suma)) + ')' : ''}</span>${licz('Notatka') ? '<span class="chip s-NOTA">Notatki: ' + licz('Notatka') + '</span>' : ''}</div></div>
+      <span class="przyciski"><button class="przycisk drugi maly" data-a="h-excel" ${w.length ? '' : 'disabled'}>${ikona('pobierz')} Pobierz do Excela</button>
+      <button class="przycisk drugi maly" data-a="h-drukuj" ${w.length ? '' : 'disabled'}>${ikona('drukuj')} Drukuj</button></span></div>
+    ${h.obciete ? '<p class="szary">Pokazano pierwsze 5000 zdarzeń – zawęź zakres dat.</p>' : ''}
+    ${ranking.length ? `<div class="karta" style="margin-bottom:12px"><h3>Spóźnienia w wybranym okresie</h3><div class="podsumowanie">${ranking.map(r => `<span class="chip s-LATE">${esc(r.u)}${r.k ? ' (' + esc(r.k) + ')' : ''}: ${r.ile}× · ${esc(czasTrwania(r.min))}</span>`).join('')}</div></div>` : ''}
+    <div class="tabela-opak"><table class="tabela"><thead><tr><th>Data i godzina</th><th>Uczeń</th><th class="tylko-szeroki">Klasa</th><th>Akcja</th><th>Uwagi</th><th class="tylko-szeroki">Sposób / urządzenie</th></tr></thead><tbody>
+    ${w.length ? w.map(x => `<tr><td style="white-space:nowrap">${esc(dataGodz(x.t))}</td><td><div class="uczen-nazwa">${esc(x.u)}</div><div class="uczen-pod">${esc(x.k)}</div></td><td class="tylko-szeroki">${esc(x.k)}</td>
+      <td>${x.a === 'Notatka' ? '<span class="chip s-NOTA">Notatka</span>' : '<span class="chip s-' + ({ 'Wejście': 'IN', 'Wyjście': 'OUT', 'Wyjazd do domu': 'HOME' }[x.a] || 'IN') + '">' + esc(x.a) + '</span>'}</td>
+      <td>${x.sp > 0 ? '<span class="chip s-LATE">spóźnienie ' + esc(czasTrwania(x.sp)) + '</span> ' : ''}${esc(x.uw.replace(/Spóźniony powrót: [^;]+;?\s*/, ''))}</td>
+      <td class="tylko-szeroki szary">${esc([x.sb, x.urz].filter((v, i, a) => v && a.indexOf(v) === i).join(' · '))}</td></tr>`).join('') : '<tr><td colspan="6" class="pusto">Brak zdarzeń w wybranym okresie.</td></tr>'}</tbody></table></div>`;
+  const ex = el.querySelector('[data-a="h-excel"]');
+  if (ex) ex.addEventListener('click', eksportujHistorie);
+  const dr = el.querySelector('[data-a="h-drukuj"]');
+  if (dr) dr.addEventListener('click', () => {
+    drukuj(`<h1>${esc(Stan.nazwa)} – historia</h1><div class="meta">Zakres: ${zakres} · zdarzeń: ${w.length} · wydrukowano ${esc(dataGodz(teraz()))}</div>
+      <table><thead><tr><th>Data i godzina</th><th>Uczeń</th><th>Klasa</th><th>Akcja</th><th>Spóźnienie</th><th>Uwagi</th></tr></thead><tbody>
+      ${w.map(x => `<tr><td>${esc(dataGodz(x.t))}</td><td>${esc(x.u)}</td><td>${esc(x.k)}</td><td>${esc(x.a)}</td><td>${x.sp > 0 ? esc(czasTrwania(x.sp)) : ''}</td><td>${esc(x.uw)}</td></tr>`).join('')}</tbody></table>`);
+  });
+}
+function eksportujHistorie() {
+  const h = Stan.hist;
+  const wiersze = [['Data i godzina', 'Uczeń', 'Klasa', 'Akcja', 'Spóźnienie (min)', 'Uwagi', 'Sposób', 'Urządzenie']];
+  h.wpisy.slice().reverse().forEach(x => wiersze.push([{ data: x.t }, x.u, x.k, x.a, x.sp > 0 ? x.sp : '', x.uw, x.sb, x.urz]));
+  const blob = zbudujXlsx('Historia', wiersze, [18, 28, 8, 16, 14, 60, 18, 24]);
+  pobierzPlik(blob, 'historia_' + h.od + (h.do !== h.od ? '_' + h.do : '') + '.xlsx');
+}
+
+// ── zakładka: uczniowie i kody QR
+function rysujUczniow() {
+  const t = $('#pn-tresc');
+  const s = Stan.ustawienia;
+  const powroty = (s.powroty || []).map((g, i) => DNI_KROTKO[i] + ' ' + (g === null ? '—' : godzMin(g)));
+  const link = linkDlaUrzadzenia();
+  t.innerHTML = `<div class="stos">
+    <div class="karta">
+      <div class="naglowek-karty"><h2>Kody QR uczniów</h2>
+        <span class="przyciski"><button class="przycisk" data-a="qr-zip">${ikona('pobierz')} Pobierz wszystkie (ZIP)</button>
+        <button class="przycisk drugi" data-a="qr-druk">${ikona('drukuj')} Drukuj karty (A4)</button></span></div>
+      <p class="szary">Każdy uczeń dostaje swój obrazek z kodem (np. przez e-dziennik lub e-mail), zapisuje go w galerii telefonu i pokazuje przy drzwiach.
+        Można też wydrukować karty i rozdać je uczniom bez telefonu. Kod nie zawiera danych osobowych – tylko losowy identyfikator.</p>
+      <input type="search" id="qr-szukaj" placeholder="Szukaj ucznia…" aria-label="Szukaj ucznia">
+      <div class="siatka-qr" id="siatka-qr"></div>
+    </div>
+    <div class="karta">
+      <h2>Dodaj uczniów z Excela</h2>
+      <p class="szary">Zaznacz w Excelu kolumny <b>Nazwisko, Imię, Klasa, Pokój</b> (razem z nagłówkami), skopiuj (Ctrl+C) i wklej poniżej (Ctrl+V). Możesz też wybrać plik .xlsx lub .csv.
+        Osoby, które już są na liście (to samo imię, nazwisko, klasa i pokój), zostaną pominięte.</p>
+      <textarea id="imp-tekst" placeholder="Nazwisko&#9;Imię&#9;Klasa&#9;Pokój&#10;Kowalski&#9;Jan&#9;2B&#9;14"></textarea>
+      <div class="przyciski" style="margin-top:10px">
+        <button class="przycisk" data-a="imp-podglad">Pokaż podgląd</button>
+        <label class="przycisk drugi" style="margin:0;font-size:1rem">${ikona('pobierz')} Wybierz plik…<input type="file" id="imp-plik" accept=".xlsx,.csv,.txt,text/csv" style="display:none"></label>
+        <button class="przycisk drugi" data-a="imp-szablon">Pobierz pusty szablon</button></div>
+      <div id="imp-wynik"></div>
+    </div>
+    <div class="siatka2">
+      <div class="karta"><h2>Ustawienia internatu</h2>
+        <dl class="ustawienia-lista"><dt>Godziny powrotu</dt><dd>${esc(powroty.join(', '))}</dd>
+        <dt>Wyjazdy do domu</dt><dd>${esc(opisDniWyjazdow())}</dd><dt>Liczba uczniów</dt><dd id="ust-liczba">${Stan.uczniowie.length}</dd></dl>
+        <p class="szary" style="margin-top:12px">Godziny, dni wyjazdów, PIN i hasło zmienisz w arkuszu Google w zakładce „Ustawienia”.
+        Dane ucznia poprawisz w zakładce „Uczniowie”, a ucznia, który opuścił internat, oznacz w kolumnie „Aktywny” jako <b>NIE</b>.</p></div>
+      <div class="karta"><h2>Podłącz kolejne urządzenie</h2>
+        <div class="urzadzenie-qr"><canvas id="qr-urzadzenie" width="10" height="10"></canvas>
+          <div style="flex:1;min-width:200px"><p class="szary">Zeskanuj ten kod aparatem w telefonie lub tablecie – otworzy się aplikacja połączona z Twoim serwerem. Potem zaloguj się PIN-em lub hasłem.</p>
+          <div class="kod-tekst" id="link-urzadzenia">${esc(link)}</div>
+          <button class="przycisk drugi maly" data-a="kopiuj-link" style="margin-top:8px">${ikona('kopiuj')} Kopiuj link</button></div></div></div>
+    </div></div>`;
+  rysujQr($('#qr-urzadzenie'), link, 4, 2);
+  $('#qr-szukaj').addEventListener('input', odswiezSiatkeQr);
+  $('#imp-plik').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) wczytajPlikImportu(f); e.target.value = ''; });
+  t.onclick = obsluzKlikUczniow;
+  Stan.podpisQr = null;
+  odswiezSiatkeQr();
+}
+function linkDlaUrzadzenia() {
+  const baza = location.origin + location.pathname;
+  return ADRES_SERWERA ? baza : baza + '?serwer=' + encodeURIComponent(adresSerwera());
+}
+function obsluzKlikUczniow(e) {
+  const b = e.target.closest('[data-a]');
+  if (!b) return;
+  const a = b.dataset.a;
+  if (a === 'qr-zip') pobierzWszystkieQr(b);
+  else if (a === 'qr-druk') drukujKartyQr();
+  else if (a === 'qr-png') { const u = Stan.poId.get(Number(b.dataset.id)); if (u) kartaQr(u).toBlob(blob => pobierzPlik(blob, nazwaPlikuQr(u))); }
+  else if (a === 'imp-podglad') podgladImportu(parsujTekstTabeli($('#imp-tekst').value));
+  else if (a === 'imp-szablon') pobierzPlik(zbudujXlsx('Uczniowie', [['Nazwisko', 'Imię', 'Klasa', 'Pokój']], [22, 18, 10, 10]), 'lista_uczniow_szablon.xlsx');
+  else if (a === 'imp-dodaj') wykonajImport(b);
+  else if (a === 'kopiuj-link') kopiuj(linkDlaUrzadzenia());
+}
+function odswiezSiatkeQr() {
+  const el = $('#siatka-qr');
+  if (!el) return;
+  const licz = $('#ust-liczba');
+  if (licz) licz.textContent = Stan.uczniowie.length;
+  const qEl = $('#qr-szukaj');
+  const q = norm(qEl ? qEl.value : '');
+  const podpis = q + '|' + Stan.uczniowie.map(u => u.id + ':' + u.kod + ':' + u.n + ':' + u.i + ':' + u.k).join(',');
+  if (podpis === Stan.podpisQr) return;          // nic się nie zmieniło – nie rysuj od nowa
+  Stan.podpisQr = podpis;
+  const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.k).indexOf(q) >= 0)
+    .sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  if (!lista.length) { el.innerHTML = '<p class="pusto" style="grid-column:1/-1">' + (Stan.uczniowie.length ? 'Brak wyników.' : 'Brak uczniów – dodaj ich poniżej albo w arkuszu Google.') + '</p>'; return; }
+  el.innerHTML = lista.map(u => `<div class="kafel-qr"><canvas data-kod="${esc(u.kod)}" width="10" height="10"></canvas>
+    <div class="n">${esc(nazwaUcznia(u))}</div><div class="d">${u.k ? 'klasa ' + esc(u.k) : '&nbsp;'}</div>
+    <button class="przycisk drugi maly" data-a="qr-png" data-id="${u.id}">${ikona('pobierz')} PNG</button></div>`).join('');
+  $$('canvas[data-kod]', el).forEach(c => rysujQr(c, c.dataset.kod, 4, 2));
+}
+
+// ── kody QR (rysowanie)
+function rysujQr(canvas, tekst, modul, margines) {
+  const m = QRMacierz(tekst);
+  const n = m.length;
+  const rozmiar = (n + margines * 2) * modul;
+  canvas.width = rozmiar; canvas.height = rozmiar;
+  const g = canvas.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, rozmiar, rozmiar);
+  g.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (m[r][c]) g.fillRect((c + margines) * modul, (r + margines) * modul, modul, modul);
+  return canvas;
+}
+function dopasujCzcionke(g, tekst, waga, maks, szer) {
+  let r = maks;
+  do { g.font = waga + ' ' + r + 'px system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'; r -= 2; } while (r > 12 && g.measureText(tekst).width > szer);
+}
+/** Karta z kodem QR ucznia (do telefonu lub wydruku). */
+function kartaQr(u) {
+  const m = QRMacierz(u.kod);
+  const n = m.length, modul = 18, marg = 4;
+  const W = (n + marg * 2) * modul;
+  const H = W + 210;
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (m[r][k]) g.fillRect((k + marg) * modul, (r + marg) * modul, modul, modul);
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.fillStyle = '#111';
+  dopasujCzcionke(g, imieNazwisko(u), 'bold', 44, W - 48);
+  g.fillText(imieNazwisko(u), W / 2, W + 34);
+  const opis = [u.k ? 'klasa ' + u.k : '', u.p ? 'pokój ' + u.p : ''].filter(Boolean).join(' · ');
+  g.fillStyle = '#444';
+  dopasujCzcionke(g, opis, 'normal', 30, W - 48);
+  g.fillText(opis, W / 2, W + 82);
+  g.fillStyle = '#2453c4';
+  dopasujCzcionke(g, Stan.nazwa, '600', 26, W - 48);
+  g.fillText(Stan.nazwa, W / 2, W + 128);
+  g.fillStyle = '#888';
+  g.font = '20px ui-monospace, Menlo, Consolas, monospace';
+  g.fillText(u.kod, W / 2, W + 170);
+  return c;
+}
+function nazwaPlikuQr(u) {
+  const czysty = t => String(t || '').replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, z => { const m = POLSKIE[z.toLowerCase()]; return z === z.toLowerCase() ? m : m.toUpperCase(); }).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  return [czysty(u.k), czysty(u.n), czysty(u.i)].filter(Boolean).join('_') + '_' + u.id + '.png';
+}
+async function pobierzWszystkieQr(btn) {
+  if (!Stan.uczniowie.length) { toast('Brak uczniów.', 'blad'); return; }
+  const tekst = btn.innerHTML;
+  btn.disabled = true;
+  try {
+    const pliki = [];
+    const lista = Stan.uczniowie.slice().sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n));
+    for (let i = 0; i < lista.length; i++) {
+      btn.textContent = 'Przygotowuję ' + (i + 1) + '/' + lista.length + '…';
+      const blob = await new Promise(ok => kartaQr(lista[i]).toBlob(ok, 'image/png'));
+      pliki.push({ nazwa: nazwaPlikuQr(lista[i]), dane: new Uint8Array(await blob.arrayBuffer()) });
+    }
+    pobierzPlik(zbudujZip(pliki), 'kody_QR_uczniow_' + dataISO(teraz()) + '.zip');
+    toast('Pobrano ' + pliki.length + ' kodów.', 'ok');
+  } catch (e) {
+    toast('Nie udało się przygotować pliku: ' + e.message, 'blad');
+  } finally {
+    btn.disabled = false; btn.innerHTML = tekst;
+  }
+}
+async function drukujKartyQr() {
+  const lista = Stan.uczniowie.slice().sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  if (!lista.length) { toast('Brak uczniów.', 'blad'); return; }
+  toast('Przygotowuję wydruk…');
+  await new Promise(r => setTimeout(r, 30));
+  const html = '<div class="karty">' + lista.map(u => '<div class="karta-qr"><img alt="" src="' + kartaQr(u).toDataURL('image/png') + '"></div>').join('') + '</div>';
+  drukuj(html);
+}
+
+// ── import listy uczniów
+function parsujTekstTabeli(tekst) {
+  tekst = String(tekst || '').replace(/^\uFEFF/, '');
+  const pierwsza = tekst.split(/\r?\n/).find(l => l.trim()) || '';
+  const ile = z => (pierwsza.match(new RegExp(z === '\t' ? '\t' : '\\' + z, 'g')) || []).length;
+  const sep = ile('\t') ? '\t' : ile(';') >= ile(',') && ile(';') ? ';' : ile(',') ? ',' : '\t';
+  const wiersze = [];
+  let w = [], pole = '', cudz = false;
+  for (let i = 0; i < tekst.length; i++) {
+    const z = tekst[i];
+    if (cudz) {
+      if (z === '"') { if (tekst[i + 1] === '"') { pole += '"'; i++; } else cudz = false; }
+      else pole += z;
+    } else if (z === '"' && pole === '') cudz = true;
+    else if (z === sep) { w.push(pole); pole = ''; }
+    else if (z === '\n' || z === '\r') { if (z === '\r' && tekst[i + 1] === '\n') i++; w.push(pole); wiersze.push(w); w = []; pole = ''; }
+    else pole += z;
+  }
+  if (pole !== '' || w.length) { w.push(pole); wiersze.push(w); }
+  return wiersze.map(r => r.map(x => String(x).trim())).filter(r => r.some(x => x !== ''));
+}
+function wierszeNaUczniow(wiersze) {
+  let start = 0, mapa = null;
+  for (let i = 0; i < Math.min(10, wiersze.length); i++) {
+    const n = wiersze[i].map(norm);
+    const iN = n.findIndex(x => x.indexOf('nazwisko') === 0 && x.indexOf('imie') < 0);
+    const iI = n.findIndex(x => x.indexOf('imie') === 0 && x.indexOf('nazwisko') < 0);
+    if (iN >= 0 && iI >= 0) {
+      mapa = { n: iN, i: iI, k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0) };
+      start = i + 1;
+      break;
+    }
+  }
+  const uwagi = [];
+  let jednaKolumna = false;
+  if (!mapa) {
+    for (let i = 0; i < Math.min(10, wiersze.length) && !mapa; i++) {
+      const n = wiersze[i].map(norm);
+      const iNI = n.findIndex(x => x.indexOf('nazwisko') >= 0 && x.indexOf('imie') >= 0);
+      if (iNI >= 0) {
+        mapa = { ni: iNI, imieNajpierw: n[iNI].indexOf('imie') < n[iNI].indexOf('nazwisko'), k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0) };
+        start = i + 1;
+        uwagi.push('Imię i nazwisko są w jednej kolumnie – rozdzielono je automatycznie. Sprawdź podgląd (osoby z dwoma nazwiskami mogą wymagać poprawki).');
+      }
+    }
+  }
+  if (!mapa) {
+    jednaKolumna = wiersze.length > 0 && wiersze.every(r => r.filter(Boolean).length === 1);
+    mapa = { n: 0, i: 1, k: 2, p: 3 };
+    if (wiersze.length && norm(wiersze[0].join(' ')).indexOf('nazwisko') >= 0) start = 1;
+    uwagi.push(jednaKolumna ? 'Nie znaleziono nagłówków – każdy wiersz rozdzielono jako „Nazwisko Imię”. Sprawdź podgląd.' : 'Nie znaleziono nagłówków „Nazwisko” i „Imię” – przyjęto kolejność kolumn: Nazwisko, Imię, Klasa, Pokój.');
+  }
+  const uczniowie = [];
+  for (let i = start; i < wiersze.length; i++) {
+    const r = wiersze[i];
+    let u;
+    if (mapa.ni !== undefined) {
+      const t = String(r[mapa.ni] || '').split(/\s+/).filter(Boolean);
+      const imie = mapa.imieNajpierw ? t.slice(0, 1).join(' ') : t.slice(1).join(' ');
+      const nazwisko = mapa.imieNajpierw ? t.slice(1).join(' ') : t.slice(0, 1).join(' ');
+      u = { nazwisko: nazwisko, imie: imie, klasa: mapa.k >= 0 ? (r[mapa.k] || '') : '', pokoj: mapa.p >= 0 ? (r[mapa.p] || '') : '' };
+    } else if (jednaKolumna) {
+      const t = r.filter(Boolean)[0].split(/\s+/);
+      u = { nazwisko: t[0] || '', imie: t.slice(1).join(' '), klasa: '', pokoj: '' };
+    } else {
+      u = { nazwisko: r[mapa.n] || '', imie: r[mapa.i] || '', klasa: mapa.k >= 0 ? (r[mapa.k] || '') : '', pokoj: mapa.p >= 0 ? (r[mapa.p] || '') : '' };
+    }
+    if (!u.nazwisko && !u.imie) continue;
+    uczniowie.push(u);
+  }
+  return { uczniowie, uwagi };
+}
+async function wczytajPlikImportu(plik) {
+  const wynik = $('#imp-wynik');
+  try {
+    let wiersze;
+    if (/\.xlsx$/i.test(plik.name)) wiersze = await czytajXlsx(await plik.arrayBuffer());
+    else if (/\.xls$/i.test(plik.name)) throw new Error('Stary format .xls nie jest obsługiwany – zapisz plik jako .xlsx albo skopiuj i wklej dane.');
+    else {
+      const buf = await plik.arrayBuffer();
+      let tekst = new TextDecoder('utf-8').decode(buf);
+      if (tekst.indexOf('\uFFFD') >= 0) tekst = new TextDecoder('windows-1250').decode(buf);
+      wiersze = parsujTekstTabeli(tekst);
+    }
+    podgladImportu(wiersze);
+  } catch (e) {
+    wynik.innerHTML = '<p class="blad-tekst">' + esc(e.message) + '</p>';
+  }
+}
+function podgladImportu(wiersze) {
+  const wynik = $('#imp-wynik');
+  const { uczniowie, uwagi } = wierszeNaUczniow(wiersze);
+  if (!uczniowie.length) { wynik.innerHTML = '<p class="blad-tekst">Nie znaleziono żadnych uczniów. Wklej dane z nagłówkami Nazwisko, Imię, Klasa, Pokój.</p>'; return; }
+  const klucz = u => norm(u.nazwisko) + '|' + norm(u.imie) + '|' + norm(u.klasa) + '|' + norm(u.pokoj);
+  const istnieja = new Set(Stan.uczniowie.map(u => norm(u.n) + '|' + norm(u.i) + '|' + norm(u.k) + '|' + norm(u.p)));
+  const widziane = new Set();
+  let nowi = 0;
+  uczniowie.forEach(u => {
+    const k = klucz(u);
+    u._stan = !u.nazwisko || !u.imie ? 'zly' : istnieja.has(k) || widziane.has(k) ? 'istnieje' : 'nowy';
+    widziane.add(k);
+    if (u._stan === 'nowy') nowi++;
+  });
+  Stan.import = uczniowie.filter(u => u._stan === 'nowy').map(u => ({ nazwisko: u.nazwisko, imie: u.imie, klasa: u.klasa, pokoj: u.pokoj }));
+  wynik.innerHTML = `${uwagi.map(x => '<p class="szary">' + ikona('uwaga') + ' ' + esc(x) + '</p>').join('')}
+    <div class="podglad-importu"><table class="tabela"><thead><tr><th>Nazwisko</th><th>Imię</th><th>Klasa</th><th>Pokój</th><th></th></tr></thead><tbody>
+    ${uczniowie.map(u => `<tr class="${u._stan === 'zly' ? 'zly' : u._stan === 'istnieje' ? 'istnieje' : ''}"><td>${esc(u.nazwisko)}</td><td>${esc(u.imie)}</td><td>${esc(u.klasa)}</td><td>${esc(u.pokoj)}</td>
+      <td>${u._stan === 'nowy' ? '<span class="chip s-IN">nowy</span>' : u._stan === 'istnieje' ? '<span class="szary">już jest</span>' : '<span class="chip s-LATE">brak imienia lub nazwiska</span>'}</td></tr>`).join('')}</tbody></table></div>
+    <div class="przyciski"><button class="przycisk" data-a="imp-dodaj" ${nowi ? '' : 'disabled'}>Dodaj ${nowi} ${nowi === 1 ? 'ucznia' : 'uczniów'}</button>
+    <span class="szary">Pominięci: ${uczniowie.length - nowi}</span></div>`;
+}
+async function wykonajImport(btn) {
+  if (!Stan.import || !Stan.import.length) return;
+  btn.disabled = true; btn.textContent = 'Dodawanie…';
+  try {
+    const d = await api('importuj', { uczniowie: Stan.import }, { limit: 90000 });
+    if (!d.ok) throw new BladApi(d.blad || 'Nie udało się dodać uczniów.', 'serwer');
+    Stan.import = null;
+    $('#imp-tekst').value = '';
+    $('#imp-wynik').innerHTML = '<p style="color:var(--in);font-weight:700">' + ikona('ok') + ' Dodano ' + d.dodano + ' uczniów' + (d.pominieto ? ' (pominięto ' + d.pominieto + ')' : '') + '. Kody QR są już gotowe poniżej.</p>';
+    await odswiezStan(false);
+    odswiezSiatkeQr();
+  } catch (e) {
+    if (e.rodzaj !== 'auth') { $('#imp-wynik').insertAdjacentHTML('beforeend', '<p class="blad-tekst">' + esc(e.message) + '</p>'); btn.disabled = false; btn.textContent = 'Spróbuj ponownie'; }
+  }
+}
+
+// ═══════════════════════════ PLIKI: ZIP, XLSX, POBIERANIE, WYDRUK ═══════════════════════════
+const CRC_TAB = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_TAB[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+/** Archiwum ZIP bez kompresji (metoda „store”) – wystarcza dla PNG i plików Excela. */
+function zbudujZip(pliki) {
+  const enc = new TextEncoder();
+  const c = czesciCzasu(teraz());
+  const dosCzas = (c.h << 11) | (c.mi << 5) | (c.s >> 1);
+  const dosData = ((c.y - 1980) << 9) | (c.mo << 5) | c.d;
+  const czesci = [], centralny = [];
+  let przes = 0;
+  pliki.forEach(p => {
+    const nazwa = enc.encode(p.nazwa);
+    const dane = p.dane instanceof Uint8Array ? p.dane : enc.encode(String(p.dane));
+    const crc = crc32(dane);
+    const lok = new Uint8Array(30 + nazwa.length);
+    const dv = new DataView(lok.buffer);
+    dv.setUint32(0, 0x04034b50, true); dv.setUint16(4, 20, true); dv.setUint16(6, 0x0800, true); dv.setUint16(8, 0, true);
+    dv.setUint16(10, dosCzas, true); dv.setUint16(12, dosData, true); dv.setUint32(14, crc, true);
+    dv.setUint32(18, dane.length, true); dv.setUint32(22, dane.length, true); dv.setUint16(26, nazwa.length, true); dv.setUint16(28, 0, true);
+    lok.set(nazwa, 30);
+    czesci.push(lok, dane);
+    const cen = new Uint8Array(46 + nazwa.length);
+    const dc = new DataView(cen.buffer);
+    dc.setUint32(0, 0x02014b50, true); dc.setUint16(4, 20, true); dc.setUint16(6, 20, true); dc.setUint16(8, 0x0800, true); dc.setUint16(10, 0, true);
+    dc.setUint16(12, dosCzas, true); dc.setUint16(14, dosData, true); dc.setUint32(16, crc, true); dc.setUint32(20, dane.length, true); dc.setUint32(24, dane.length, true);
+    dc.setUint16(28, nazwa.length, true); dc.setUint32(42, przes, true);
+    cen.set(nazwa, 46);
+    centralny.push(cen);
+    przes += lok.length + dane.length;
+  });
+  const rozmiarCen = centralny.reduce((s, x) => s + x.length, 0);
+  const kon = new Uint8Array(22);
+  const dk = new DataView(kon.buffer);
+  dk.setUint32(0, 0x06054b50, true); dk.setUint16(8, pliki.length, true); dk.setUint16(10, pliki.length, true);
+  dk.setUint32(12, rozmiarCen, true); dk.setUint32(16, przes, true);
+  return new Blob(czesci.concat(centralny, [kon]), { type: 'application/zip' });
+}
+function xmlEsc(t) { return String(t == null ? '' : t).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function literaKolumny(i) { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+/** Prawdziwy plik Excela (.xlsx) z jednym arkuszem. Komórka {data: ms} to data z godziną. */
+function zbudujXlsx(nazwaArkusza, wiersze, szerokosci) {
+  const komorka = (v, r, k, naglowek) => {
+    const ref = literaKolumny(k) + (r + 1);
+    if (v && typeof v === 'object' && 'data' in v) {
+      const c = czesciCzasu(v.data);
+      const serial = Date.UTC(c.y, c.mo - 1, c.d, c.h, c.mi, c.s) / 864e5 + 25569;
+      return '<c r="' + ref + '" s="2"><v>' + serial.toFixed(8) + '</v></c>';
+    }
+    if (typeof v === 'number' && isFinite(v)) return '<c r="' + ref + '"' + (naglowek ? ' s="1"' : '') + '><v>' + v + '</v></c>';
+    if (v === '' || v === null || v === undefined) return '';
+    return '<c r="' + ref + '" t="inlineStr"' + (naglowek ? ' s="1"' : '') + '><is><t xml:space="preserve">' + xmlEsc(v) + '</t></is></c>';
+  };
+  const dane = wiersze.map((w, r) => '<row r="' + (r + 1) + '">' + w.map((v, k) => komorka(v, r, k, r === 0)).join('') + '</row>').join('');
+  const kolumny = (szerokosci || []).map((s, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + s + '" customWidth="1"/>').join('');
+  const arkusz = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' +
+    (kolumny ? '<cols>' + kolumny + '</cols>' : '') + '<sheetData>' + dane + '</sheetData></worksheet>';
+  const pliki = [
+    { nazwa: '[Content_Types].xml', dane: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>' },
+    { nazwa: '_rels/.rels', dane: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+    { nazwa: 'xl/workbook.xml', dane: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="' + xmlEsc(nazwaArkusza).slice(0, 31) + '" sheetId="1" r:id="rId1"/></sheets></workbook>' },
+    { nazwa: 'xl/_rels/workbook.xml.rels', dane: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
+    { nazwa: 'xl/styles.xml', dane: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="dd.mm.yyyy hh:mm"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>' },
+    { nazwa: 'xl/worksheets/sheet1.xml', dane: arkusz }
+  ];
+  const zip = zbudujZip(pliki);
+  return new Blob([zip], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+/** Odczyt pierwszego arkusza z pliku .xlsx (bez zewnętrznych bibliotek). */
+async function czytajXlsx(bufor) {
+  const dv = new DataView(bufor);
+  let koniec = -1;
+  for (let i = bufor.byteLength - 22; i >= Math.max(0, bufor.byteLength - 65600); i--) { if (dv.getUint32(i, true) === 0x06054b50) { koniec = i; break; } }
+  if (koniec < 0) throw new Error('To nie jest prawidłowy plik .xlsx.');
+  const ile = dv.getUint16(koniec + 10, true);
+  let p = dv.getUint32(koniec + 16, true);
+  const dek = new TextDecoder('utf-8');
+  const wpisy = {};
+  for (let k = 0; k < ile; k++) {
+    if (dv.getUint32(p, true) !== 0x02014b50) throw new Error('Uszkodzony plik .xlsx.');
+    const metoda = dv.getUint16(p + 10, true), rozmC = dv.getUint32(p + 20, true);
+    const dlN = dv.getUint16(p + 28, true), dlE = dv.getUint16(p + 30, true), dlK = dv.getUint16(p + 32, true), lok = dv.getUint32(p + 42, true);
+    const nazwa = dek.decode(new Uint8Array(bufor, p + 46, dlN));
+    p += 46 + dlN + dlE + dlK;
+    if (!/^xl\/(workbook\.xml|sharedStrings\.xml|_rels\/workbook\.xml\.rels|worksheets\/[^/]+\.xml)$/.test(nazwa)) continue;
+    const start = lok + 30 + dv.getUint16(lok + 26, true) + dv.getUint16(lok + 28, true);
+    const surowe = new Uint8Array(bufor, start, rozmC);
+    let dane;
+    if (metoda === 0) dane = surowe;
+    else if (metoda === 8) {
+      if (typeof DecompressionStream === 'undefined') throw new Error('Ta przeglądarka nie odczyta pliku .xlsx – skopiuj dane z Excela i wklej je w pole powyżej.');
+      dane = new Uint8Array(await new Response(new Blob([surowe]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+    } else throw new Error('Nieobsługiwana kompresja w pliku .xlsx.');
+    wpisy[nazwa] = dek.decode(dane);
+  }
+  const xml = t => new DOMParser().parseFromString(t, 'application/xml');
+  const poNazwie = (el, n) => Array.from(el.getElementsByTagNameNS('*', n));
+  const atr = (el, n) => { for (const a of Array.from(el.attributes)) if (a.localName === n) return a.value; return null; };
+  let sciezka = 'xl/worksheets/sheet1.xml';
+  if (wpisy['xl/workbook.xml'] && wpisy['xl/_rels/workbook.xml.rels']) {
+    const pierwszy = poNazwie(xml(wpisy['xl/workbook.xml']), 'sheet')[0];
+    const rid = pierwszy ? atr(pierwszy, 'id') : null;
+    const rel = poNazwie(xml(wpisy['xl/_rels/workbook.xml.rels']), 'Relationship').find(r => r.getAttribute('Id') === rid);
+    if (rel) { const cel = rel.getAttribute('Target'); sciezka = cel.charAt(0) === '/' ? cel.slice(1) : 'xl/' + cel.replace(/^\.\//, ''); }
+  }
+  if (!wpisy[sciezka]) sciezka = Object.keys(wpisy).filter(n => n.indexOf('xl/worksheets/') === 0).sort()[0];
+  if (!sciezka || !wpisy[sciezka]) throw new Error('W pliku nie znaleziono arkusza.');
+  const wspolne = wpisy['xl/sharedStrings.xml'] ? poNazwie(xml(wpisy['xl/sharedStrings.xml']), 'si').map(si => poNazwie(si, 't').filter(t => !t.parentNode || t.parentNode.localName !== 'rPh').map(t => t.textContent).join('')) : [];
+  const wiersze = [];
+  poNazwie(xml(wpisy[sciezka]), 'row').forEach(row => {
+    const w = [];
+    poNazwie(row, 'c').forEach(c => {
+      const ref = c.getAttribute('r') || '';
+      const lit = (ref.match(/^[A-Z]+/) || [''])[0];
+      let idx = w.length;
+      if (lit) { idx = 0; for (const ch of lit) idx = idx * 26 + (ch.charCodeAt(0) - 64); idx -= 1; }
+      const typ = c.getAttribute('t');
+      const v = poNazwie(c, 'v')[0];
+      let wart = '';
+      if (typ === 's') wart = wspolne[Number(v ? v.textContent : -1)] || '';
+      else if (typ === 'inlineStr') wart = poNazwie(c, 't').map(t => t.textContent).join('');
+      else if (typ === 'b') wart = v && v.textContent === '1' ? 'TAK' : 'NIE';
+      else wart = v ? v.textContent : '';
+      while (w.length < idx) w.push('');
+      w[idx] = String(wart).trim();
+    });
+    if (w.some(x => x !== '')) wiersze.push(w);
+  });
+  return wiersze;
+}
+function pobierzPlik(blob, nazwa) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nazwa; a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 4000);
+}
+function drukuj(html) {
+  const w = $('#wydruk');
+  w.innerHTML = html;
+  document.body.classList.add('drukowanie');
+  const sprzataj = () => { document.body.classList.remove('drukowanie'); w.innerHTML = ''; window.removeEventListener('afterprint', sprzataj); };
+  window.addEventListener('afterprint', sprzataj);
+  const obrazy = $$('img', w).map(i => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()));
+  Promise.all(obrazy).then(() => setTimeout(() => window.print(), 60));
+}
+function kopiuj(tekst) {
+  const awaryjnie = () => {
+    const t = document.createElement('textarea');
+    t.value = tekst; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); toast('Skopiowano link.', 'ok'); } catch (e) { toast('Zaznacz i skopiuj link ręcznie.', 'blad'); }
+    t.remove();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(tekst).then(() => toast('Skopiowano link.', 'ok'), awaryjnie);
+  else awaryjnie();
+}
+
+// ═══════════════════════════ ZDARZENIA PRZEGLĄDARKI ═══════════════════════════
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    if (Stan.widok === 'skaner') { uruchomKamere(); wlaczWakeLock(); }
+    if (Stan.widok === 'skaner' || Stan.widok === 'panel') { odswiezStan(true); wyslijKolejke(); }
+  } else if (Stan.widok === 'skaner') {
+    Kamera.stop();
+  }
+});
+window.addEventListener('online', () => { Stan.bladSieci = false; wyslijKolejke(); odswiezStan(true); });
+window.addEventListener('offline', () => { Stan.bladSieci = true; odswiezWskaznik(); });
+
+start();
+</script>
+</body>
+</html>
