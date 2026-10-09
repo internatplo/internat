@@ -1532,7 +1532,7 @@ QRCode.createBytes = function(buffer, rsBlocks) {
 // Jeśli zostawisz puste, aplikacja zapyta o adres przy pierwszym uruchomieniu.
 const ADRES_SERWERA = '';
 
-const WERSJA = '1.0';
+const WERSJA = '1.1';
 const STREFA = 'Europe/Warsaw';
 const GRANICA_DOBY = 5 * 60;
 const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
@@ -2897,6 +2897,9 @@ function obsluzKlikUczniow(e) {
   else if (a === 'imp-dodaj') wykonajImport(b);
   else if (a === 'kopiuj-link') kopiuj(linkDlaUrzadzenia());
 }
+/** Kolejność kart z kodami: klasa, pokój, nazwisko, imię (łatwo rozdać kody pokojami). */
+function kolejnoscKart(a, b) { return porownaj(a.k, b.k) || porownaj(a.p, b.p) || porownaj(a.n, b.n) || porownaj(a.i, b.i); }
+function opisKlasaPokoj(u) { return [u.k ? 'klasa ' + u.k : '', u.p ? 'pokój ' + u.p : ''].filter(Boolean).join(' · '); }
 function odswiezSiatkeQr() {
   const el = $('#siatka-qr');
   if (!el) return;
@@ -2904,14 +2907,14 @@ function odswiezSiatkeQr() {
   if (licz) licz.textContent = Stan.uczniowie.length;
   const qEl = $('#qr-szukaj');
   const q = norm(qEl ? qEl.value : '');
-  const podpis = q + '|' + Stan.uczniowie.map(u => u.id + ':' + u.kod + ':' + u.n + ':' + u.i + ':' + u.k).join(',');
+  const podpis = q + '|' + Stan.uczniowie.map(u => u.id + ':' + u.kod + ':' + u.n + ':' + u.i + ':' + u.k + ':' + u.p).join(',');
   if (podpis === Stan.podpisQr) return;          // nic się nie zmieniło – nie rysuj od nowa
   Stan.podpisQr = podpis;
-  const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.k).indexOf(q) >= 0)
-    .sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.k + ' ' + u.p).indexOf(q) >= 0)
+    .sort(kolejnoscKart);
   if (!lista.length) { el.innerHTML = '<p class="pusto" style="grid-column:1/-1">' + (Stan.uczniowie.length ? 'Brak wyników.' : 'Brak uczniów – dodaj ich poniżej albo w arkuszu Google.') + '</p>'; return; }
   el.innerHTML = lista.map(u => `<div class="kafel-qr"><canvas data-kod="${esc(u.kod)}" width="10" height="10"></canvas>
-    <div class="n">${esc(nazwaUcznia(u))}</div><div class="d">${u.k ? 'klasa ' + esc(u.k) : '&nbsp;'}</div>
+    <div class="n">${esc(nazwaUcznia(u))}</div><div class="d">${esc(opisKlasaPokoj(u)) || '&nbsp;'}</div>
     <button class="przycisk drugi maly" data-a="qr-png" data-id="${u.id}">${ikona('pobierz')} PNG</button></div>`).join('');
   $$('canvas[data-kod]', el).forEach(c => rysujQr(c, c.dataset.kod, 4, 2));
 }
@@ -2948,7 +2951,7 @@ function kartaQr(u) {
   g.fillStyle = '#111';
   dopasujCzcionke(g, imieNazwisko(u), 'bold', 44, W - 48);
   g.fillText(imieNazwisko(u), W / 2, W + 34);
-  const opis = [u.k ? 'klasa ' + u.k : '', u.p ? 'pokój ' + u.p : ''].filter(Boolean).join(' · ');
+  const opis = opisKlasaPokoj(u);
   g.fillStyle = '#444';
   dopasujCzcionke(g, opis, 'normal', 30, W - 48);
   g.fillText(opis, W / 2, W + 82);
@@ -2962,7 +2965,7 @@ function kartaQr(u) {
 }
 function nazwaPlikuQr(u) {
   const czysty = t => String(t || '').replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, z => { const m = POLSKIE[z.toLowerCase()]; return z === z.toLowerCase() ? m : m.toUpperCase(); }).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
-  return [czysty(u.k), czysty(u.n), czysty(u.i)].filter(Boolean).join('_') + '_' + u.id + '.png';
+  return [czysty(u.k), czysty(u.n), czysty(u.i), u.p ? 'pokoj' + czysty(u.p) : ''].filter(Boolean).join('_') + '_' + u.id + '.png';
 }
 async function pobierzWszystkieQr(btn) {
   if (!Stan.uczniowie.length) { toast('Brak uczniów.', 'blad'); return; }
@@ -2970,7 +2973,7 @@ async function pobierzWszystkieQr(btn) {
   btn.disabled = true;
   try {
     const pliki = [];
-    const lista = Stan.uczniowie.slice().sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n));
+    const lista = Stan.uczniowie.slice().sort(kolejnoscKart);
     for (let i = 0; i < lista.length; i++) {
       btn.textContent = 'Przygotowuję ' + (i + 1) + '/' + lista.length + '…';
       const blob = await new Promise(ok => kartaQr(lista[i]).toBlob(ok, 'image/png'));
@@ -2985,7 +2988,7 @@ async function pobierzWszystkieQr(btn) {
   }
 }
 async function drukujKartyQr() {
-  const lista = Stan.uczniowie.slice().sort((a, b) => porownaj(a.k, b.k) || porownaj(a.n, b.n) || porownaj(a.i, b.i));
+  const lista = Stan.uczniowie.slice().sort(kolejnoscKart);
   if (!lista.length) { toast('Brak uczniów.', 'blad'); return; }
   toast('Przygotowuję wydruk…');
   await new Promise(r => setTimeout(r, 30));
