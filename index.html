@@ -88,7 +88,11 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .chip.s-NOTA::before, .chip.bez::before { display: none; }
 
 /* ekran logowania / konfiguracji */
-.ekran-srodek { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+.ekran-srodek { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; }
+.autor { text-align: center; font-size: .78rem; line-height: 1.5; color: var(--tekst3); padding: 16px 16px 20px; }
+.autor a { color: inherit; }
+.ekran-srodek .autor { padding-bottom: 0; max-width: 440px; }
+.st .autor { padding: 0; margin-top: -8px; font-size: .7rem; color: #6c7c8f; }
 .okno-wejscia { width: 100%; max-width: 440px; }
 .okno-wejscia .logo { width: 56px; height: 56px; border-radius: 16px; background: var(--akcent); color: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
 .okno-wejscia .logo .ikona { width: 30px; height: 30px; }
@@ -1730,7 +1734,7 @@ QRCode.createBytes = function(buffer, rsBlocks) {
 // Gdy jest wpisany, każde urządzenie od razu łączy się z serwerem. Puste = aplikacja zapyta o adres przy pierwszym uruchomieniu.
 const ADRES_SERWERA = 'https://script.google.com/macros/s/AKfycbztsxYwsqmiAg4l0KrRAgZWXLWaJw3Y5nYJTZ2NQr3BPOOqp1nCb5-UERSxlKbqhnM7/exec';
 
-const WERSJA = '2.0';
+const WERSJA = '2.1';
 const STREFA = 'Europe/Warsaw';
 const GRANICA_DOBY = 5 * 60;
 const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
@@ -1740,6 +1744,11 @@ const COFNIJ_MS = 10 * 1000;            // tyle czasu na „Cofnij” po podpisi
 const BEZCZYNNOSC_PODPIS_MS = 30 * 1000;
 const BEZCZYNNOSC_OKNO_MS = 60 * 1000;
 
+const AUTOR = { tekst: '© 2026 Wszelkie prawa zastrzeżone · Realizacja: Maksym Terenzani – Spot · Kontakt: ', email: 'spot.opole@gmail.com' };
+/** Stopka z prawami autorskimi; na tablecie przy drzwiach bez linku (uczniowie nie otworzą poczty). */
+function stopkaAutora(bezLinku) {
+  return '<footer class="autor">' + esc(AUTOR.tekst) + (bezLinku ? esc(AUTOR.email) : '<a href="mailto:' + AUTOR.email + '">' + esc(AUTOR.email) + '</a>') + '</footer>';
+}
 const STATUS_NAZWA = { IN: 'W internacie', OUT: 'Poza internatem', HOME: 'W domu' };
 const AKCJA_NAZWA = { WEJSCIE: 'Powrót', WYJSCIE: 'Wyjście', DOM: 'Wyjazd do domu', POBRANIE: 'Pobranie', ZWROT: 'Zwrot', WEEKEND_ZAPIS: 'Zapis na weekend', WEEKEND_WYPIS: 'Wypis z weekendu' };
 const AKCJA_STATUS = { WEJSCIE: 'IN', WYJSCIE: 'OUT', DOM: 'HOME' };
@@ -2416,7 +2425,7 @@ function pokazKonfiguracje(komunikat) {
       <ol><li>Otwórz arkusz Google z danymi → Rozszerzenia → Apps Script.</li>
       <li>Kliknij <b>Wdróż → Zarządzaj wdrożeniami</b>.</li>
       <li>Skopiuj <b>Adres URL aplikacji internetowej</b> (kończy się na <b>/exec</b>).</li></ol>
-    </details></div></div>`;
+    </details></div>${stopkaAutora()}</div>`;
   $('#f-konfig').addEventListener('submit', async e => {
     e.preventDefault();
     const adres = $('#adres').value.trim();
@@ -2457,7 +2466,7 @@ function pokazLogowanie(komunikat) {
     </form>
     <p class="maly-tekst" style="margin-top:14px">Tablet przy drzwiach logujemy <b>PIN-em stanowiska</b>, a telefon lub komputer wychowawcy – <b>hasłem panelu</b>. Oba są w arkuszu, w karcie „Ustawienia”.</p>
     ${adresWbudowany() ? '' : '<button class="link" data-a="zmien-serwer" type="button">Zmień adres serwera</button>'}
-  </div></div>`;
+  </div>${stopkaAutora()}</div>`;
   setTimeout(() => { const h = $('#haslo'); if (h) h.focus(); }, 50);
   if (!Pamiec.get('nazwa', null)) {      // nowe urządzenie – pobierz nazwę internatu z serwera
     api('ping', {}, { limit: 20000 }).then(d => {
@@ -2690,6 +2699,7 @@ function pokazSkaner() {
     </nav>
     <main class="st-tresc" id="st-tresc"></main>
     <footer class="st-stopka" id="st-stopka"></footer>
+    ${stopkaAutora(true)}
   </div>`;
   $('#aplikacja').onclick = e => {
     const b = e.target.closest('[data-a],[data-zak]');
@@ -3781,7 +3791,7 @@ function pokazPanel() {
     <div class="pn-srodek">
       <nav class="zakladki" id="zakladki">${ZAKLADKI.map(z => `<button data-z="${z[0]}">${z[1]}</button>`).join('')}</nav>
       <div id="pn-tresc"></div>
-    </div></div>`;
+    </div>${stopkaAutora()}</div>`;
   $('.pn-gora').addEventListener('click', e => {
     const b = e.target.closest('[data-a]');
     if (!b) return;
@@ -4325,23 +4335,22 @@ function rysujWynikiNieob() {
   const czeka = new Set(em.oczekuje.map(x => x.u + '|' + x.p));
   const opisEmail = x => {
     if (x.email) return esc(x.email);
-    if (czeka.has(x.u + '|' + x.p)) return '<span class="amb-zn">czeka na wysyłkę</span>';
-    return '<span class="szary">' + (em.adres.length ? 'nie wysłano (za późno na wypis)' : 'nie wysłano – brak adresu') + '</span>';
+    if (czeka.has(x.u + '|' + x.p)) return '<span class="amb-zn">' + (em.adres.length ? 'czeka na wysyłkę' : 'do wypisu') + '</span>';
+    return '<span class="szary">' + (x.wrocil !== null ? 'wrócił' : (/^\d{4}-/.test(x.wypis) ? 'za późno na wypis' : '—')) + '</span>';
   };
   const wiersz = x => `<tr class="${x.wrocil === null && x.powrot && x.powrot < ymd(teraz()) ? 'w-LATE' : ''}"><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${esc(x.r)}</td>
     <td style="white-space:nowrap">${x.zgl ? esc(opisDniaKr(ymd(x.zgl)) + ', ' + godz(x.zgl)) : ''}</td>
     <td style="white-space:nowrap">${x.wrocil !== null ? '<span class="ok-zn">✓ ' + esc(kiedy(x.wrocil)) + '</span><div class="szary">plan: ' + esc(x.powrot ? opisDniaKr(x.powrot) : '—') + '</div>' : '<b>' + (x.powrot ? esc(opisPowrotuKr(x.powrot)) : '—') + '</b>'}</td><td class="num">${x.dni}</td>
     <td>${/^\d{4}-/.test(x.wypis) ? '<b style="color:var(--akcent2)">' + esc(opisDniaKr(x.wypis)) + '</b>' : esc(x.wypis)}</td><td class="tylko-szeroki">${esc(x.potw)}</td><td class="tylko-szeroki">${esc(x.powod)}</td>
     <td>${opisEmail(x)}</td></tr>`;
-  const naglowek = '<thead><tr><th>Uczeń</th><th>Pokój</th><th>Rodzaj</th><th>Wyjazd</th><th>Powrót</th><th class="num">Dni</th><th>Wypis z posiłków od</th><th class="tylko-szeroki">Potwierdzenie</th><th class="tylko-szeroki">Powód</th><th>E-mail do sekretariatu</th></tr></thead>';
-  const listaNazw = l => l.map(x => x.u).join(', ').replace(/\.$/, '');
+  const naglowek = '<thead><tr><th>Uczeń</th><th>Pokój</th><th>Rodzaj</th><th>Wyjazd</th><th>Powrót</th><th class="num">Dni</th><th>Wypis z posiłków od</th><th class="tylko-szeroki">Potwierdzenie</th><th class="tylko-szeroki">Powód</th><th>Sekretariat</th></tr></thead>';
   el.innerHTML = `<div class="stos">
-      <div><h2 style="margin:0">Nieobecności w dni nauki</h2><p class="szary" style="margin:2px 0 0">Wyjazdy, przy których uczeń opuszcza dni nauki (pon–pt). Dłuższe niż ${em.prog} dni idą e-mailem do sekretariatu – wypis z posiłków od pojutrza (gdy pojutrze to sobota lub niedziela – od poniedziałku). Weekendy nie trafiają do sekretariatu – wtedy nie wydajemy posiłków.</p></div>
-      <div class="karta"><div class="email-pasek"><h2>${ikona('mail')} E-mail do sekretariatu</h2>
+      <div><h2 style="margin:0">Nieobecności w dni nauki</h2><p class="szary" style="margin:2px 0 0">Wyjazdy, przy których uczeń opuszcza dni nauki (pon–pt). Dłuższe niż ${em.prog} dni sekretariat sprawdza w arkuszu, w karcie „Nieobecności”, i wypisuje ucznia z posiłków od pojutrza (gdy pojutrze to sobota lub niedziela – od poniedziałku). Weekendy nie trafiają do sekretariatu – wtedy nie wydajemy posiłków.</p></div>
+      <div class="karta"><div class="email-pasek"><h2>${ikona('mail')} ${em.adres.length ? 'E-mail do sekretariatu' : 'Sekretariat – wypis z posiłków'}</h2>
       ${em.adres.length ? `<dl class="ustawienia-lista"><dt>Adres</dt><dd>${esc(em.adres.join(', '))}</dd><dt>Wysyłka</dt><dd>${em.godzina !== null ? 'codziennie ok. ' + esc(godzMin(em.godzina)) + ' – tylko gdy są nowe zgłoszenia' : 'nie ustawiono godziny'}</dd>
           <dt>Ostatnio</dt><dd>${em.ostatni ? esc(dataGodz(em.ostatni)) : 'jeszcze nie wysłano'}</dd><dt>Czeka</dt><dd>${em.oczekuje.length ? esc(em.oczekuje.map(x => x.u + ' (wypis od ' + opisDniaKr(x.wypisOd) + ')').join(', ')) : 'nic'}</dd></dl>
           <button class="przycisk drugi" data-a="wyslij-email" ${em.oczekuje.length ? '' : 'disabled'}>${ikona('mail')} Wyślij teraz</button>`
-        : `<div class="ramka-info" style="flex:1;min-width:260px">E-mail jest <b>wyłączony</b> – nie ma adresu sekretariatu. Wpisz go w arkuszu, w karcie „Ustawienia”, w wierszu <b>email_sekretariatu</b> (godzinę wysyłki – w wierszu <b>godzina_emaila</b>). Zadziała od razu, bez zmian w aplikacji.${em.oczekuje.length ? '<br>Do wysłania byłoby teraz: <b>' + esc(listaNazw(em.oczekuje)) + '</b>.' : ''}</div>`}</div></div>
+        : `<div class="ramka-info" style="flex:1;min-width:260px">Sekretariat sprawdza wypisy w arkuszu „Internat – obecność”, w karcie <b>Nieobecności</b>: do zrobienia są wiersze z datą w kolumnie „Wypis z posiłków od” i pustą kolumną „Sekretariat” (zaznaczone na żółto). Po wypisaniu sekretariat wpisuje tam „wypisano”.<br>${em.oczekuje.length ? 'Do wypisu teraz: <b>' + esc(em.oczekuje.map(x => x.u + ' (od ' + opisDniaKr(x.wypisOd) + ')').join(', ')) + '</b>.' : 'Teraz nie ma nikogo do wypisu.'}</div>`}</div></div>
       <div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8fafc">Teraz nieobecni (${otwarte.length})</div>
         <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela">${naglowek}<tbody>${otwarte.length ? otwarte.map(wiersz).join('') : '<tr><td colspan="10" class="pusto">Nikt nie jest teraz nieobecny w dni nauki.</td></tr>'}</tbody></table></div></div>
       ${zamkn.length ? `<div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8fafc">Wrócili (ostatnie 30 dni)</div>
