@@ -1734,7 +1734,7 @@ QRCode.createBytes = function(buffer, rsBlocks) {
 // Gdy jest wpisany, każde urządzenie od razu łączy się z serwerem. Puste = aplikacja zapyta o adres przy pierwszym uruchomieniu.
 const ADRES_SERWERA = 'https://script.google.com/macros/s/AKfycbztsxYwsqmiAg4l0KrRAgZWXLWaJw3Y5nYJTZ2NQr3BPOOqp1nCb5-UERSxlKbqhnM7/exec';
 
-const WERSJA = '2.1';
+const WERSJA = '2.2';
 const STREFA = 'Europe/Warsaw';
 const GRANICA_DOBY = 5 * 60;
 const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
@@ -1968,14 +1968,33 @@ function terminZapisow(piatek) {
 }
 /** Pojutrze; gdy wypada w sobotę lub niedzielę – poniedziałek. */
 function pojutrze(d) { let x = dodajDni(d, 2); while (dzienTyg(x) > 5) x = dodajDni(x, 1); return x; }
-/** Dni nauki z całodniową nieobecnością – ta sama zasada co na serwerze. */
+/** Dni nauki z całodniową nieobecnością i dni nieobecności razem z weekendem – ta sama zasada co na serwerze. */
 function nieobecnosc(ts, powrot, rodzaj) {
   const wyj = ymd(ts);
   let d = rodzaj === 'weekend' ? dodajDni(wyj, 1) : wyj;
   const dni = [];
   for (let i = 0; d < powrot && i < 400; i++, d = dodajDni(d, 1)) if (dzienTyg(d) <= 5) dni.push(d);
-  return { dni: dni.length, lista: dni, od: dni[0] || null };
+  let kal = 0;
+  for (let x = wyj, i = 0; x < powrot && i < 400; i++, x = dodajDni(x, 1)) kal++;
+  return { dni: dni.length, lista: dni, od: dni[0] || null, kal: kal };
 }
+/**
+ * Wypis z posiłków (jak na serwerze): nieobecność dłuższa niż próg – dni liczone razem z sobotą i niedzielą;
+ * wypis najwcześniej na pojutrze (sobota, niedziela → poniedziałek; w poniedziałek pierwszy posiłek to kolacja)
+ * i tylko wtedy, gdy uczeń nie wróci wcześniej.
+ */
+function wypisPosilkow(ts, powrot, rodzaj) {
+  const nb = nieobecnosc(ts, powrot, rodzaj);
+  const prog = Stan.ustawienia.prog === undefined ? 2 : Stan.ustawienia.prog;
+  if (!nb.dni) return { nb: nb, prog: prog, stan: 'bez_nauki' };
+  if (nb.kal <= prog) return { nb: nb, prog: prog, stan: 'krotko' };
+  let wypis = pojutrze(ymd(ts));
+  if (nb.od > wypis) wypis = nb.od;
+  if (wypis >= powrot) return { nb: nb, prog: prog, stan: 'za_pozno' };
+  return { nb: nb, prog: prog, stan: 'wypis', wypis: wypis };
+}
+/** „poniedziałku 12.10 (od kolacji)” */
+function opisWypisu(wypis) { return DNI_DOP[dzienTyg(wypis) - 1] + ' ' + dzienMies(wypis) + (dzienTyg(wypis) === 1 ? ' (od kolacji)' : ''); }
 function oknoWydawania(ms) {
   const m = czesciCzasu(ms).min;
   const s = Stan.ustawienia;
@@ -3031,18 +3050,17 @@ function ekranDomWeekend() {
   });
 }
 
-/** Informacja o dniach nieobecności i sekretariacie (ta sama zasada co e-mail z serwera). */
+/** Informacja o dniach nieobecności i wypisie z posiłków (ta sama zasada co na serwerze). */
 function infoNieobecnosci(rodzaj, powrot) {
   if (!powrot) return '';
-  const nb = nieobecnosc(teraz(), powrot, rodzaj);
-  const prog = Stan.ustawienia.prog === undefined ? 2 : Stan.ustawienia.prog;
-  if (!nb.dni) return `<div class="info-n">${ikona('mail')}<span>Nie opuścisz żadnego dnia nauki – sekretariat nie dostaje informacji.</span></div>`;
-  const zakres = nb.dni === 1 ? opisDniaKr(nb.od) : DNI_KROTKO[dzienTyg(nb.lista[0]) - 1] + '–' + DNI_KROTKO[dzienTyg(nb.lista[nb.lista.length - 1]) - 1];
-  const ile = nb.dni + ' ' + liczbaMnoga(nb.dni, 'dzień', 'dni', 'dni') + ' nauki';
-  if (nb.dni <= prog) return `<div class="info-n">${ikona('mail')}<span>Nie będzie Cię ${esc(ile)} (${esc(zakres)}) – nie więcej niż ${prog} dni, więc sekretariat nie dostaje informacji.</span></div>`;
-  let wypis = pojutrze(ymd(teraz()));
-  if (nb.od > wypis) wypis = nb.od;
-  return `<div class="info-n">${ikona('mail')}<span><b>Nie będzie Cię ${esc(ile)} (${esc(zakres)}${rodzaj === 'tydzien' ? ', weekendu nie liczymy' : ''}).</b> To ponad ${prog} dni, więc sekretariat dostanie informację: wypis z posiłków od ${esc(DNI_DOP[dzienTyg(wypis) - 1] + ' ' + dzienMies(wypis))}.</span></div>`;
+  const w = wypisPosilkow(teraz(), powrot, rodzaj);
+  const nb = w.nb;
+  const ile = nb.kal + ' ' + liczbaMnoga(nb.kal, 'dzień', 'dni', 'dni');
+  const info = t => `<div class="info-n">${ikona('mail')}<span>${t}</span></div>`;
+  if (w.stan === 'bez_nauki') return info('Nie opuścisz żadnego dnia nauki – nie trzeba wypisu z posiłków.');
+  if (w.stan === 'krotko') return info(`Nie będzie Cię ${esc(ile)} – nie więcej niż ${w.prog}, więc nie trzeba wypisu z posiłków.`);
+  if (w.stan === 'za_pozno') return info(`Nie będzie Cię ${esc(ile)}, ale wrócisz, zanim wypis z posiłków zacznie działać (najwcześniej na pojutrze) – nie trzeba wypisu.`);
+  return info(`<b>Nie będzie Cię ${esc(ile)} (razem z weekendem).</b> To ponad ${w.prog} dni, więc sekretariat wypisze Cię z posiłków od ${esc(opisWypisu(w.wypis))}.`);
 }
 
 function ekranDomDzien() {
@@ -3350,14 +3368,13 @@ function opisPodpisu(f) {
       o.chipy.push(pig('powrót: ' + esc(opisPowrotuSr(f.powrotData)), 'dom'));
       o.ramki.push('<div class="ramka-mala cz"><b>Rodzic potwierdził ' + (f.potwierdzenie === 'SMS' ? 'SMS-em' : 'e-mailem') + '</b></div>');
       o.ramki.push('<div class="ramka-mala zo"><b>Zgłoś to wychowawcy przy drzwiach.</b> Powiedz, jak rodzic potwierdził.</div>');
-      const nb = nieobecnosc(t, f.powrotData, 'tydzien');
-      if (nb.dni > (Stan.ustawienia.prog === undefined ? 2 : Stan.ustawienia.prog)) {
-        let wypis = pojutrze(ymd(t)); if (nb.od > wypis) wypis = nb.od;
-        o.nota = 'Sekretariat dostanie informację na pojutrze – wypis z posiłków od ' + esc(opisDniaKr(wypis)) + '.';
-      }
+      const w = wypisPosilkow(t, f.powrotData, 'tydzien');
+      if (w.stan === 'wypis') o.nota = 'Sekretariat wypisze Cię z posiłków od ' + esc(opisWypisu(w.wypis)) + '.';
     } else {
       o.pig = 'Wyjazd do domu · krok 2 z 2';
       o.chipy.push(pig('powrót: ' + esc(opisPowrotuSr(f.powrotData)), 'dom'));
+      const w = f.powrotData ? wypisPosilkow(t, f.powrotData, 'weekend') : { stan: '' };
+      if (w.stan === 'wypis') o.nota = 'Sekretariat wypisze Cię z posiłków od ' + esc(opisWypisu(w.wypis)) + '.';
       o.chipy.push(pig('weekend – bez dodatkowych zgód', 'wr'));
       o.nota = 'Po powrocie podpisz „Wracam”.';
     }
@@ -3601,16 +3618,14 @@ function pokazPotwierdzenie2(ev, u, f, mig, r) {
     c.kolor = 'dom'; c.ik = 'dom'; c.nad = 'Szczęśliwej drogi!';
     c.linia = 'Wyjazd do domu · ' + DNI[dzienTyg(ymd(ts)) - 1] + ' ' + dzienMies(ymd(ts)) + ', ' + godz(ts) + (f.rodzaj === 'tydzien' ? ' · ' + malaLitera(f.powod) : '');
     c.chipy.push(['Powrót: ' + opisPowrotuSr(f.powrotData), '']);
+    const wp = f.powrotData ? wypisPosilkow(ts, f.powrotData, f.rodzaj === 'tydzien' ? 'tydzien' : 'weekend') : { stan: '' };
+    if (wp.stan === 'wypis') {
+      c.chipy.push(['Wypis z posiłków przez sekretariat', 'bialy']);
+      c.notka = 'Wypis z posiłków od ' + opisWypisu(wp.wypis) + ' zrobi sekretariat.';
+    }
     if (f.rodzaj === 'tydzien') {
-      const nb = nieobecnosc(ts, f.powrotData, 'tydzien');
-      const prog = Stan.ustawienia.prog === undefined ? 2 : Stan.ustawienia.prog;
-      if (nb.dni > prog) {
-        let wypis = pojutrze(ymd(ts)); if (nb.od > wypis) wypis = nb.od;
-        c.chipy.push(['Informacja dla sekretariatu na pojutrze', 'bialy']);
-        c.notka = 'Wypis z posiłków od ' + DNI_DOP[dzienTyg(wypis) - 1] + ' ' + dzienMies(wypis) + ' zrobi sekretariat.';
-      }
       c.zolta = 'Teraz powiedz wychowawcy przy drzwiach, że rodzic potwierdził ' + (f.potwierdzenie === 'SMS' ? 'SMS-em.' : 'e-mailem.');
-    } else c.notka = 'Po powrocie podpisz „Wracam”.';
+    } else if (wp.stan !== 'wypis') c.notka = 'Po powrocie podpisz „Wracam”.';
   } else if (f.typ === 'POBRANIE') {
     c.kolor = 'moj'; c.ik = ikonaRzeczy(r) === 'klucz' || r.typ !== 'aktywnosc' ? 'klucz' : 'ok';
     c.linia = 'Pobranie · ' + malaLitera(r.nazwa) + ' · ' + godz(ts);
@@ -4345,7 +4360,7 @@ function rysujWynikiNieob() {
     <td>${opisEmail(x)}</td></tr>`;
   const naglowek = '<thead><tr><th>Uczeń</th><th>Pokój</th><th>Rodzaj</th><th>Wyjazd</th><th>Powrót</th><th class="num">Dni</th><th>Wypis z posiłków od</th><th class="tylko-szeroki">Potwierdzenie</th><th class="tylko-szeroki">Powód</th><th>Sekretariat</th></tr></thead>';
   el.innerHTML = `<div class="stos">
-      <div><h2 style="margin:0">Nieobecności w dni nauki</h2><p class="szary" style="margin:2px 0 0">Wyjazdy, przy których uczeń opuszcza dni nauki (pon–pt). Dłuższe niż ${em.prog} dni sekretariat sprawdza w arkuszu, w karcie „Nieobecności”, i wypisuje ucznia z posiłków od pojutrza (gdy pojutrze to sobota lub niedziela – od poniedziałku). Weekendy nie trafiają do sekretariatu – wtedy nie wydajemy posiłków.</p></div>
+      <div><h2 style="margin:0">Nieobecności w dni nauki</h2><p class="szary" style="margin:2px 0 0">Wyjazdy, przy których uczeń opuszcza dni nauki. Nieobecności dłuższe niż ${em.prog} dni – liczone razem z sobotą i niedzielą – sekretariat sprawdza w arkuszu, w karcie „Nieobecności”, i wypisuje ucznia z posiłków najwcześniej na pojutrze (gdy pojutrze to sobota lub niedziela – od poniedziałku; w poniedziałek pierwszy posiłek to kolacja).</p></div>
       <div class="karta"><div class="email-pasek"><h2>${ikona('mail')} ${em.adres.length ? 'E-mail do sekretariatu' : 'Sekretariat – wypis z posiłków'}</h2>
       ${em.adres.length ? `<dl class="ustawienia-lista"><dt>Adres</dt><dd>${esc(em.adres.join(', '))}</dd><dt>Wysyłka</dt><dd>${em.godzina !== null ? 'codziennie ok. ' + esc(godzMin(em.godzina)) + ' – tylko gdy są nowe zgłoszenia' : 'nie ustawiono godziny'}</dd>
           <dt>Ostatnio</dt><dd>${em.ostatni ? esc(dataGodz(em.ostatni)) : 'jeszcze nie wysłano'}</dd><dt>Czeka</dt><dd>${em.oczekuje.length ? esc(em.oczekuje.map(x => x.u + ' (wypis od ' + opisDniaKr(x.wypisOd) + ')').join(', ')) : 'nic'}</dd></dl>
