@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   SYSTEM OBECNOŚCI W INTERNACIE – APLIKACJA (stanowisko przy drzwiach + panel wychowawcy)
-  Wersja 2.0
+  Wersja 2.3
 
   Ten plik umieść na GitHub Pages jako index.html (patrz instrukcja instalacji).
   Adres serwera jest wpisany niżej w stałej ADRES_SERWERA (albo podawany przy pierwszym uruchomieniu).
@@ -147,8 +147,13 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .kafel .ch.zajety { background: var(--nota-tlo); color: var(--nota); }
 .kafel .ch.zamkniete { background: rgba(0, 0, 0, .25); }
 .kafel > .ikona { width: 30px; height: 30px; opacity: .9; }
-.st-pasek { grid-column: 1 / -1; background: #2a2410; border: 1px solid #6b5a1a; color: #f5d77a; border-radius: 12px; padding: 9px 16px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; text-align: center; }
-.st-pasek.po22 { background: #3a1416; border-color: #7a2a2a; color: #ffb4b4; }
+.st-zasady { grid-column: 1 / -1; background: #2a2410; border: 1px solid #6b5a1a; color: #f5d77a; border-radius: 14px; padding: 10px 18px 12px; display: flex; flex-direction: column; gap: 6px; font-size: clamp(1rem, 1.7vw, 1.22rem); line-height: 1.3; }
+.st-zasady .tyt { font-weight: 800; font-size: .78em; letter-spacing: .07em; text-transform: uppercase; color: #d9bf63; }
+.st-zasady .w { display: flex; align-items: center; gap: 12px; }
+.st-zasady .w .ikona { width: 1.45em; height: 1.45em; }
+.st-zasady b { color: #fff1b8; }
+.st-zasady .w.cz { background: #3a1416; border: 1px solid #7a2a2a; color: #ffb4b4; border-radius: 10px; padding: 5px 10px; margin: 0 -10px; }
+.st-zasady .w.cz b { color: #ffd9d9; }
 .st-stopka { text-align: center; color: #c7d2de; font-size: 1.02rem; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 26px; }
 @media (max-width: 760px), (orientation: portrait) {
   .st { height: auto; min-height: 100vh; overflow: visible; }
@@ -196,7 +201,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .opcja.srodek { align-items: center; text-align: center; }
 .opcja .duza { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.1; }
 .opcja.wyb { background: var(--out-mocny); border-color: var(--out-mocny); color: #fff; }
-.opcja:disabled { opacity: .42; cursor: default; transform: none; }
+.opcja:disabled, .opcja.wyl { opacity: .42; cursor: default; transform: none; }
+.opcja.pomar { background: var(--out-mocny); border-color: var(--out-mocny); color: #fff; }
 .opcja.nieb { border-color: #bfd0f7; background: #eef3fd; color: #17306e; }
 .opcja.nieb.wyb { background: var(--home-mocny); border-color: var(--home-mocny); color: #fff; }
 .opcja.nieb.mocna { background: var(--home-mocny); border-color: var(--home-mocny); color: #fff; }
@@ -239,15 +245,6 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .btn-duzy { border-radius: 14px; padding: 12px 18px; text-align: left; display: flex; flex-direction: column; gap: 2px; min-height: 72px; justify-content: center; border: 2px solid transparent; }
 .btn-duzy b { font-size: 1.2rem; } .btn-duzy small { font-size: .92rem; }
 .btn-duzy.fiol { background: var(--moj-mocny); color: #fff; } .btn-duzy.bialy { background: #fff; color: var(--tekst); border-color: #cfd8e1; }
-.zegarek { border: 2px solid #e2e8f0; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
-.zegarek .cyfry { display: flex; align-items: center; gap: 6px; }
-.zegarek .kol { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.zegarek .kol button { width: 64px; height: 40px; border: 1px solid #cfd8e1; border-radius: 10px; background: #f4f6f9; font-size: 1.3rem; font-weight: 800; }
-.zegarek .cyfra { font-size: 3rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
-.zegarek .dwukropek { font-size: 2.6rem; font-weight: 800; }
-.pole-uwagi { display: flex; align-items: center; gap: 8px; }
-.pole-uwagi label { margin: 0; font-size: .85rem; white-space: nowrap; color: #4a1010; }
-.pole-uwagi input { min-height: 40px; padding: 6px 10px; border-color: #e8b4b4; }
 .dni-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .dzien-chip { border: 2px solid #bfd0f7; background: #eef3fd; color: #17306e; border-radius: 12px; padding: 8px 12px; font-weight: 700; min-height: 48px; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
 .dzien-chip small { font-weight: 600; font-size: .8rem; }
@@ -341,11 +338,13 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .potw2 .chipy2 span.zolty2, .potw2 .zolta2 { background: var(--nota-tlo); color: var(--nota); }
 .potw2 .zolta2 { border-radius: 14px; padding: 11px 18px; font-weight: 800; font-size: clamp(1.05rem, 2vw, 1.25rem); display: flex; align-items: center; gap: 10px; }
 .potw2 .notka { font-size: 1.05rem; opacity: .95; }
+.potw2 .info2 { background: #fff; color: #0f5c30; border-radius: 14px; padding: 11px 18px; font-weight: 800; font-size: clamp(1.05rem, 2vw, 1.25rem); display: flex; align-items: center; gap: 10px; }
+.grupa2 { border: 2px solid #fff; color: #fff; border-radius: 14px; padding: 4px 14px; font-size: clamp(1.1rem, 2.4vw, 1.5rem); font-weight: 800; }
 .potw2 .btn-wroc { margin-top: 6px; background: var(--out-mocny); color: #fff; border: 0; border-radius: 16px; padding: 12px 24px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); }
 .potw2 .btn-wroc b { font-size: 1.35rem; } .potw2 .btn-wroc small { font-size: .95rem; }
 .potw2 .btn-wroc.k-dom { background: var(--home-mocny); }
 .potw2 .dol { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 0 0 max(24px, env(safe-area-inset-bottom)); }
-.btn-cofnij { border: 2px solid #fff; border-radius: 12px; padding: 10px 20px; background: transparent; color: #fff; font-weight: 800; font-size: 1.05rem; min-height: 48px; }
+.btn-cofnij { border: 2px solid #fff; border-radius: 12px; padding: 10px 22px; background: #d32f2f; color: #fff; font-weight: 800; font-size: 1.05rem; min-height: 48px; box-shadow: 0 4px 14px rgba(0, 0, 0, .25); }
 .btn-zamknij2 { background: rgba(0, 0, 0, .22); border: 0; border-radius: 10px; padding: 9px 14px; color: #fff; font-weight: 600; min-height: 44px; }
 
 /* nakładki */
@@ -388,7 +387,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .kpi .pod { font-size: .82rem; color: var(--tekst2); }
 .kpi .znaczki { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
 .kpi .znaczki span { border-radius: 999px; padding: 1px 9px; font-size: .78rem; font-weight: 800; }
-.kpi .z-late { background: var(--late-tlo); color: var(--late); } .kpi .z-amb { background: var(--nota-tlo); color: var(--nota); }
+.kpi .z-late { background: var(--late-tlo); color: var(--late); }
 .kpi.k-IN .liczba { color: var(--in); } .kpi.k-CZEKA .liczba { color: var(--out); } .kpi.k-HOME .liczba { color: var(--home); } .kpi.k-MOJ .liczba { color: var(--moj-mocny); }
 .kpi.k-LATE .liczba { color: var(--tekst3); } .kpi.k-LATE.jest { background: #fff1f1; } .kpi.k-LATE.jest .liczba { color: var(--late); }
 .kpi.k-MOJ.jest { background: #fff1f1; }
@@ -416,13 +415,16 @@ table.tabela { width: 100%; border-collapse: collapse; font-size: .93rem; }
 .tabela td.zgoda-k { background: #fff8f8; color: #8f1c1c; font-weight: 700; }
 .tabela tr:last-child td { border-bottom: 0; }
 .tabela tr.w-LATE td { background: #fff5f5; }
-.tabela tr.w-AMB td { background: #fffbeb; }
 .tabela .uczen-nazwa { font-weight: 700; }
 .tabela .uczen-pod { display: none; color: var(--tekst2); font-size: .85rem; }
 .tabela .num { text-align: right; font-variant-numeric: tabular-nums; }
 .tabela td.akcje { text-align: right; white-space: nowrap; }
 .tabela .nota { display: inline-block; background: var(--nota-tlo); color: var(--nota); border-radius: 8px; padding: 2px 8px; font-size: .85rem; }
 .pok { display: inline-block; background: #17212b; color: #fff; border-radius: 7px; padding: 1px 8px; font-weight: 800; font-size: .85rem; white-space: nowrap; }
+.grp { display: inline-block; color: #fff; border-radius: 7px; padding: 1px 8px; font-weight: 800; font-size: .82rem; white-space: nowrap; vertical-align: 1px; }
+.grp.duzy { border-radius: 10px; padding: 3px 12px; font-size: 1.2rem; vertical-align: 0; }
+.lista-weekend .grp { margin-left: 2px; }
+select.sortuj { width: auto; min-height: 34px; padding: .3em .6em; font-size: .9rem; }
 .ok-zn { color: var(--in); font-weight: 800; }
 .amb-zn { background: var(--nota-tlo); color: var(--nota); border-radius: 8px; padding: 2px 8px; font-weight: 800; white-space: nowrap; }
 .late-zn { background: var(--late-tlo); color: var(--late); border-radius: 8px; padding: 2px 8px; font-weight: 800; white-space: nowrap; }
@@ -457,6 +459,23 @@ table.tabela { width: 100%; border-collapse: collapse; font-size: .93rem; }
 .lista-weekend .d { color: var(--tekst2); font-size: .85rem; }
 .ramka-info { background: var(--nota-tlo); border: 1px solid var(--nota-linia); color: var(--nota); border-radius: 12px; padding: 10px 14px; font-size: .9rem; }
 .ramka-info.nieb { background: #eef3fd; border-color: #bfd0f7; color: #17306e; }
+.kto-wpisuje { display: flex; align-items: center; gap: 10px; background: #f4f6f9; border: 1px solid var(--linia); border-radius: 12px; padding: 8px 12px; margin: 4px 0 6px; }
+.kto-wpisuje label { margin: 0; font-weight: 800; white-space: nowrap; }
+.kto-wpisuje input { flex: 1; min-width: 0; margin: 0; }
+.kto-wpisuje input.blad-pole, input.blad-pole { border-color: var(--late); box-shadow: 0 0 0 3px rgba(189, 37, 37, .15); }
+.nota .nota-kto { font-weight: 600; opacity: .8; }
+.ramka-po21 { background: #fff8f8; border: 2px solid #f0c4c4; border-radius: 14px; padding: 12px 16px; margin: 8px 0 4px; }
+.ramka-po21 .t { font-weight: 800; color: #8f1c1c; font-size: 1.1rem; }
+.ramka-po21 p { color: var(--tekst2); font-size: .9rem; margin: 2px 0 4px; }
+.ramka-po21 label { margin-top: .6em; }
+.ramka-po21 .wiersz2 { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+.ramka-po21 input[type=time] { min-height: 44px; border: 1px solid var(--linia); border-radius: 10px; padding: .4em .6em; background: #fff; font-size: 1.05rem; }
+.ramka-po21 .wybor-cz { justify-content: center; text-align: center; min-height: 54px; }
+.ramka-po21 .blad-tekst { margin: .3em 0; min-height: 0; }
+.dzien-powrotu { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 2px; font-size: .95rem; }
+.dzien-powrotu label { margin: 0; color: inherit; }
+.dzien-powrotu .wiersz { display: flex; gap: 8px; align-items: center; }
+.dzien-powrotu .wiersz input { flex: 1; min-width: 0; margin: 0; }
 .siatka-qr { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-top: 12px; }
 .kafel-qr { border: 1px solid var(--linia); border-radius: 12px; padding: 10px; text-align: center; background: #fff; }
 .kafel-qr canvas { width: 108px; height: 108px; image-rendering: pixelated; }
@@ -1734,13 +1753,23 @@ QRCode.createBytes = function(buffer, rsBlocks) {
 // Gdy jest wpisany, każde urządzenie od razu łączy się z serwerem. Puste = aplikacja zapyta o adres przy pierwszym uruchomieniu.
 const ADRES_SERWERA = 'https://script.google.com/macros/s/AKfycbztsxYwsqmiAg4l0KrRAgZWXLWaJw3Y5nYJTZ2NQr3BPOOqp1nCb5-UERSxlKbqhnM7/exec';
 
-const WERSJA = '2.2';
+const WERSJA = '2.3';
 const STREFA = 'Europe/Warsaw';
 const GRANICA_DOBY = 5 * 60;
 const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
 const ODSWIEZANIE_SKANER_MS = 60 * 1000;
 const ODSWIEZANIE_PANEL_MS = 30 * 1000;
-const COFNIJ_MS = 10 * 1000;            // tyle czasu na „Cofnij” po podpisie
+const COFNIJ_MS = 3 * 1000;             // tyle czasu na „Cofnij” po podpisie (ekran z prośbą do wychowawcy: +2 s)
+/** Wyjazd poza weekendem – jak rodzic potwierdził (wartość „w” idzie na serwer; tak samo nazywa ją serwer). */
+const POTWIERDZENIA = [
+  { w: 'SMS', przycisk: 'SMS od rodzica', ramka: 'Rodzic potwierdził SMS-em', prosba: 'że rodzic potwierdził SMS-em.', zgoda: 'rodzic potwierdził: SMS' },
+  { w: 'e-mail', przycisk: 'E-mail od rodzica', ramka: 'Rodzic potwierdził e-mailem', prosba: 'że rodzic potwierdził e-mailem.', zgoda: 'rodzic potwierdził: e-mail' },
+  { w: 'osobiście', przycisk: 'Rodzic odbiera osobiście', ramka: 'Rodzic odbiera Cię osobiście', prosba: 'że rodzic odbiera Cię osobiście.', zgoda: 'rodzic odebrał osobiście' }
+];
+function potwierdzenieRodzica(w) {
+  return POTWIERDZENIA.find(p => p.w === w) ||
+    { w: w, przycisk: w, ramka: 'Rodzic potwierdził: ' + w, prosba: 'jak rodzic potwierdził (' + w + ').', zgoda: 'rodzic potwierdził: ' + w };
+}
 const BEZCZYNNOSC_PODPIS_MS = 30 * 1000;
 const BEZCZYNNOSC_OKNO_MS = 60 * 1000;
 
@@ -1759,6 +1788,7 @@ const CELE = [
   { n: 'Rodzina / znajomi', p: 'odwiedziny, bez noclegu' },
   { n: 'Korepetycje', p: 'nauka poza szkołą' }
 ];
+/** Powrót po 21:00 – zgoda przed wyjściem; zapisuje tylko wychowawca w panelu (zgł. 14). */
 const ZGODY_PO21 = ['SMS od rodzica', 'zwolnienie od trenera klubu'];
 const POWODY = ['Choroba', 'Sprawy rodzinne', 'Lekarz', 'Inny'];
 const DNI = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'];
@@ -1966,35 +1996,21 @@ function terminZapisow(piatek) {
   const z = Stan.ustawienia.zapisyDo || { dzien: 4, min: 1320 };
   return msZDnia(dodajDni(piatek, z.dzien - 5), z.min);
 }
-/** Pojutrze; gdy wypada w sobotę lub niedzielę – poniedziałek. */
-function pojutrze(d) { let x = dodajDni(d, 2); while (dzienTyg(x) > 5) x = dodajDni(x, 1); return x; }
-/** Dni nauki z całodniową nieobecnością i dni nieobecności razem z weekendem – ta sama zasada co na serwerze. */
-function nieobecnosc(ts, powrot, rodzaj) {
-  const wyj = ymd(ts);
-  let d = rodzaj === 'weekend' ? dodajDni(wyj, 1) : wyj;
-  const dni = [];
-  for (let i = 0; d < powrot && i < 400; i++, d = dodajDni(d, 1)) if (dzienTyg(d) <= 5) dni.push(d);
-  let kal = 0;
-  for (let x = wyj, i = 0; x < powrot && i < 400; i++, x = dodajDni(x, 1)) kal++;
-  return { dni: dni.length, lista: dni, od: dni[0] || null, kal: kal };
-}
 /**
- * Wypis z posiłków (jak na serwerze): nieobecność dłuższa niż próg – dni liczone razem z sobotą i niedzielą;
- * wypis najwcześniej na pojutrze (sobota, niedziela → poniedziałek; w poniedziałek pierwszy posiłek to kolacja)
- * i tylko wtedy, gdy uczeń nie wróci wcześniej.
+ * Wypis z posiłków (ta sama zasada co na serwerze): zawsze od kolacji. Zgłoszenie do 7:59 → od kolacji tego samego dnia,
+ * później → od kolacji następnego dnia. W piątek, sobotę i niedzielę nie ma kolacji → od kolacji w poniedziałek.
  */
-function wypisPosilkow(ts, powrot, rodzaj) {
-  const nb = nieobecnosc(ts, powrot, rodzaj);
-  const prog = Stan.ustawienia.prog === undefined ? 2 : Stan.ustawienia.prog;
-  if (!nb.dni) return { nb: nb, prog: prog, stan: 'bez_nauki' };
-  if (nb.kal <= prog) return { nb: nb, prog: prog, stan: 'krotko' };
-  let wypis = pojutrze(ymd(ts));
-  if (nb.od > wypis) wypis = nb.od;
-  if (wypis >= powrot) return { nb: nb, prog: prog, stan: 'za_pozno' };
-  return { nb: nb, prog: prog, stan: 'wypis', wypis: wypis };
+function dzienWypisu(ts) {
+  let d = ymd(ts);
+  if (czesciCzasu(ts).min >= 8 * 60) d = dodajDni(d, 1);
+  while (dzienTyg(d) >= 5) d = dodajDni(d, 1);
+  return d;
 }
-/** „poniedziałku 12.10 (od kolacji)” */
-function opisWypisu(wypis) { return DNI_DOP[dzienTyg(wypis) - 1] + ' ' + dzienMies(wypis) + (dzienTyg(wypis) === 1 ? ' (od kolacji)' : ''); }
+/** Dzień wypisu albo null, gdy uczeń wróci, zanim opuści kolację (powrót „po szkole” = kolację tego dnia zje). */
+function wypisZPosilkow(ts, powrotData) {
+  const d = dzienWypisu(ts);
+  return !powrotData || powrotData > d ? d : null;
+}
 function oknoWydawania(ms) {
   const m = czesciCzasu(ms).min;
   const s = Stan.ustawienia;
@@ -2005,27 +2021,78 @@ function oknoWydawania(ms) {
 function godzWydawaniaDo() { const g = Stan.ustawienia.wydawanieDo; return g === null || g === undefined ? null : godzMin(g); }
 
 // ── spóźnienia
-/** Twardy termin: godzina powrotu z ustawień (21:00) albo późniejsza godzina za zgodą. */
+/** Twardy termin: godzina powrotu z ustawień dnia (np. 21:00) albo późniejsza godzina ze zgody (wyjście zapisane przez wychowawcę).
+ *  Godzina podana przez ucznia przed 21:00 nie ma znaczenia (zgł. 3). */
 function terminTwardy(u) {
   if (u.s !== 'OUT') return null;
   const limit = terminPowrotu(u.od);
-  if (!u.pp) return limit;
-  return limit === null ? u.pp : Math.max(u.pp, limit);
+  const zgoda = !!u.zg && !!u.pp;
+  if (limit === null) return zgoda ? u.pp : null;
+  return zgoda && u.pp > limit ? u.pp : limit;
 }
-/** Czerwone: po 21:00 (albo po godzinie ze zgody) albo nie wrócił z domu w planowanym dniu. */
+/** Wyjście z powrotem po 21:00 zapisane przez wychowawcę (zgoda rodzica albo trenera przed wyjściem). */
+function wyjscieOdWychowawcy(u) {
+  if (u.s !== 'OUT' || !u.zg || !u.pp) return false;
+  const limit = terminPowrotu(u.od);
+  return limit !== null && u.pp > limit;
+}
+/** Czerwone: po 21:00 (albo po godzinie ze zgody) albo nie wrócił z domu w dniu, który wpisał wychowawca (zgł. 13 – dzień
+ *  podany przez ucznia nigdy nie jest spóźnieniem). */
 function spozniony(u) {
   if (u.s === 'OUT') { const t = terminTwardy(u); return !!t && teraz() > t; }
-  if (u.s === 'HOME' && u.pp) { const d = ymd(u.pp); const g = (Stan.ustawienia.powroty || [])[dzienTyg(d) - 1]; return teraz() > msZDnia(d, g === null || g === undefined ? 1260 : g); }
+  if (u.s === 'HOME' && u.pp && u.pz) { const d = ymd(u.pp); const g = (Stan.ustawienia.powroty || [])[dzienTyg(d) - 1]; return teraz() > msZDnia(d, g === null || g === undefined ? 1260 : g); }
   return false;
 }
-/** Żółte: po godzinie, którą uczeń sam podał (ale jeszcze przed 21:00). */
-function poCzasie(u) { return u.s === 'OUT' && !!u.pp && teraz() > u.pp && !spozniony(u); }
 function minutySpoznienia(u) {
-  if (u.s === 'OUT') { const t = spozniony(u) ? terminTwardy(u) : u.pp; return t ? Math.max(0, Math.round((teraz() - t) / 60000)) : 0; }
+  if (u.s === 'OUT' && spozniony(u)) return Math.max(0, Math.round((teraz() - terminTwardy(u)) / 60000));
   return 0;
 }
 /** Czy czekamy na powrót: wyszedł albo dziś (lub wcześniej) miał wrócić z domu. */
 function czekamy(u) { return u.s === 'OUT' || (u.s === 'HOME' && !!u.pp && ymd(u.pp) <= ymd(teraz())); }
+
+// ── grupa wychowawcza (zgł. 8)
+const KOLORY_GRUP = ['#be185d', '#0f766e', '#b45309', '#4338ca'];
+function nrGrupy(g) { const m = String(g == null ? '' : g).match(/\d+/); return m ? Number(m[0]) : null; }
+function kolorGrupy(g) { const n = nrGrupy(g); return n ? KOLORY_GRUP[(n - 1) % KOLORY_GRUP.length] : '#64748b'; }
+/** „2” → „Grupa 2”; inna wartość (np. „sportowa”) – bez zmian. */
+function nazwaGrupy(g) { const t = String(g == null ? '' : g).trim(); return /^\d+$/.test(t) ? 'Grupa ' + Number(t) : t; }
+/** Kolorowy znaczek grupy obok pokoju na ekranach tabletu (duży – w nagłówkach okien). */
+function grpZn(g, duzy) { return g ? ' <span class="grp' + (duzy ? ' duzy' : '') + '" style="background:' + kolorGrupy(g) + '">' + esc(nazwaGrupy(g).toLowerCase()) + '</span>' : ''; }
+const grupaUcznia = id => { const u = Stan.poId.get(Number(id)); return u ? u.g || '' : ''; };
+/** Znaczek grupy do tabel panelu. */
+function grp(g) {
+  const t = nazwaGrupy(g);
+  return t ? '<span class="grp" style="background:' + kolorGrupy(g) + '">' + esc(t) + '</span>' : '<span class="szary">—</span>';
+}
+/** Grupa ucznia z wiersza listy (serwer podaje g albo id ucznia). */
+function grupaWiersza(x) {
+  if (x.g !== undefined && x.g !== null && x.g !== '') return x.g;
+  const u = x.id ? Stan.poId.get(Number(x.id)) : null;
+  return u ? u.g || '' : '';
+}
+/** Sortowanie list z uczniami: według grupy, pokoju albo alfabetycznie. Każdy wiersz: { u: nazwa, p: pokój, g: grupa }. */
+const SORTOWANIA = [['grupa', 'według grupy'], ['pokoj', 'według pokoju'], ['alfabet', 'alfabetycznie']];
+function porownajWiersze(a, b, tryb) {
+  const ga = nrGrupy(a.g), gb = nrGrupy(b.g);
+  const poGrupie = (ga === null ? 1e9 : ga) - (gb === null ? 1e9 : gb) || porownaj(String(a.g || ''), String(b.g || ''));
+  const poPokoju = porownaj(String(a.p || ''), String(b.p || ''));
+  const poNazwie = porownaj(String(a.u || ''), String(b.u || ''));
+  if (tryb === 'grupa') return poGrupie || poPokoju || poNazwie;
+  if (tryb === 'pokoj') return poPokoju || poNazwie;
+  return poNazwie || poPokoju;
+}
+/** Wybór sortowania nad listą (zapamiętany na urządzeniu). Pierwsza opcja to obecna kolejność listy, np. „od najnowszych”. */
+function wyborSortowania(klucz, pierwsza, domyslna) {
+  const v = Pamiec.get('sort_' + klucz, domyslna || pierwsza[0]);
+  return `<select class="sortuj" data-sortuj="${esc(klucz)}" aria-label="Sortowanie">${[pierwsza].concat(SORTOWANIA).map(o => `<option value="${o[0]}" ${v === o[0] ? 'selected' : ''}>Sortuj: ${esc(o[1])}</option>`).join('')}</select>`;
+}
+function sortowanieListy(klucz, domyslna) { return Pamiec.get('sort_' + klucz, domyslna); }
+/** Sortuje kopię listy wierszy; tryb spoza SORTOWANIA → kolejność bez zmian. */
+function posortujWiersze(lista, tryb, nazwa) {
+  if (!SORTOWANIA.some(o => o[0] === tryb)) return lista.slice();
+  return lista.map(x => ({ x: x, k: { u: nazwa ? nazwa(x) : x.u, p: x.p, g: grupaWiersza(x) } }))
+    .sort((a, b) => porownajWiersze(a.k, b.k, tryb)).map(o => o.x);
+}
 
 // ═══════════════════════════ POŁĄCZENIE Z SERWEREM ═══════════════════════════
 class BladApi extends Error { constructor(tekst, rodzaj) { super(tekst); this.rodzaj = rodzaj; } }
@@ -2124,11 +2191,13 @@ function zastosujZdarzenie(u, ev) {
     u.zg = ev.zgoda || '';
   } else if (s === 'HOME') {
     u.pp = ev.powrotData ? msZDnia(ev.powrotData, 12 * 60) : null;
+    u.pz = ev.powrotData && ev.sposob === 'panel' ? 1 : 0;      // dzień powrotu wpisał wychowawca → liczy się spóźnienie
     u.sz = ev.rodzaj === 'tydzien' ? ['poza weekendem', ev.powod].filter(Boolean).join(' · ') : 'weekend';
-    u.zg = ev.rodzaj === 'tydzien' && ev.potwierdzenie ? 'rodzic potwierdził: ' + ev.potwierdzenie : '';
+    u.zg = ev.rodzaj === 'tydzien' && ev.potwierdzenie ? potwierdzenieRodzica(ev.potwierdzenie).zgoda : '';
   } else {
     u.pp = null; u.sz = ''; u.zg = '';
   }
+  if (s !== 'HOME') u.pz = 0;
 }
 function zastosujRzecz(ev) {
   const r = Stan.rzeczy.find(x => x.id === ev.rzecz);
@@ -2176,13 +2245,12 @@ function zapisanyNaWeekend(id) {
   return w && w.zapisani && w.zapisani[id] ? w.zapisani[id] : null;
 }
 function liczniki() {
-  const c = { razem: 0, IN: 0, OUT: 0, HOME: 0, LATE: 0, AMB: 0, CZEKA: 0, Z_DOMU: 0, DZIS_Z_DOMU: 0, WYDANE: 0, PO22: 0 };
+  const c = { razem: 0, IN: 0, OUT: 0, HOME: 0, LATE: 0, CZEKA: 0, Z_DOMU: 0, DZIS_Z_DOMU: 0, WYDANE: 0, PO22: 0 };
   const dzis = ymd(teraz());
   Stan.uczniowie.forEach(u => {
     c.razem++;
     c[u.s] = (c[u.s] || 0) + 1;
     if (spozniony(u)) c.LATE++;
-    else if (poCzasie(u)) c.AMB++;
     if (czekamy(u)) { c.CZEKA++; if (u.s === 'HOME') c.Z_DOMU++; }
     if (u.s === 'HOME' && u.pp && ymd(u.pp) === dzis) c.DZIS_Z_DOMU++;
   });
@@ -2227,7 +2295,7 @@ function przerysuj() {
   else if (Stan.widok === 'panel') { rysujKpi(); rysujZakladke(true); rysujGorePanelu(); }
 }
 
-// ── kolejka zdarzeń (działa też bez internetu; nowe zdarzenia czekają 10 s na „Cofnij”)
+// ── kolejka zdarzeń (działa też bez internetu; nowe zdarzenia czekają 3 s na „Cofnij”)
 function zapiszKolejke() { Pamiec.set('kolejka', Stan.kolejka); }
 function gotoweDoWysylki() { const t = Date.now(); return Stan.kolejka.filter(e => !(e.wstrzymaj > t)); }
 function zaplanujWysylke() {
@@ -2264,7 +2332,7 @@ async function wyslijKolejke() {
       zapiszKolejke();
       wyniki.forEach(w => {
         if (w.ok) oznaczOstatnie(w.uid, 'ok');
-        else if (!w.ponow) { oznaczOstatnie(w.uid, 'blad'); toast('Nie zapisano: ' + w.blad, 'blad', 8000); odswiezPo = true; }
+        else if (!w.ponow) { oznaczOstatnie(w.uid, 'blad'); toast('Nie zapisano: ' + w.blad, 'blad', 8000); odswiezPo = true; if (Stan.widok === 'skaner') owca(); }
       });
       if (d.czas) Stan.przesuniecie = d.czas - Date.now();
       (d.uczniowie || []).forEach(aktualizujUcznia);
@@ -2664,7 +2732,44 @@ function odblokujDzwiek() {
     if (!AC) return;
     Stan.audio = Stan.audio || new AC();
     if (Stan.audio.state === 'suspended') Stan.audio.resume();
+    if (Stan.widok === 'skaner') zaladujOwce();
   } catch (e) { /* brak dźwięku */ }
+}
+
+// ── „beee” przy odrzuconej procedurze (np. wyjście z kluczem na stanie) – żeby było słychać, że się nie udało
+const DZWIEK_OWCA = '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FAafLHkLBX2SwNPlgaytTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tSxOgBC/T9MueEugFeGCXJhgqQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+1LE04PMdGcgB+GFwAAANIAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==';      // przy budowaniu wstawiany jest tu plik dzwieki/owca.mp3 (base64)
+const Owca = { bufor: null, laduje: null, gra: false };
+function zaladujOwce() {
+  if (Owca.bufor || Owca.laduje || !Stan.audio || DZWIEK_OWCA.indexOf('@@') >= 0) return Owca.laduje;
+  try {
+    const bin = atob(DZWIEK_OWCA);
+    const bajty = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bajty[i] = bin.charCodeAt(i);
+    Owca.laduje = new Promise((ok, zle) => Stan.audio.decodeAudioData(bajty.buffer, ok, zle))
+      .then(b => { Owca.bufor = b; return b; })
+      .catch(() => null)
+      .finally(() => { Owca.laduje = null; });
+  } catch (e) { Owca.laduje = null; }
+  return Owca.laduje;
+}
+/** Gra zawsze (niezależnie od „Dźwięku przy skanowaniu”), żeby nie dało się jej wyciszyć w menu tabletu. */
+async function owca() {
+  try {
+    odblokujDzwiek();
+    const ctx = Stan.audio;
+    if (!ctx) return;
+    const buf = Owca.bufor || await zaladujOwce();
+    if (!buf) { piknij(false); return; }
+    if (Owca.gra) return;                 // już beczy – nie nakładamy drugiego
+    Owca.gra = true;
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    g.gain.value = 1;
+    src.buffer = buf;
+    src.connect(g); g.connect(ctx.destination);
+    src.onended = () => { Owca.gra = false; };
+    src.start();
+    window.__owca = (window.__owca || 0) + 1;   // licznik do testów
+  } catch (e) { Owca.gra = false; }
 }
 function piknij(dobrze) {
   if (!Pamiec.get('dzwiek', true)) return;
@@ -2793,7 +2898,6 @@ function tresciMojInternat() {
   const akt = Stan.rzeczy.filter(r => r.typ === 'aktywnosc');
   const lodW = lod.filter(r => r.ma).length, aktW = akt.filter(r => r.ma).length;
   const po22 = czyPo22();
-  const doG = godzWydawaniaDo() || '22:00';
   const kafel = (a, ik, tytul, pod, chip, jasny) => `<button class="kafel ${jasny ? 'jasny' : ''}" data-a="${a}"><span class="ik">${ikona(ik, 2)}</span>
     <span class="tr"><b>${tytul}</b><span class="pod">${pod}</span>${chip}</span>${ikona('dalej', 2.6)}</button>`;
   const chipWeekend = !w ? '<span class="ch">łączenie z serwerem…</span>'
@@ -2809,8 +2913,20 @@ function tresciMojInternat() {
     kafel('pralnia', 'pralka', 'Pralnia', 'jeden klucz do pralni', chipPralnia, !!(pralnia && pralnia.ma)) +
     kafel('lodowki', 'lodowka', 'Lodówki', 'klucz tylko do lodówki Twojego pokoju', chipLod, false) +
     kafel('aktywnosci', 'pad', 'Aktywności', esc(akt.map(r => malaLitera(r.nazwa)).join(', ') || 'brak rzeczy w ustawieniach'), chipAkt, false) +
-    (po22 ? '<div class="st-pasek po22">' + ikona('zegar') + ' Po ' + esc(doG) + ' nie wydajemy kluczy ani rzeczy · oddać możesz zawsze</div>'
-      : '<div class="st-pasek">' + ikona('zegar') + ' Klucze i rzeczy wydajemy do ' + esc(doG) + ' · oddaje zawsze osoba, która wzięła · z rzeczą na stanie nie wyjdziesz</div>');
+    zasadyMojInternat(po22);
+}
+/** Zgł. 2: trzy zasady, czytelnie; po godzinie wydawania pierwszy wiersz na czerwono. */
+function zasadyMojInternat(po22) {
+  const s = Stan.ustawienia;
+  const od = s.wydawanieOd !== null && s.wydawanieOd !== undefined ? godzMin(s.wydawanieOd) : null;
+  const doG = godzWydawaniaDo();
+  const kiedy = od && doG ? '<b>od ' + esc(od) + ' do ' + esc(doG) + '</b>' : doG ? '<b>do ' + esc(doG) + '</b>' : od ? '<b>od ' + esc(od) + '</b>' : '<b>o każdej porze</b>';
+  const pierwszy = po22 && doG
+    ? `<div class="w cz">${ikona('zegar', 2.2)}<span><b>Po ${esc(doG)} nie wydajemy</b> kluczy ani rzeczy. Oddać możesz zawsze.</span></div>`
+    : `<div class="w">${ikona('zegar', 2.2)}<span>Wydajemy ${kiedy}. Oddać możesz o każdej porze.</span></div>`;
+  return `<div class="st-zasady"><div class="tyt">Zasady – klucze i rzeczy</div>${pierwszy}
+    <div class="w">${ikona('osoba', 2.2)}<span>Oddaje zawsze <b>ta sama osoba, która wzięła</b> – podpisuje się swoim kodem QR.</span></div>
+    <div class="w">${ikona('wyjscie', 2.2)}<span>Z kluczem albo rzeczą na stanie <b>nie wyjdziesz z internatu</b> ani nie wyjedziesz do domu – najpierw oddaj.</span></div></div>`;
 }
 
 function odswiezWskaznik() {
@@ -2890,130 +3006,35 @@ function ekranWyjCel() {
     const b = e.target.closest('[data-cel]');
     if (!b) return;
     f.cel = b.dataset.cel;
-    ekranWyjGodzina();
+    ekranWyjKiedy();
   });
 }
 
-function ekranWyjGodzina() {
+/** Zgł. 14: uczeń wybiera tylko „Wracam przed 21:00”. Powrót po 21:00 – wyłącznie przez wychowawcę (zgoda przed wyjściem). */
+function ekranWyjKiedy() {
   const f = St.flow;
   const t = teraz() - (teraz() % 60000);
   const limit = terminPowrotu(t);
-  const limitTxt = limit ? godz(limit) : null;
-  const opcje = [
-    { et: 'za 30 min', ms: t + 30 * 60000 },
-    { et: 'za 1 godz.', ms: t + 60 * 60000 },
-    { et: 'za 2 godz.', ms: t + 120 * 60000 }
-  ];
-  if (limit) opcje.push({ et: 'najpóźniej', ms: limit });
-  else opcje.push({ et: 'za 3 godz.', ms: t + 180 * 60000 });
-  const poLimicie = limit !== null && t >= limit;
+  const g = limit !== null ? godz(limit) : null;
+  const po = limit !== null && t >= limit;
+  const przycisk = `<button class="opcja zwiersz pomar ${po ? 'wyl' : ''}" data-f="przed" ${po ? 'aria-disabled="true"' : ''}><span class="ik">${ikona('zegar', 2.2)}</span>
+      <span class="tr"><b style="font-size:clamp(1.5rem,2.8vw,2rem)">${g ? 'Wracam przed ' + esc(g) : 'Wracam dziś'}</b><small style="font-size:1.1rem">${po ? 'jest już po ' + esc(g) : 'bez dodatkowej zgody'}</small></span>${po ? '' : ikona('dalej', 2.6)}</button>`;
+  const ramka = g ? `<div class="czerwony" style="cursor:default"><span class="ik">${ikona('wychowawca', 2.2)}</span>
+      <span class="tr"><b style="font-size:1.5rem">Powrót po ${esc(g)}</b><b style="font-size:1.2rem;color:#4a1010">Zgłoś się do wychowawcy.</b>
+      <span style="font-size:1.05rem">Rodzic albo trener musi potwierdzić, <b>zanim wyjdziesz</b>. Wyjście zapisze wychowawca.</span></span></div>` : '';
   const el = pokazEkran(oknoKroku(gora('wstecz', 'cel: <b>' + esc(f.cel) + '</b>', pig('Wychodzę · krok 2 z 3', 'wyj')),
-    `<h2>O której wrócisz?</h2>
-     <div class="siatka-opcji cztery">${opcje.map((o, i) => {
-       const zle = (limit !== null && o.ms > limit) || o.ms <= teraz();
-       return `<button class="opcja srodek ${f.powrot === o.ms && !f.zgoda ? 'wyb' : ''}" data-i="${i}" ${zle ? 'disabled' : ''}><small>${esc(o.et)}</small><span class="duza">${esc(godzinaZDniem(o.ms, t))}</span>${zle && limit ? '<small>po ' + esc(limitTxt) + ' – tylko za zgodą</small>' : ''}</button>`;
-     }).join('')}</div>
-     ${poLimicie ? '<div class="info-sz"><b>Jest już po ' + esc(limitTxt) + '.</b> Wyjście tylko za wcześniejszą zgodą – wybierz czerwony przycisk.</div>' : ''}
-     <button class="czerwony" data-f="inna"><span class="ik">${ikona('zegar', 2.2)}</span>
-       <span class="tr"><span><b>${limit ? 'Inna godzina – powrót po ' + esc(limitTxt) : 'Inna godzina'}</b>${limit ? '<span class="metka">TYLKO ZA ZGODĄ</span>' : ''}</span>
-       ${limit ? `<span><b style="font-size:1rem;color:inherit">Tylko gdy wcześniej przyszła zgoda:</b> SMS od rodzica na numer internatu albo zwolnienie od trenera klubu (np. wyjazd na mecz). Zgoda jest jednorazowa.</span>
-       <span><span class="pig p-zolta" style="padding:2px 9px">Zgłoś to wychowawcy przy drzwiach</span></span>` : '<span>Wybierz godzinę powrotu.</span>'}</span>${ikona('dalej', 2.6)}</button>`,
-    `<span class="lewo">Na końcu podpiszesz się kodem QR.</span><button class="btn-anuluj" data-f="zamknij">Anuluj</button>`), 'wyj-godzina');
+    `<h2>Kiedy wracasz?</h2><div class="siatka-opcji ${g ? 'dwie' : ''}" style="${g ? '' : 'grid-template-columns:1fr'}">${przycisk}${ramka}</div>`,
+    `<span class="lewo">${po ? 'Po ' + esc(g) + ' wyjście zapisuje tylko wychowawca.' : 'Na końcu podpiszesz się kodem QR.'}</span><button class="btn-anuluj" data-f="zamknij">Anuluj</button>`), 'wyj-kiedy');
   el.addEventListener('click', e => {
-    const b = e.target.closest('[data-i],[data-f]');
-    if (!b || b.disabled) return;
-    if (b.dataset.f === 'wstecz') return ekranWyjCel();
-    if (b.dataset.f === 'inna') return ekranWyjInna();
-    if (b.dataset.i !== undefined) {
-      f.powrot = opcje[Number(b.dataset.i)].ms;
-      f.zgoda = ''; f.uwaga = ''; f.inna = false;
-      ekranPodpis();
-    }
-  });
-}
-
-function ekranWyjInna() {
-  const f = St.flow;
-  const limit = terminPowrotu(teraz());
-  const limitTxt = limit ? godz(limit) : '21:00';
-  if (f.ig === undefined) {
-    const start = limit ? Math.max(limit, teraz()) + 90 * 60000 : teraz() + 3 * 3600000;
-    const c = czesciCzasu(start);
-    f.ig = c.h; f.im = Math.floor(c.mi / 15) * 15;
-  }
-  const tel = Stan.ustawienia.telefon || '';
-  const el = pokazEkran(oknoKroku(gora('wstecz', 'cel: <b>' + esc(f.cel) + '</b>', pig('Wychodzę · krok 2 z 3', 'wyj')),
-    `<div style="display:grid;grid-template-columns:minmax(230px,250px) minmax(0,1fr);gap:14px" class="inna-siatka">
-       <div class="zegarek"><div style="font-weight:800">Wrócę o</div>
-         <div class="cyfry"><div class="kol"><button type="button" data-z="h+" aria-label="Godzina później">+</button><span class="cyfra" id="z-h"></span><button type="button" data-z="h-" aria-label="Godzina wcześniej">−</button></div>
-           <span class="dwukropek">:</span>
-           <div class="kol"><button type="button" data-z="m+" aria-label="Minuty później">+</button><span class="cyfra" id="z-m"></span><button type="button" data-z="m-" aria-label="Minuty wcześniej">−</button></div></div>
-         <div class="szary" id="z-opis" style="text-align:center"></div></div>
-       <div class="ramka-cz" id="z-zgoda">
-         <div class="t">${ikona('uwaga', 2.2)} Po ${esc(limitTxt)} – tylko za wcześniejszą zgodą</div>
-         <div style="font-size:.95rem">Zgoda musi przyjść, <b>zanim wyjdziesz</b>: SMS od rodzica na numer internatu albo zwolnienie od trenera klubu (np. wyjazd na mecz). Jest jednorazowa – na to jedno wyjście.</div>
-         ${tel ? `<div style="font-size:.9rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap">Numer internatu dla rodziców: <span class="numer">${esc(tel)}</span></div>` : ''}
-         <div style="font-weight:800">Jak przyszła zgoda?</div>
-         <div class="dwie-kol">${ZGODY_PO21.map(z => `<button type="button" class="wybor-cz ${f.zgoda === z ? 'wyb' : ''}" data-zg="${esc(z)}">${f.zgoda === z ? ikona('ok', 3) : ''}<span>${esc(z.charAt(0).toUpperCase() + z.slice(1))}</span></button>`).join('')}</div>
-         <div class="pole-uwagi"><label for="z-uwaga">Dokąd / uwaga:</label><input id="z-uwaga" type="text" maxlength="100" placeholder="np. mecz w Brzegu, powrót autokarem" value="${esc(f.uwaga || '')}"></div>
-       </div>
-     </div>
-     <div class="zolty" id="z-zolty"><span class="ik">${ikona('wychowawca', 2.2)}</span><span class="tr"><b>Zgłoś to wychowawcy przy drzwiach</b><span>Powiedz, że masz zgodę na powrót po ${esc(limitTxt)} i <b>jak przyszła</b>: SMS od rodzica czy zwolnienie od trenera.</span></span></div>`,
-    `<span class="lewo" id="z-lewo">Wpis trafi na listę „Powroty po ${esc(limitTxt)}” dla wychowawców.</span><button class="btn-anuluj" data-f="zamknij">Anuluj</button><button class="btn-dalej k-wyj" data-f="dalej" id="z-dalej">Dalej – podpis kodem QR</button>`), 'wyj-inna');
-  const odswiez = () => {
-    const ms = godzinaInna(f);
-    const potrzebna = limit !== null && ms > limit;
-    $('#z-h', el).textContent = dwa(f.ig);
-    $('#z-m', el).textContent = dwa(f.im);
-    const zaDaleko = ms - teraz() > 12 * 3600000;
-    $('#z-opis', el).innerHTML = zaDaleko ? '<b style="color:var(--late)">To za ponad 12 godzin – wybierz godzinę dzisiejszego wieczoru.</b>'
-      : (ymd(ms) !== ymd(teraz()) ? 'jutro, ' + esc(opisDniaKr(ymd(ms))) + '<br>' : '') + (potrzebna ? 'Powrót po ' + esc(limitTxt) + ' – potrzebna zgoda.' : 'Powrót przed ' + esc(limitTxt) + ' nie wymaga zgody.');
-    $('#z-zgoda', el).style.opacity = potrzebna ? '1' : '.45';
-    $('#z-zolty', el).style.display = potrzebna ? '' : 'none';
-    $('#z-lewo', el).style.visibility = potrzebna ? 'visible' : 'hidden';
-    $('#z-dalej', el).disabled = zaDaleko || ms <= teraz() || (potrzebna && !f.zgoda);
-  };
-  odswiez();
-  $('#z-uwaga', el).addEventListener('input', e => { f.uwaga = e.target.value; });
-  el.addEventListener('click', e => {
-    const b = e.target.closest('[data-z],[data-zg],[data-f]');
+    const b = e.target.closest('[data-f]');
     if (!b) return;
-    if (b.dataset.z) {
-      const z = b.dataset.z;
-      if (z === 'h+') f.ig = (f.ig + 1) % 24;
-      if (z === 'h-') f.ig = (f.ig + 23) % 24;
-      if (z === 'm+') f.im = (f.im + 15) % 60;
-      if (z === 'm-') f.im = (f.im + 45) % 60;
-      odswiez();
-      return;
-    }
-    if (b.dataset.zg) {
-      f.zgoda = b.dataset.zg;
-      $$('[data-zg]', el).forEach(x => {
-        const w = x.dataset.zg === f.zgoda;
-        x.classList.toggle('wyb', w);
-        x.innerHTML = (w ? ikona('ok', 3) : '') + '<span>' + esc(x.dataset.zg.charAt(0).toUpperCase() + x.dataset.zg.slice(1)) + '</span>';
-      });
-      odswiez();
-      return;
-    }
-    if (b.dataset.f === 'wstecz') return ekranWyjGodzina();
-    if (b.dataset.f === 'dalej' && !b.disabled) {
-      const ms = godzinaInna(f);
-      const potrzebna = limit !== null && ms > limit;
-      f.powrot = ms;
-      f.inna = true;
-      if (!potrzebna) f.zgoda = '';
-      f.uwaga = (f.uwaga || '').trim();
-      ekranPodpis();
-    }
+    if (b.dataset.f === 'wstecz') return ekranWyjCel();
+    if (b.dataset.f !== 'przed') return;
+    if (po) { owca(); toast('Jest już po ' + g + ' – wyjście zapisuje tylko wychowawca.', 'blad', 5000); return; }
+    f.powrot = limit;
+    f.zgoda = ''; f.uwaga = '';
+    ekranPodpis();
   });
-}
-function godzinaInna(f) {
-  const d = ymd(teraz());
-  let ms = msZDnia(d, f.ig * 60 + f.im);
-  if (ms <= teraz()) ms = msZDnia(dodajDni(d, 1), f.ig * 60 + f.im);
-  return ms;
 }
 
 // ═════════════ WRACAM ═════════════
@@ -3050,18 +3071,6 @@ function ekranDomWeekend() {
   });
 }
 
-/** Informacja o dniach nieobecności i wypisie z posiłków (ta sama zasada co na serwerze). */
-function infoNieobecnosci(rodzaj, powrot) {
-  if (!powrot) return '';
-  const w = wypisPosilkow(teraz(), powrot, rodzaj);
-  const nb = w.nb;
-  const ile = nb.kal + ' ' + liczbaMnoga(nb.kal, 'dzień', 'dni', 'dni');
-  const info = t => `<div class="info-n">${ikona('mail')}<span>${t}</span></div>`;
-  if (w.stan === 'bez_nauki') return info('Nie opuścisz żadnego dnia nauki – nie trzeba wypisu z posiłków.');
-  if (w.stan === 'krotko') return info(`Nie będzie Cię ${esc(ile)} – nie więcej niż ${w.prog}, więc nie trzeba wypisu z posiłków.`);
-  if (w.stan === 'za_pozno') return info(`Nie będzie Cię ${esc(ile)}, ale wrócisz, zanim wypis z posiłków zacznie działać (najwcześniej na pojutrze) – nie trzeba wypisu.`);
-  return info(`<b>Nie będzie Cię ${esc(ile)} (razem z weekendem).</b> To ponad ${w.prog} dni, więc sekretariat wypisze Cię z posiłków od ${esc(opisWypisu(w.wypis))}.`);
-}
 
 function ekranDomDzien() {
   const f = St.flow;
@@ -3074,8 +3083,7 @@ function ekranDomDzien() {
     `<h2>W który dzień wracasz do internatu?</h2>
      <div class="siatka-opcji cztery">${dni.map(d => `<button class="opcja nieb ${f.powrotData === d ? 'wyb' : ''}" data-d="${d}"><b>${esc(DNI[dzienTyg(d) - 1] + ' ' + dzienMies(d))}</b><small>po szkole</small></button>`).join('')}
        <button class="opcja nieb przer ${inny ? 'wyb' : ''}" data-f="kalendarz"><b>${inny ? esc(opisDniaSr(f.powrotData)) : 'Inny dzień…'}</b><small>${inny ? esc(poraPowrotu(f.powrotData)) : 'wybierz z kalendarza'}</small></button></div>
-     <div id="dd-kal" class="${f.kal ? '' : 'ukryte'}"><div class="dni-chips">${kolejneDni(dodajDni(pn, 4), 18).map(d => `<button class="dzien-chip ${f.powrotData === d ? 'wyb' : ''}" data-d="${d}">${esc(opisDniaKr(d))}<small>${esc(poraPowrotu(d) || 'sobota')}</small></button>`).join('')}</div></div>
-     <div id="dd-info">${infoNieobecnosci('weekend', f.powrotData && f.powrotData > pn ? f.powrotData : null)}</div>`,
+     <div id="dd-kal" class="${f.kal ? '' : 'ukryte'}"><div class="dni-chips">${kolejneDni(dodajDni(pn, 4), 18).map(d => `<button class="dzien-chip ${f.powrotData === d ? 'wyb' : ''}" data-d="${d}">${esc(opisDniaKr(d))}<small>${esc(poraPowrotu(d) || 'sobota')}</small></button>`).join('')}</div></div>`,
     `<button class="btn-anuluj" data-f="zamknij">Anuluj</button><button class="btn-dalej" data-f="dalej" ${f.powrotData && f.powrotData > pn ? '' : 'disabled'}>Dalej – podpis kodem QR</button>`), 'dom-dzien');
   el.addEventListener('click', e => {
     const b = e.target.closest('[data-d],[data-f]');
@@ -3093,33 +3101,24 @@ function ekranDomTydzien() {
   f.rodzaj = 'tydzien';
   const dzis = ymd(teraz());
   const tel = Stan.ustawienia.telefon || '';
-  const dniPowrotu = kolejneDni(dodajDni(dzis, 1), 16).filter(d => dzienTyg(d) !== 6);
-  const gotowe = f.potwierdzenie && f.powod && f.powrotData;
+  f.powrotData = '';                     // dzień powrotu wpisuje wychowawca w panelu, gdy będzie wiadomo
+  const gotowe = f.potwierdzenie && f.powod;
   const el = pokazEkran(oknoKroku(gora('zamknij', '<b style="font-size:1.25rem">Wyjazd do domu poza weekendem</b>', pig('krok 1 z 2', 'dom')),
     `<div class="ramka-cz">
        <div class="t">${ikona('uwaga', 2.2)} Dziś ${esc(DNI[dzienTyg(dzis) - 1])} – potrzebne potwierdzenie rodzica</div>
-       <div style="display:flex;gap:6px 14px;flex-wrap:wrap;font-size:.95rem;align-items:center"><span>Rodzic potwierdza wyjazd <b>SMS-em lub e-mailem</b> – zanim wyjedziesz.</span>
+       <div style="display:flex;gap:6px 14px;flex-wrap:wrap;font-size:.95rem;align-items:center"><span>Rodzic potwierdza wyjazd <b>SMS-em lub e-mailem</b> albo <b>odbiera Cię osobiście</b>.</span>
          ${tel ? `<span class="nowrap">Numer dla rodziców: <span class="numer">${esc(tel)}</span></span>` : ''}</div>
        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><b style="margin-right:4px">Jak rodzic potwierdził?</b>
-         ${[['SMS', 'SMS od rodzica'], ['e-mail', 'E-mail od rodzica']].map(z => `<button type="button" class="wybor-cz ${f.potwierdzenie === z[0] ? 'wyb' : ''}" data-p="${z[0]}">${f.potwierdzenie === z[0] ? ikona('ok', 3) : ''}<span>${z[1]}</span></button>`).join('')}</div>
+         ${POTWIERDZENIA.map(z => `<button type="button" class="wybor-cz ${f.potwierdzenie === z.w ? 'wyb' : ''}" data-p="${esc(z.w)}">${f.potwierdzenie === z.w ? ikona('ok', 3) : ''}<span>${esc(z.przycisk)}</span></button>`).join('')}</div>
      </div>
-     <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px" class="inna-siatka">
-       <div><h3 style="margin-bottom:6px">Powód</h3><div class="dni-chips">${POWODY.map(p => `<button type="button" class="dzien-chip ${f.powod === p ? 'wyb' : ''}" data-pw="${esc(p)}" style="flex-direction:row">${esc(p)}</button>`).join('')}</div></div>
-       <div><h3 style="margin-bottom:6px">Przewidywany powrót</h3>
-         <button type="button" class="opcja nieb ${f.powrotData ? '' : 'przer'}" data-f="kal" style="min-height:56px;padding:8px 14px;flex-direction:row;align-items:center;gap:10px">${ikona('kalendarz')}
-           <span style="display:flex;flex-direction:column"><b style="font-size:1.1rem">${f.powrotData ? esc(DNI[dzienTyg(f.powrotData) - 1] + ' ' + dzienMies(f.powrotData)) : 'Wybierz dzień'}</b><small>${f.powrotData ? esc(poraPowrotu(f.powrotData)) : 'dotknij, aby wybrać'}</small></span></button></div>
-     </div>
-     <div id="dt-kal" class="${f.kal ? '' : 'ukryte'}"><div class="dni-chips">${dniPowrotu.map(d => `<button type="button" class="dzien-chip ${f.powrotData === d ? 'wyb' : ''}" data-d="${d}">${esc(opisDniaKr(d))}<small>${esc(poraPowrotu(d))}</small></button>`).join('')}</div></div>
-     ${infoNieobecnosci('tydzien', f.powrotData)}
-     <div class="zolty"><span class="ik">${ikona('wychowawca', 2.2)}</span><span class="tr"><span><b>Zgłoś to wychowawcy przy drzwiach.</b> Powiedz, że rodzic potwierdził wyjazd i <b>jak</b> – SMS-em czy e-mailem.</span></span></div>`,
-    `<span class="lewo">${gotowe ? '' : 'Zaznacz: jak rodzic potwierdził, powód i dzień powrotu.'}</span><button class="btn-anuluj" data-f="zamknij">Anuluj</button><button class="btn-dalej" data-f="dalej" ${gotowe ? '' : 'disabled'}>Dalej – podpis kodem QR</button>`), 'dom-tydzien');
+     <div><h3 style="margin-bottom:6px">Powód</h3><div class="dni-chips">${POWODY.map(p => `<button type="button" class="dzien-chip ${f.powod === p ? 'wyb' : ''}" data-pw="${esc(p)}" style="flex-direction:row">${esc(p)}</button>`).join('')}</div></div>
+     <div class="zolty"><span class="ik">${ikona('wychowawca', 2.2)}</span><span class="tr"><span><b>Zgłoś to wychowawcy przy drzwiach.</b> Powiedz, że rodzic potwierdził wyjazd i <b>jak</b> – SMS-em, e-mailem czy osobiście.</span></span></div>`,
+    `<span class="lewo">${gotowe ? '' : 'Zaznacz: jak rodzic potwierdził i powód.'}</span><button class="btn-anuluj" data-f="zamknij">Anuluj</button><button class="btn-dalej" data-f="dalej" ${gotowe ? '' : 'disabled'}>Dalej – podpis kodem QR</button>`), 'dom-tydzien');
   el.addEventListener('click', e => {
-    const b = e.target.closest('[data-p],[data-pw],[data-d],[data-f]');
+    const b = e.target.closest('[data-p],[data-pw],[data-f]');
     if (!b || b.disabled) return;
     if (b.dataset.p) { f.potwierdzenie = b.dataset.p; return ekranDomTydzien(); }
     if (b.dataset.pw) { f.powod = b.dataset.pw; return ekranDomTydzien(); }
-    if (b.dataset.f === 'kal') { f.kal = !f.kal; return ekranDomTydzien(); }
-    if (b.dataset.d) { f.powrotData = b.dataset.d; f.kal = false; return ekranDomTydzien(); }
     if (b.dataset.f === 'dalej') ekranPodpis();
   });
 }
@@ -3198,7 +3197,7 @@ function startRzecz(rid, zSiatki) {
   if (!r) { toast('Nie ma tej rzeczy na liście – odśwież dane.', 'blad'); return; }
   if (r.ma) return ekranZajeta(r, zSiatki);
   const okno = oknoWydawania(teraz());
-  if (!okno.ok) { toast(okno.blad, 'blad', 5000); return; }
+  if (!okno.ok) { owca(); toast(okno.blad, 'blad', 5000); return; }
   St.flow = { typ: 'POBRANIE', rid: r.id, siatka: zSiatki || null };
   ekranPodpis();
 }
@@ -3246,7 +3245,7 @@ function podepnijSiatke(el, typ) {
   el.addEventListener('click', e => {
     const b = e.target.closest('[data-r]');
     if (!b) return;
-    if (b.dataset.wyl) { toast(oknoWydawania(teraz()).blad, 'blad', 4000); return; }
+    if (b.dataset.wyl) { owca(); toast(oknoWydawania(teraz()).blad, 'blad', 4000); return; }
     startRzecz(b.dataset.r, typ);
   });
 }
@@ -3275,7 +3274,7 @@ function ekranZajeta(r, zSiatki) {
     `<h2>${esc(r.nazwa)} ma teraz:</h2>
      <div style="display:flex;align-items:center;gap:14px;border:3px solid var(--moj-mocny);background:#f5f2fc;border-radius:16px;padding:12px 16px">
        <span class="awatar" style="width:52px;height:52px;background:var(--moj-mocny);color:#fff">${ikona('osoba', 2.2)}</span>
-       <span style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:1.6rem">${esc(r.ma.u)}</b><span class="pok" style="background:#17212b;color:#fff;border-radius:8px;padding:2px 10px;font-weight:800">pokój ${esc(r.ma.p)}</span></span>
+       <span style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:1.6rem">${esc(r.ma.u)}</b><span class="pok" style="background:#17212b;color:#fff;border-radius:8px;padding:2px 10px;font-weight:800">pokój ${esc(r.ma.p)}</span>${grpZn(grupaUcznia(r.ma.id), true)}</span>
        <span class="szary" style="font-size:1rem">ma od ${esc(godzinaZDniem(r.ma.od))} · ${esc(czasTrwania(min))}</span></span></div>
      <p style="margin:0">Znajdź tę osobę i poproś o zwrot. <b>Oddaje tylko osoba, która ${klucz ? 'ma klucz' : 'wzięła'}</b> – swoim kodem QR.</p>
      <div class="dwie-kol">
@@ -3296,7 +3295,7 @@ function ekranNieTwoja(r, u) {
     `<div style="display:flex;align-items:center;gap:12px"><span class="awatar" style="width:50px;height:50px;background:var(--late);color:#fff">${ikona('uwaga', 2.2)}</span><h2 style="color:#8f1c1c">To nie Twoja lodówka</h2></div>
      <div style="display:flex;align-items:center;gap:14px;border:3px solid var(--late);background:#fff5f5;border-radius:16px;padding:12px 16px">
        <span class="awatar" style="width:52px;height:52px;background:var(--late);color:#fff">${ikona('osoba', 2.2)}</span>
-       <span style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:1.6rem">${esc(krotko(u))}</b><span style="background:#17212b;color:#fff;border-radius:8px;padding:2px 10px;font-weight:800">pokój ${esc(u.p)}</span></span>
+       <span style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:1.6rem">${esc(krotko(u))}</b><span style="background:#17212b;color:#fff;border-radius:8px;padding:2px 10px;font-weight:800">pokój ${esc(u.p)}</span>${grpZn(u.g, true)}</span>
        <span style="font-size:1rem">${moja ? 'Twój pokój należy do lodówki nr ' + moja.nr + ' (pokoje ' + esc(skrocPokoje(moja.tokeny, moja.pokoje)) + ')' : 'Twój pokój nie jest przypisany do żadnej lodówki – zapytaj wychowawcę.'}</span></span></div>
      <p style="margin:0">Klucz do <b>lodówki nr ${r.nr}</b> mogą wziąć tylko pokoje <b>${esc(skrocPokoje(r.tokeny, r.pokoje))}</b>. Klucz się nie wydał.</p>
      <div class="dwie-kol">
@@ -3317,7 +3316,7 @@ function ekranNieTen(r, u) {
   const el = pokazEkran(oknoKroku('',
     `<div style="display:flex;align-items:center;gap:12px"><span class="awatar" style="width:50px;height:50px;background:var(--late);color:#fff">${ikona('uwaga', 2.2)}</span>
        <h2 style="color:#8f1c1c">${klucz ? 'To nie Twój klucz' : 'To nie Twoja rzecz'} – zwrot się nie zapisał</h2></div>
-     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Zeskanowany kod: <span class="pig p-szara">${esc(krotko(u))} · pokój ${esc(u.p)}</span></div>
+     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Zeskanowany kod: <span class="pig p-szara">${esc(krotko(u))} · pokój ${esc(u.p)}${u.g ? ' · ' + esc(nazwaGrupy(u.g).toLowerCase()) : ''}</span></div>
      <div class="ramka-cz" style="font-size:1.05rem">${esc(r.nazwa)} oddaje tylko <b>${esc(r.ma.u)} · pokój ${esc(r.ma.p)}</b> – osoba, która ma ${klucz ? 'go' : 'to'} na stanie. Poproś tę osobę, żeby sama podpisała zwrot.</div>`,
     `<button class="btn-dalej k-ciem" data-f="zamknij">Rozumiem</button>`, 'waski'), 'nie-ten');
 }
@@ -3325,9 +3324,9 @@ function ekranNieTen(r, u) {
 function ekranBlokada(u, rz, f) {
   const wyj = f.typ === 'WYJSCIE';
   const klucz = rz[0].typ === 'pralnia' || rz[0].typ === 'lodowka';
-  const opisFlow = wyj ? 'Wychodzę' + (f.cel ? ' · ' + f.cel : '') + (f.powrot ? ' · powrót ' + godz(f.powrot) : '') : 'Wyjazd do domu';
+  const opisFlow = wyj ? 'Wychodzę' + (f.cel ? ' · ' + f.cel : '') + (f.powrot ? ' · powrót przed ' + godz(f.powrot) : '') : 'Wyjazd do domu';
   const el = pokazEkran(oknoKroku(
-    `<div class="dlg-gora"><div class="opis" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><b style="font-size:1.8rem;color:var(--tekst)">${esc(krotko(u))}</b><span style="background:#17212b;color:#fff;border-radius:10px;padding:3px 12px;font-size:1.2rem;font-weight:800">pokój ${esc(u.p)}</span></div>${pig(esc(opisFlow), wyj ? 'wyj' : 'dom')}</div>`,
+    `<div class="dlg-gora"><div class="opis" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><b style="font-size:1.8rem;color:var(--tekst)">${esc(krotko(u))}</b><span style="background:#17212b;color:#fff;border-radius:10px;padding:3px 12px;font-size:1.2rem;font-weight:800">pokój ${esc(u.p)}</span>${u.g ? '<span class="grp duzy" style="background:' + kolorGrupy(u.g) + '">' + esc(nazwaGrupy(u.g).toLowerCase()) + '</span>' : ''}</div>${pig(esc(opisFlow), wyj ? 'wyj' : 'dom')}</div>`,
     `<div class="czerwony" style="cursor:default"><span class="ik" style="width:62px;height:62px">${ikona('klucz', 2.2)}</span>
        <span class="tr"><b style="font-size:1.5rem">Nie możesz ${wyj ? 'wyjść' : 'wyjechać'} – masz rzecz na stanie</b>
        ${rz.map(r => `<span style="font-size:1.1rem"><b>${esc(r.nazwa)}</b> · masz od ${esc(godzinaZDniem(r.ma.od))}</span>`).join('')}
@@ -3352,29 +3351,21 @@ function opisPodpisu(f) {
   const o = { data: data, chipy: [], ramki: [], nota: '', kolor: 'wyj', moj: false };
   if (f.typ === 'WYJSCIE') {
     o.pig = 'Wychodzę · krok 3 z 3'; o.co = 'Wyjście'; o.tytul = f.cel;
-    o.chipy.push(pig('powrót do ' + esc(godzinaZDniem(f.powrot, t)), 'wyj'));
-    if (f.zgoda) {
-      o.ramki.push('<div class="ramka-mala cz"><b>Po ' + esc(godz(terminPowrotu(t) || f.powrot)) + ' – zgoda: ' + esc(f.zgoda) + '</b>' + (f.uwaga ? '<br>' + esc(f.uwaga) : '') + '</div>');
-      o.ramki.push('<div class="ramka-mala zo"><b>Zgłoś to wychowawcy przy drzwiach</b><br>Powiedz, że masz zgodę i jak przyszła.</div>');
-    } else if (f.uwaga) o.nota = esc(f.uwaga);
+    o.chipy.push(pig(f.powrot ? 'powrót przed ' + esc(godz(f.powrot)) : 'powrót dziś', 'wyj'));
   } else if (f.typ === 'WEJSCIE') {
     o.kolor = 'wr'; o.pig = 'Wracam'; o.co = ''; o.tytul = 'Powrót do internatu';
-    o.nota = 'Aplikacja pamięta Twoje wyjście i zgłoszoną godzinę powrotu – po podpisie zobaczysz, czy jesteś na czas.';
+    o.nota = 'Aplikacja pamięta Twoje wyjście – po podpisie zobaczysz, czy jesteś na czas.';
   } else if (f.typ === 'DOM') {
     o.kolor = 'dom'; o.co = ''; o.tytul = 'Wyjazd do domu';
     if (f.rodzaj === 'tydzien') {
       o.pig = 'Poza weekendem · krok 2 z 2';
       o.chipy.push(pig('poza weekendem · ' + esc(malaLitera(f.powod)), 'dom'));
-      o.chipy.push(pig('powrót: ' + esc(opisPowrotuSr(f.powrotData)), 'dom'));
-      o.ramki.push('<div class="ramka-mala cz"><b>Rodzic potwierdził ' + (f.potwierdzenie === 'SMS' ? 'SMS-em' : 'e-mailem') + '</b></div>');
-      o.ramki.push('<div class="ramka-mala zo"><b>Zgłoś to wychowawcy przy drzwiach.</b> Powiedz, jak rodzic potwierdził.</div>');
-      const w = wypisPosilkow(t, f.powrotData, 'tydzien');
-      if (w.stan === 'wypis') o.nota = 'Sekretariat wypisze Cię z posiłków od ' + esc(opisWypisu(w.wypis)) + '.';
+      const p = potwierdzenieRodzica(f.potwierdzenie);
+      o.ramki.push('<div class="ramka-mala cz"><b>' + esc(p.ramka) + '</b></div>');
+      o.ramki.push('<div class="ramka-mala zo"><b>Zgłoś to wychowawcy przy drzwiach.</b>' + (p.w === 'osobiście' ? '' : ' Powiedz, jak rodzic potwierdził.') + '</div>');
     } else {
       o.pig = 'Wyjazd do domu · krok 2 z 2';
       o.chipy.push(pig('powrót: ' + esc(opisPowrotuSr(f.powrotData)), 'dom'));
-      const w = f.powrotData ? wypisPosilkow(t, f.powrotData, 'weekend') : { stan: '' };
-      if (w.stan === 'wypis') o.nota = 'Sekretariat wypisze Cię z posiłków od ' + esc(opisWypisu(w.wypis)) + '.';
       o.chipy.push(pig('weekend – bez dodatkowych zgód', 'wr'));
       o.nota = 'Po powrocie podpisz „Wracam”.';
     }
@@ -3404,7 +3395,7 @@ function opisPodpisu(f) {
 function wsteczZPodpisu() {
   const f = St.flow;
   if (!f) return zamknijFlow();
-  if (f.typ === 'WYJSCIE') return f.inna ? ekranWyjInna() : ekranWyjGodzina();
+  if (f.typ === 'WYJSCIE') return ekranWyjKiedy();
   if (f.typ === 'DOM') return f.rodzaj === 'tydzien' ? ekranDomTydzien() : f.zDnia ? ekranDomDzien() : ekranDomWeekend();
   if (f.typ === 'WEEKEND_ZAPIS') return ekranWeekend();
   if (f.typ === 'WEEKEND_WYPIS') return startWeekend();
@@ -3480,7 +3471,7 @@ function obsluzKod(tekst, sposob) {
   if ($$('#nakladki .nakladka').some(n => !n.classList.contains('wyszukiwarka'))) return;
   const u = Stan.poKodzie.get(kod);
   if (!u) {
-    piknij(false);
+    owca();
     toast(sposob === 'czytnik' ? 'Nieznany kod lub karta: ' + tekst.slice(0, 40) + ' (wpisz go w kolumnie „Karta RFID” w arkuszu)' : 'Nieznany kod QR – ten kod nie należy do żadnego ucznia.', 'blad', 5000);
     return;
   }
@@ -3497,7 +3488,20 @@ async function podpisz(u, sposob) {
   Kamera.odlacz();
   if (f.typ === 'WYJSCIE' || f.typ === 'DOM') {
     const rz = rzeczyUcznia(u.id);
-    if (rz.length) { piknij(false); return ekranBlokada(u, rz, f); }
+    if (rz.length) { owca(); return ekranBlokada(u, rz, f); }
+    if (f.typ === 'WYJSCIE' && wyjscieOdWychowawcy(u)) {      // wyjście po 21:00 zapisał wychowawca – drugi podpis nadpisałby zgodę
+      owca();
+      pokazEkran(oknoKroku('', `<h2>${esc(krotko(u))} · pokój ${esc(u.p)}${grpZn(u.g, true)}</h2><div class="zolty" style="font-size:1.1rem"><span>Twoje wyjście zapisał już wychowawca – wróć do <b>${esc(godzinaZDniem(u.pp, u.od))}</b>. Nie podpisuj wyjścia drugi raz.</span></div>`,
+        `<button class="btn-dalej k-ciem" data-f="zamknij">Zamknij</button>`, 'waski'), 'wyj-od-wychowawcy');
+      return;
+    }
+    const limitTeraz = f.typ === 'WYJSCIE' ? terminPowrotu(teraz()) : null;
+    if (limitTeraz !== null && teraz() >= limitTeraz) {
+      owca();
+      pokazEkran(oknoKroku('', `<h2>${esc(krotko(u))} · pokój ${esc(u.p)}${grpZn(u.g, true)}</h2><div class="ramka-cz" style="font-size:1.1rem"><span>Jest już po <b>${esc(godz(limitTeraz))}</b> – wyjście zapisuje tylko wychowawca. Wyjście się nie zapisało.</span></div>`,
+        `<button class="btn-dalej k-ciem" data-f="zamknij">Zamknij</button>`, 'waski'), 'wyj-po-limicie');
+      return;
+    }
     const ostrz = [];
     if (f.typ === 'WYJSCIE' && u.s === 'OUT') ostrz.push(krotko(u) + ' ma już zapisane wyjście (od ' + kiedy(u.od) + (u.sz ? ', ' + u.sz : '') + ') – bez podpisu „Wracam”. Zapisać nowe wyjście?');
     if (f.typ === 'WYJSCIE' && u.s === 'HOME') ostrz.push(krotko(u) + ' jest zapisany(-a) jako „w domu”. Po przyjeździe trzeba było podpisać „Wracam”. Zapisać wyjście?');
@@ -3512,26 +3516,26 @@ async function podpisz(u, sposob) {
   if (f.typ === 'POBRANIE') {
     const r = rzecz(f.rid);
     const okno = oknoWydawania(teraz());
-    if (!okno.ok) { piknij(false); toast(okno.blad, 'blad', 5000); return zamknijFlow(); }
-    if (r.typ === 'lodowka' && !pokojPasuje(u.p, r.tokeny)) { piknij(false); return ekranNieTwoja(r, u); }
+    if (!okno.ok) { owca(); toast(okno.blad, 'blad', 5000); return zamknijFlow(); }
+    if (r.typ === 'lodowka' && !pokojPasuje(u.p, r.tokeny)) { owca(); return ekranNieTwoja(r, u); }
     if (r.ma && r.ma.id === u.id) { toast(krotko(u) + ' ma już: ' + malaLitera(r.nazwa) + '.', '', 4000); return zamknijFlow(); }
-    if (r.ma) { piknij(false); return ekranZajeta(r, f.siatka); }
+    if (r.ma) { owca(); return ekranZajeta(r, f.siatka); }
     return zapiszAkcje(u, sposob);
   }
   if (f.typ === 'ZWROT') {
     const r = rzecz(f.rid);
     if (!r || !r.ma) { toast('Ta rzecz jest już oddana.', '', 4000); return zamknijFlow(); }
-    if (r.ma.id !== u.id) { piknij(false); return ekranNieTen(r, u); }
+    if (r.ma.id !== u.id) { owca(); return ekranNieTen(r, u); }
     return zapiszAkcje(u, sposob);
   }
   if (f.typ === 'WEEKEND_ZAPIS') {
-    if (!Stan.weekend || teraz() > Stan.weekend.termin) return ekranWeekendZamkniete();
+    if (!Stan.weekend || teraz() > Stan.weekend.termin) { owca(); return ekranWeekendZamkniete(); }
     return zapiszAkcje(u, sposob);
   }
   if (f.typ === 'WEEKEND_WYPIS') {
     if (!zapisanyNaWeekend(u.id)) {
       piknij(false);
-      pokazEkran(oknoKroku('', `<h2>${esc(krotko(u))} · pokój ${esc(u.p)}</h2><div class="zolty" style="font-size:1.1rem"><span>Nie ma Twojego zapisu na weekend ${esc(opisWeekendu(f.weekend))} – nie trzeba się wypisywać.</span></div>`,
+      pokazEkran(oknoKroku('', `<h2>${esc(krotko(u))} · pokój ${esc(u.p)}${grpZn(u.g, true)}</h2><div class="zolty" style="font-size:1.1rem"><span>Nie ma Twojego zapisu na weekend ${esc(opisWeekendu(f.weekend))} – nie trzeba się wypisywać.</span></div>`,
         `<button class="btn-dalej k-ciem" data-f="zamknij">Zamknij</button>`, 'waski'), 'nie-zapisany');
       return;
     }
@@ -3567,7 +3571,7 @@ function zapiszAkcje(u, sposob) {
   const f = St.flow;
   const ts = teraz();
   const ev = { uid: nowyUid(), id: u.id, akcja: f.typ, ts: ts, sposob: sposob, urzadzenie: Stan.urzadzenie };
-  if (f.typ === 'WYJSCIE') Object.assign(ev, { cel: f.cel, powrot: f.powrot, zgoda: f.zgoda || '', uwaga: f.uwaga || '' });
+  if (f.typ === 'WYJSCIE') Object.assign(ev, { cel: f.cel, powrot: f.powrot || null, zgoda: '', uwaga: '' });
   if (f.typ === 'DOM') Object.assign(ev, { rodzaj: f.rodzaj, powrotData: f.powrotData, potwierdzenie: f.rodzaj === 'tydzien' ? f.potwierdzenie : '', powod: f.rodzaj === 'tydzien' ? f.powod : '' });
   if (f.typ === 'POBRANIE' || f.typ === 'ZWROT') ev.rzecz = f.rid;
   if (f.typ === 'WEEKEND_ZAPIS') Object.assign(ev, { weekend: f.weekend, opis: f.opis });
@@ -3596,36 +3600,26 @@ function zapiszAkcje(u, sposob) {
 function pokazPotwierdzenie2(ev, u, f, mig, r) {
   zamknijPotwierdzenie2(false);
   const ts = ev.ts;
-  const c = { kolor: 'wyj', ik: 'ok', nad: '', linia: '', chipy: [], zolta: '', notka: '', wroc: null };
+  const c = { kolor: 'wyj', ik: 'ok', nad: '', linia: '', chipy: [], zolta: '', info: '', notka: '', wroc: null };
   if (f.typ === 'WYJSCIE') {
     c.linia = 'Wyjście · ' + godz(ts) + ' · ' + f.cel;
-    c.chipy.push(['Wróć do ' + godzinaZDniem(f.powrot, ts), '']);
-    if (f.zgoda) {
-      const trener = f.zgoda.indexOf('trener') >= 0;
-      c.chipy.push(['po ' + godz(terminPowrotu(ts) || f.powrot) + ' za zgodą ' + (trener ? 'trenera' : 'rodzica (SMS)'), 'bialy']);
-      c.zolta = 'Teraz powiedz wychowawcy przy drzwiach, że masz zgodę ' + (trener ? 'od trenera klubu.' : '– rodzic przysłał SMS.');
-    }
+    c.chipy.push([f.powrot ? 'Wróć przed ' + godz(f.powrot) : 'Wróć dziś', '']);
   } else if (f.typ === 'WEJSCIE') {
     c.kolor = 'wr'; c.nad = 'Witaj z powrotem!';
     c.linia = 'Powrót · ' + godz(ts) + (u.s === 'OUT' && u.sz ? ' · ze: ' + u.sz : u.s === 'HOME' ? ' · z domu' : '');
-    if (u.s === 'OUT' && u.pp && ts > u.pp) {
-      const m = Math.round((ts - u.pp) / 60000);
-      const limit = terminPowrotu(u.od);
-      if (limit && ts > limit && u.pp <= limit) c.chipy.push([m + ' min po zgłoszonej godzinie (' + godz(u.pp) + ') – po ' + godz(limit), 'czerw']);
-      else if (m > 0) c.chipy.push([czasTrwania(m) + ' po zadeklarowanej godzinie (' + godz(u.pp) + ')', 'zolty2']);
-    }
+    const termin = terminTwardy(u);             // stan sprzed powrotu: 21:00 albo godzina ze zgody (zgł. 3)
+    const m = termin ? Math.round((ts - termin) / 60000) : 0;
+    if (m > 0) c.chipy.push([czasTrwania(m) + ' po ' + godz(termin), 'czerw']);
+    const wsp = wspolokatorzyWPokoju(u);       // zgł. 6
+    if (wsp.length) c.info = (wsp.length === 1 ? 'W Twoim pokoju jest już ' : 'W Twoim pokoju są już ') + listaImion(wsp.map(krotko)) + ' – klucz został pobrany.';
   } else if (f.typ === 'DOM') {
     c.kolor = 'dom'; c.ik = 'dom'; c.nad = 'Szczęśliwej drogi!';
     c.linia = 'Wyjazd do domu · ' + DNI[dzienTyg(ymd(ts)) - 1] + ' ' + dzienMies(ymd(ts)) + ', ' + godz(ts) + (f.rodzaj === 'tydzien' ? ' · ' + malaLitera(f.powod) : '');
-    c.chipy.push(['Powrót: ' + opisPowrotuSr(f.powrotData), '']);
-    const wp = f.powrotData ? wypisPosilkow(ts, f.powrotData, f.rodzaj === 'tydzien' ? 'tydzien' : 'weekend') : { stan: '' };
-    if (wp.stan === 'wypis') {
-      c.chipy.push(['Wypis z posiłków przez sekretariat', 'bialy']);
-      c.notka = 'Wypis z posiłków od ' + opisWypisu(wp.wypis) + ' zrobi sekretariat.';
-    }
-    if (f.rodzaj === 'tydzien') {
-      c.zolta = 'Teraz powiedz wychowawcy przy drzwiach, że rodzic potwierdził ' + (f.potwierdzenie === 'SMS' ? 'SMS-em.' : 'e-mailem.');
-    } else if (wp.stan !== 'wypis') c.notka = 'Po powrocie podpisz „Wracam”.';
+    if (f.powrotData) c.chipy.push(['Powrót: ' + opisPowrotuSr(f.powrotData), '']);
+    const wypis = u.po ? wypisZPosilkow(ts, f.powrotData) : null;     // zgł. 9 – tylko uczniowie na posiłkach
+    if (wypis) c.chipy.push(['Wypis z posiłków od kolacji ' + opisDniaKr(wypis), 'bialy']);
+    if (f.rodzaj === 'tydzien') c.zolta = 'Teraz powiedz wychowawcy przy drzwiach, ' + potwierdzenieRodzica(f.potwierdzenie).prosba;
+    c.notka = 'Po powrocie podpisz „Wracam”.';
   } else if (f.typ === 'POBRANIE') {
     c.kolor = 'moj'; c.ik = ikonaRzeczy(r) === 'klucz' || r.typ !== 'aktywnosc' ? 'klucz' : 'ok';
     c.linia = 'Pobranie · ' + malaLitera(r.nazwa) + ' · ' + godz(ts);
@@ -3661,10 +3655,11 @@ function pokazPotwierdzenie2(ev, u, f, mig, r) {
   el.setAttribute('role', 'status');
   el.innerHTML = `<div class="srodek"><div class="znak2">${ikona(c.ik, 2.6)}</div>
       ${c.nad ? '<div class="nad">' + esc(c.nad) + '</div>' : ''}
-      <div class="kto"><span class="imie2">${esc(krotko(u))}</span>${u.p ? '<span class="pokoj2">pokój ' + esc(u.p) + '</span>' : ''}</div>
+      <div class="kto"><span class="imie2">${esc(krotko(u))}</span>${u.p ? '<span class="pokoj2">pokój ' + esc(u.p) + '</span>' : ''}${u.g ? '<span class="grupa2" style="background:' + kolorGrupy(u.g) + '">' + esc(nazwaGrupy(u.g).toLowerCase()) + '</span>' : ''}</div>
       <div class="linia">${esc(c.linia)}</div>
       ${c.chipy.length ? '<div class="chipy2">' + c.chipy.map(x => '<span class="' + x[1] + '"' + (x[1] === 'czerw' ? ' style="background:#fff;color:#bd2525"' : '') + '>' + esc(x[0]) + '</span>').join('') + '</div>' : ''}
       ${c.notka ? '<div class="notka">' + esc(c.notka) + '</div>' : ''}
+      ${c.info ? '<div class="info2">' + ikona('klucz', 2.2) + esc(c.info) + '</div>' : ''}
       ${c.zolta ? '<div class="zolta2">' + ikona('wychowawca', 2.2) + esc(c.zolta) + '</div>' : ''}
       ${c.wroc ? '<button class="btn-wroc ' + (c.wroc.kolor || '') + '" data-p="wroc"' + (c.wroc.kolor === 'moj' ? ' style="background:#4b2a9a"' : '') + '><b>' + esc(c.wroc.tekst) + '</b><small>' + esc(c.wroc.pod) + '</small></button>' : ''}
     </div>
@@ -3678,7 +3673,7 @@ function pokazPotwierdzenie2(ev, u, f, mig, r) {
     if (s) s.textContent = Math.max(0, zostalo);
     if (zostalo <= 0) { clearInterval(St.potwOdl); const b = $('.btn-cofnij', el); if (b) b.remove(); }
   }, 1000);
-  St.potwTimer = setTimeout(() => zamknijPotwierdzenie2(true), c.zolta || c.wroc ? COFNIJ_MS + 2000 : COFNIJ_MS);
+  St.potwTimer = setTimeout(() => zamknijPotwierdzenie2(true), c.zolta || c.wroc || c.info ? COFNIJ_MS + 2000 : COFNIJ_MS);
   el.addEventListener('click', e => {
     const b = e.target.closest('[data-p]');
     if (b && b.dataset.p === 'cofnij') return cofnij();
@@ -3686,6 +3681,16 @@ function pokazPotwierdzenie2(ev, u, f, mig, r) {
     zamknijPotwierdzenie2(true);
   });
 }
+/** Zgł. 6: kto z tego samego pokoju (dokładnie ten numer – 111A to nie 111B) jest już w internacie. */
+function normPokoj(p) { return String(p == null ? '' : p).toUpperCase().replace(/\s+/g, ''); }
+function wspolokatorzyWPokoju(u) {
+  const p = normPokoj(u.p);
+  if (!p) return [];
+  return Stan.uczniowie.filter(x => x.id !== u.id && x.s === 'IN' && normPokoj(x.p) === p)
+    .sort((a, b) => (a.od || 0) - (b.od || 0));
+}
+/** „A”, „A i B”, „A, B i C” */
+function listaImion(t) { return t.length < 2 ? t.join('') : t.slice(0, -1).join(', ') + ' i ' + t[t.length - 1]; }
 function zamknijPotwierdzenie2(wyslij) {
   clearTimeout(St.potwTimer);
   clearInterval(St.potwOdl);
@@ -3735,7 +3740,7 @@ function pokazWyszukiwarke(naWybor) {
     const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.i + ' ' + u.n + ' ' + u.k + ' pokoj ' + u.p + ' ' + u.p).indexOf(q) >= 0)
       .sort((a, b) => porownaj(a.i, b.i) || porownaj(a.n, b.n)).slice(0, 60);
     $('#ws-lista', n).innerHTML = lista.length ? lista.map(u => `<li><button data-id="${u.id}"><span class="awatar">${esc(inicjaly(u))}</span>
-        <span><span class="n">${esc(imieNazwisko(u))}</span><br><span class="d">pokój ${esc(u.p || '—')}${u.k ? ' · klasa ' + esc(u.k) : ''}</span></span>
+        <span><span class="n">${esc(imieNazwisko(u))}</span><br><span class="d">pokój ${esc(u.p || '—')}${u.k ? ' · klasa ' + esc(u.k) : ''}${u.g ? ' <span class="grp" style="background:' + kolorGrupy(u.g) + '">' + esc(nazwaGrupy(u.g).toLowerCase()) + '</span>' : ''}</span></span>
         <span class="prawo chip s-${u.s}">${esc(STATUS_NAZWA[u.s])}</span></button></li>`).join('')
       : '<li class="pusto">' + (Stan.uczniowie.length ? 'Brak wyników.' : 'Lista uczniów jest pusta – poczekaj na połączenie z serwerem.') + '</li>';
   };
@@ -3857,7 +3862,7 @@ function rysujKpi() {
     `<button class="kpi k-IN ${akt('IN')}" data-filtr="IN"><div class="liczba">${c.IN}</div><div class="opis">Na stanie</div><div class="pod">obecni teraz w internacie</div></button>` +
     `<button class="kpi k-CZEKA ${akt('CZEKA')}" data-filtr="CZEKA"><div class="liczba">${c.CZEKA}</div><div class="opis">Czekamy na powrót</div>
       <div class="pod">z wyjść: ${c.OUT} · z domu (dziś): ${c.Z_DOMU}</div>
-      ${c.LATE || c.AMB ? '<div class="znaczki">' + (c.LATE ? '<span class="z-late">spóźnieni: ' + c.LATE + '</span>' : '') + (c.AMB ? '<span class="z-amb">po zgłoszonej godz.: ' + c.AMB + '</span>' : '') + '</div>' : ''}</button>` +
+      ${c.LATE ? '<div class="znaczki"><span class="z-late">spóźnieni: ' + c.LATE + '</span></div>' : ''}</button>` +
     `<button class="kpi k-HOME ${akt('HOME')}" data-filtr="HOME"><div class="liczba">${c.HOME}</div><div class="opis">Nieobecni</div><div class="pod">w domu${c.DZIS_Z_DOMU ? ' · wracają dziś: ' + c.DZIS_Z_DOMU : ''}</div></button>` +
     `<button class="kpi k-LATE ${c.LATE ? 'jest' : ''} ${akt('LATE')}" data-filtr="LATE"><div class="liczba">${c.LATE}</div><div class="opis">Spóźnieni</div><div class="pod">${c.LATE ? 'po 21:00 albo nie wrócili z domu' : 'wszyscy na czas'}</div></button>` +
     `<button class="kpi k-MOJ ${c.PO22 ? 'jest' : ''}" data-z="moj"><div class="liczba">${c.WYDANE}</div><div class="opis">Wydane rzeczy</div><div class="pod">${c.PO22 ? '<b style="color:var(--late)">nie oddane po ' + esc(doG) + ': ' + c.PO22 + '</b>' : 'klucze i aktywności'}</div></button>`;
@@ -3898,6 +3903,7 @@ function rysujStan() {
       <select id="st-sort" aria-label="Sortowanie">
         <option value="status" ${Stan.sortowanie === 'status' ? 'selected' : ''}>Sortuj: najpierw spóźnieni i nieobecni</option>
         <option value="nazwisko" ${Stan.sortowanie === 'nazwisko' ? 'selected' : ''}>Sortuj: alfabetycznie</option>
+        <option value="grupa" ${Stan.sortowanie === 'grupa' ? 'selected' : ''}>Sortuj: według grupy</option>
         <option value="pokoj" ${Stan.sortowanie === 'pokoj' ? 'selected' : ''}>Sortuj: według pokoju</option>
         <option value="czas" ${Stan.sortowanie === 'czas' ? 'selected' : ''}>Sortuj: ostatnia zmiana</option></select>
       <button class="przycisk drugi maly" data-a="drukuj-stan">${ikona('drukuj')} Drukuj listę</button>
@@ -3913,11 +3919,10 @@ function rysujStan() {
 }
 function priorytet(u) {
   if (spozniony(u)) return 0;
-  if (poCzasie(u)) return 1;
-  if (u.s === 'OUT') return 2;
-  if (czekamy(u)) return 3;
-  if (u.s === 'HOME') return 4;
-  return 5;
+  if (u.s === 'OUT') return 1;
+  if (czekamy(u)) return 2;
+  if (u.s === 'HOME') return 3;
+  return 4;
 }
 function listaStanu() {
   const q = norm(Stan.filtrTekst);
@@ -3930,6 +3935,7 @@ function listaStanu() {
   }).sort((a, b) => {
     const s = Stan.sortowanie;
     if (s === 'status') return priorytet(a) - priorytet(b) || (a.s === 'OUT' && b.s === 'OUT' ? (a.pp || 0) - (b.pp || 0) : 0) || porownaj(a.i, b.i) || porownaj(a.n, b.n);
+    if (s === 'grupa') return porownajWiersze({ u: a.n + ' ' + a.i, p: a.p, g: a.g }, { u: b.n + ' ' + b.i, p: b.p, g: b.g }, 'grupa');
     if (s === 'pokoj') return porownaj(a.p, b.p) || porownaj(a.i, b.i);
     if (s === 'czas') return (b.od || 0) - (a.od || 0);
     return porownaj(a.n, b.n) || porownaj(a.i, b.i);
@@ -3946,7 +3952,7 @@ function szczegolyUcznia(u) {
   }
   if (u.s === 'HOME') {
     if (u.sz) czesci.push(esc(u.sz));
-    if (u.pp) czesci.push('powrót <b>' + esc(opisPowrotuKr(ymd(u.pp))) + '</b>');
+    if (u.pp) czesci.push('powrót <b>' + esc(opisPowrotuKr(ymd(u.pp))) + '</b>' + (u.pz ? '' : ' <span class="szary">(wg ucznia)</span>'));
     else czesci.push('powrót: nie podano');
     let h = czesci.join(' · ');
     if (u.zg) h += ' <span class="szary">(' + esc(u.zg) + ')</span>';
@@ -3958,8 +3964,7 @@ function szczegolyUcznia(u) {
 function uwagiUcznia(u) {
   const w = [];
   if (spozniony(u)) w.push(u.s === 'HOME' ? '<span class="late-zn">nie wrócił(a) z domu</span>' : '<span class="late-zn">spóźnienie ' + esc(czasTrwania(minutySpoznienia(u))) + '</span>');
-  else if (poCzasie(u)) w.push('<span class="amb-zn">po zgłoszonej godz. ' + esc(czasTrwania(minutySpoznienia(u))) + '</span>');
-  if (u.nt) w.push('<span class="nota">' + esc(u.nt) + '</span>');
+  if (u.nt) w.push('<span class="nota">' + esc(u.nt) + (u.ntk ? ' <span class="nota-kto">– ' + esc(u.ntk) + '</span>' : '') + '</span>');
   return w.join(' ');
 }
 function rysujWierszeStanu() {
@@ -3970,21 +3975,22 @@ function rysujWierszeStanu() {
     fl.innerHTML = Object.keys(NAZWY_FILTROW).map(k => `<button class="filtr ${Stan.filtr === k ? 'aktywny' : ''}" data-filtr="${k}">${NAZWY_FILTROW[k]} <span>${liczba[k]}</span></button>`).join('');
   }
   const zKlasa = Stan.uczniowie.some(u => u.k);
+  const zGrupa = Stan.uczniowie.some(u => u.g);
   const th = $('#t-stan thead');
-  if (th) th.innerHTML = `<tr><th>Uczeń</th><th>Pokój</th>${zKlasa ? '<th class="tylko-szeroki">Klasa</th>' : ''}<th>Status</th><th class="tylko-szeroki">Od kiedy</th><th>Szczegóły</th><th class="tylko-szeroki">Uwagi</th><th></th></tr>`;
+  if (th) th.innerHTML = `<tr><th>Uczeń</th><th>Pokój</th>${zGrupa ? '<th>Grupa</th>' : ''}${zKlasa ? '<th class="tylko-szeroki">Klasa</th>' : ''}<th>Status</th><th class="tylko-szeroki">Od kiedy</th><th>Szczegóły</th><th class="tylko-szeroki">Uwagi</th><th></th></tr>`;
   const tb = $('#t-stan tbody');
   if (!tb) return;
   const lista = listaStanu();
-  const kolumn = zKlasa ? 8 : 7;
+  const kolumn = 7 + (zKlasa ? 1 : 0) + (zGrupa ? 1 : 0);
   if (!lista.length) {
     tb.innerHTML = '<tr><td colspan="' + kolumn + '" class="pusto">' + (Stan.uczniowie.length ? 'Brak uczniów spełniających kryteria.' : 'Lista uczniów jest pusta. Dodaj uczniów w zakładce „Uczniowie i kody QR”.') + '</td></tr>';
     return;
   }
   tb.innerHTML = lista.map(u => {
-    const late = spozniony(u), amb = poCzasie(u);
-    return `<tr class="${late ? 'w-LATE' : amb ? 'w-AMB' : ''}">
+    const late = spozniony(u);
+    return `<tr class="${late ? 'w-LATE' : ''}">
       <td><div class="uczen-nazwa">${esc(imieNazwisko(u))}</div><div class="uczen-pod">${u.od ? esc(kiedy(u.od)) : ''} ${uwagiUcznia(u)}</div></td>
-      <td>${pok(u.p)}</td>${zKlasa ? '<td class="tylko-szeroki">' + esc(u.k) + '</td>' : ''}
+      <td>${pok(u.p)}</td>${zGrupa ? '<td>' + grp(u.g) + '</td>' : ''}${zKlasa ? '<td class="tylko-szeroki">' + esc(u.k) + '</td>' : ''}
       <td><span class="chip s-${u.s}">${esc(STATUS_NAZWA[u.s])}</span></td>
       <td class="tylko-szeroki">${u.od ? esc(kiedy(u.od)) + '<div class="szary">' + esc(czasTrwania((teraz() - u.od) / 60000)) + ' temu</div>' : '<span class="szary">—</span>'}</td>
       <td>${szczegolyUcznia(u)}</td>
@@ -3995,8 +4001,8 @@ function rysujWierszeStanu() {
 function drukujStan() {
   const lista = listaStanu();
   const html = `<h1>${esc(Stan.nazwa)} – stan obecności</h1><div class="meta">Stan na ${esc(dataGodz(teraz()))} · filtr: ${esc(NAZWY_FILTROW[Stan.filtr])} · ${lista.length} os.</div>
-    <table><thead><tr><th>Lp.</th><th>Uczeń</th><th>Pokój</th><th>Status</th><th>Od kiedy</th><th>Szczegóły</th><th>Uwagi</th></tr></thead><tbody>
-    ${lista.map((u, i) => `<tr><td>${i + 1}</td><td>${esc(imieNazwisko(u))}</td><td>${esc(u.p)}</td><td>${esc(STATUS_NAZWA[u.s])}</td><td>${u.od ? esc(dataGodz(u.od)) : ''}</td>
+    <table><thead><tr><th>Lp.</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Status</th><th>Od kiedy</th><th>Szczegóły</th><th>Uwagi</th></tr></thead><tbody>
+    ${lista.map((u, i) => `<tr><td>${i + 1}</td><td>${esc(imieNazwisko(u))}</td><td>${esc(u.p)}</td><td>${esc(nazwaGrupy(u.g))}</td><td>${esc(STATUS_NAZWA[u.s])}</td><td>${u.od ? esc(dataGodz(u.od)) : ''}</td>
       <td>${szczegolyUcznia(u).replace(/<[^>]+>/g, '')}</td><td>${uwagiUcznia(u).replace(/<[^>]+>/g, ' ')}</td></tr>`).join('')}</tbody></table>`;
   drukuj(html);
 }
@@ -4009,9 +4015,15 @@ function pokazOknoUcznia(id) {
   let wybrana = u.s === 'IN' ? 'WYJSCIE' : 'WEJSCIE';
   const rz = rzeczyUcznia(u.id);
   const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true">
-      <h2>${esc(imieNazwisko(u))} ${u.p ? '<span class="pok" style="background:#17212b;color:#fff;border-radius:8px;padding:1px 9px;font-size:.95rem">pokój ' + esc(u.p) + '</span>' : ''}</h2>
+      <h2>${esc(imieNazwisko(u))} ${u.p ? '<span class="pok" style="background:#17212b;color:#fff;border-radius:8px;padding:1px 9px;font-size:.95rem">pokój ' + esc(u.p) + '</span>' : ''} ${u.g ? grp(u.g) : ''}</h2>
       <p>Teraz: <span class="chip s-${u.s}">${esc(STATUS_NAZWA[u.s])}</span> <span class="szary">${u.od ? 'od ' + esc(kiedy(u.od)) : ''}</span><br><span class="szary">${szczegolyUcznia(u).replace(/<[^>]+>/g, '')}</span></p>
+      <div class="kto-wpisuje"><label for="o-kto">Wpisuje</label><input type="text" id="o-kto" maxlength="40" autocomplete="name" placeholder="imię i nazwisko wychowawcy" value="${esc(Pamiec.get('wychowawca', ''))}"></div>
       ${rz.length ? '<p class="ramka-info">Ma na stanie: <b>' + esc(rz.map(r => r.nazwa).join(', ')) + '</b> – zwrot zapiszesz w zakładce „Mój internat”.</p>' : ''}
+      ${u.s === 'IN' && terminPowrotu(teraz()) !== null ? ramkaPo21Html() : ''}
+      ${u.s === 'HOME' ? `<div class="ramka-info nieb dzien-powrotu">
+          <label for="o-dzien-powrotu"><b>Dzień powrotu z domu</b></label>
+          <div class="wiersz"><input type="date" id="o-dzien-powrotu" min="${ymd(teraz())}" value="${u.pp ? ymd(u.pp) : ''}"><button class="przycisk" data-a="zapisz-powrot">Zapisz</button></div>
+          <span>${u.pp ? 'Teraz: <b>' + esc(opisPowrotuKr(ymd(u.pp))) + '</b>' : 'Nie podano – wpisz, gdy będzie wiadomo, kiedy wróci.'}</span></div>` : ''}
       <hr class="cienka">
       <h3>Zmień status (korekta)</h3>
       <div class="trzy">${['WEJSCIE', 'WYJSCIE', 'DOM'].map(a => `<button class="wybor a-${a} ${a === wybrana ? 'wybrany' : ''}" data-wybor="${a}">${ikona(IKONA_AKCJI[a])}${a === 'WEJSCIE' ? 'W internacie' : a === 'WYJSCIE' ? 'Wyjście' : 'Wyjazd do domu'}</button>`).join('')}</div>
@@ -4031,12 +4043,25 @@ function pokazOknoUcznia(id) {
         <span class="przyciski"><button class="przycisk drugi" data-a="zapisz-notatke">Zapisz notatkę</button><button class="przycisk drugi" data-a="zamknij">Zamknij</button></span></div>
     </div>`);
   const pokazDom = () => $('#o-dom', n).classList.toggle('ukryte', wybrana !== 'DOM');
+  $('#o-kto', n).addEventListener('input', e => e.target.classList.remove('blad-pole'));
+  let zgoda21 = '';
   n.addEventListener('click', async e => {
+    const z21 = e.target.closest('[data-zg21]');
+    if (z21) { zgoda21 = z21.dataset.zg21; $$('[data-zg21]', n).forEach(x => x.classList.toggle('wyb', x === z21)); return; }
     const w = e.target.closest('[data-wybor]');
     if (w) { wybrana = w.dataset.wybor; $$('[data-wybor]', n).forEach(x => x.classList.toggle('wybrany', x === w)); pokazDom(); return; }
     const b = e.target.closest('[data-a]');
     if (!b) return;
     const blad = $('#o-blad', n);
+    /** Kto wpisuje – obowiązkowo przy każdym zapisie w tym oknie; zapamiętane na urządzeniu. */
+    const ktoWpisuje = () => {
+      const pole = $('#o-kto', n);
+      const v = pole.value.trim().replace(/\s+/g, ' ');
+      if (!v) { pole.classList.add('blad-pole'); pole.focus(); toast('Wpisz u góry okna, kto wpisuje (imię i nazwisko wychowawcy).', 'blad', 5000); return null; }
+      pole.classList.remove('blad-pole');
+      Pamiec.set('wychowawca', v);
+      return v;
+    };
     if (b.dataset.a === 'zamknij') zamknijNakladke(n);
     if (b.dataset.a === 'historia') {
       zamknijNakladke(n);
@@ -4050,8 +4075,11 @@ function pokazOknoUcznia(id) {
       const ts = lokalnyNaMs(+m[1], +m[2], +m[3], +m[4], +m[5]);
       if (ts > teraz() + 60000) { blad.textContent = 'Ta godzina jest w przyszłości.'; return; }
       if (ts < teraz() - 7 * 864e5) { blad.textContent = 'Korekta może dotyczyć tylko ostatnich 7 dni.'; return; }
-      const ev = { uid: nowyUid(), id: u.id, akcja: wybrana, ts: ts, sposob: 'panel', urzadzenie: 'Panel wychowawcy' };
+      const kto = ktoWpisuje();
+      if (!kto) return;
+      const ev = { uid: nowyUid(), id: u.id, akcja: wybrana, ts: ts, sposob: 'panel', urzadzenie: 'Panel wychowawcy', wychowawca: kto };
       const uw = $('#o-uwagi', n).value.trim();
+      if (wybrana === 'WEJSCIE' && uw) ev.uwaga = uw;
       if (wybrana === 'WYJSCIE') { ev.cel = uw || 'korekta w panelu'; }
       if (wybrana === 'DOM') { const p = $('#o-powrot', n).value; if (p) ev.powrotData = p; ev.rodzaj = czyDzienWeekendowy(ymd(ts)) ? 'weekend' : 'tydzien'; ev.powod = uw; }
       b.disabled = true; b.textContent = 'Zapisywanie…'; blad.textContent = '';
@@ -4069,9 +4097,11 @@ function pokazOknoUcznia(id) {
       }
     }
     if (b.dataset.a === 'zapisz-notatke') {
+      const kto = ktoWpisuje();
+      if (!kto) return;
       b.disabled = true;
       try {
-        const d = await api('notatka', { id: u.id, tekst: $('#o-notatka', n).value.trim(), urzadzenie: 'Panel wychowawcy' });
+        const d = await api('notatka', { id: u.id, tekst: $('#o-notatka', n).value.trim(), urzadzenie: 'Panel wychowawcy', wychowawca: kto });
         if (!d.ok) throw new BladApi(d.blad || 'Nie zapisano notatki.', 'serwer');
         aktualizujUcznia(d.uczen);
         zamknijNakladke(n);
@@ -4081,7 +4111,86 @@ function pokazOknoUcznia(id) {
         if (err.rodzaj !== 'auth') { blad.textContent = err.message; b.disabled = false; }
       }
     }
+    if (b.dataset.a === 'zapisz-po21') {
+      const blad21 = $('#o21-blad', n);
+      const cel = $('#o21-cel', n).value;
+      const ms = godzinaWieczoru($('#o21-godz', n).value);
+      const limit = terminPowrotu(teraz());
+      const uwaga = $('#o21-uwaga', n).value.trim();
+      let komunikat = '';
+      if (!cel) komunikat = 'Wybierz, dokąd wychodzi.';
+      else if (!ms) komunikat = 'Podaj godzinę powrotu.';
+      else if (limit !== null && ms <= limit) komunikat = 'Godzina powrotu musi być po ' + godz(limit) + '.';
+      else if (ms <= teraz()) komunikat = 'Ta godzina już minęła.';
+      else if (ms - teraz() > 12 * 3600000) komunikat = 'To za ponad 12 godzin – podaj godzinę powrotu dzisiejszego wieczoru.';
+      else if (!zgoda21) komunikat = 'Zaznacz, kto potwierdził.';
+      blad21.textContent = komunikat;
+      if (komunikat) return;
+      const kto = ktoWpisuje();
+      if (!kto) return;
+      const ev = { uid: nowyUid(), id: u.id, akcja: 'WYJSCIE', ts: teraz(), sposob: 'panel', urzadzenie: 'Panel wychowawcy', wychowawca: kto, cel: cel, powrot: ms, zgoda: zgoda21, uwaga: uwaga, po21: 1 };
+      b.disabled = true; b.textContent = 'Zapisywanie…';
+      try {
+        const d = await api('zapisz', { zdarzenia: [ev] });
+        if (!d.ok || !d.wyniki || !d.wyniki[0] || !d.wyniki[0].ok) throw new BladApi((d.wyniki && d.wyniki[0] && d.wyniki[0].blad) || d.blad || 'Nie zapisano.', 'serwer');
+        Stan.zapisGen++;
+        (d.uczniowie || []).forEach(aktualizujUcznia);
+        if (d.czas) Stan.przesuniecie = d.czas - Date.now();
+        zamknijNakladke(n);
+        toast('Zapisano wyjście: ' + imieNazwisko(u) + ' – wróci do ' + godzinaZDniem(ms), 'ok');
+        przerysuj();
+      } catch (err) {
+        if (err.rodzaj !== 'auth') { blad21.textContent = err.message; b.disabled = false; b.textContent = 'Zapisz wyjście'; }
+      }
+    }
+    if (b.dataset.a === 'zapisz-powrot') {
+      const dzien = $('#o-dzien-powrotu', n).value;
+      if (dzien && dzien < ymd(teraz())) { blad.textContent = 'Dzień powrotu nie może być w przeszłości.'; return; }
+      const kto = ktoWpisuje();
+      if (!kto) return;
+      b.disabled = true;
+      try {
+        const d = await api('powrot', { id: u.id, data: dzien, urzadzenie: 'Panel wychowawcy', wychowawca: kto });
+        if (!d.ok) throw new BladApi(d.blad || 'Nie zapisano dnia powrotu.', 'serwer');
+        aktualizujUcznia(d.uczen);
+        zamknijNakladke(n);
+        toast(dzien ? 'Zapisano powrót: ' + imieNazwisko(u) + ' – ' + opisPowrotuKr(dzien) : 'Usunięto dzień powrotu.', 'ok');
+        przerysuj();
+      } catch (err) {
+        if (err.rodzaj !== 'auth') { blad.textContent = err.message; b.disabled = false; }
+      }
+    }
   });
+}
+
+/** Zgł. 14: wyjście z powrotem po 21:00 – zapisuje tylko wychowawca, gdy rodzic albo trener potwierdził przed wyjściem. */
+function ramkaPo21Html() {
+  const g = godz(terminPowrotu(teraz()));
+  return `<div class="ramka-po21">
+      <div class="t">Powrót po ${esc(g)}</div>
+      <p>Zapisz, gdy uczeń wychodzi, a wróci po ${esc(g)}. Tylko gdy rodzic albo trener potwierdził, <b>zanim uczeń wyjdzie</b>. Uczeń nie podpisuje tego na tablecie.</p>
+      <div class="wiersz2"><div><label for="o21-cel">Dokąd</label><select id="o21-cel"><option value="">– wybierz –</option>${CELE.map(c => `<option>${esc(c.n)}</option>`).join('')}</select></div>
+        <div><label for="o21-godz">Wróci o</label><input type="time" id="o21-godz" value="${domyslnaGodzinaPo21()}" step="300"></div></div>
+      <label>Kto potwierdził</label>
+      <div class="dwie-kol">${ZGODY_PO21.map(z => `<button type="button" class="wybor-cz" data-zg21="${esc(z)}">${esc(z.charAt(0).toUpperCase() + z.slice(1))}</button>`).join('')}</div>
+      <label for="o21-uwaga">Uwaga (opcjonalnie)</label><input type="text" id="o21-uwaga" maxlength="100" placeholder="np. mecz w Brzegu, powrót autokarem">
+      <p class="blad-tekst" id="o21-blad"></p>
+      <div class="przyciski"><button class="przycisk" data-a="zapisz-po21">Zapisz wyjście</button></div></div>`;
+}
+/** 22:30, a gdy to już blisko – za godzinę (pełne kwadranse). */
+function domyslnaGodzinaPo21() {
+  let ms = godzinaWieczoru('22:30');
+  if (!ms || ms < teraz() + 30 * 60000) { const t = teraz() + 60 * 60000; ms = t - (t % (15 * 60000)) + 15 * 60000; }
+  return godz(ms);
+}
+/** „22:30” → ms wieczoru, do którego należy teraz (godziny przed 5:00 to już następny dzień, po północy). */
+function godzinaWieczoru(hhmm) {
+  const m = /^(\d{1,2}):(\d{2})/.exec(hhmm || '');
+  if (!m) return null;
+  const min = Number(m[1]) * 60 + Number(m[2]);
+  let dzien = ymd(teraz());
+  if (czesciCzasu(teraz()).min < GRANICA_DOBY) dzien = dodajDni(dzien, -1);
+  return msZDnia(min < GRANICA_DOBY ? dodajDni(dzien, 1) : dzien, min);
 }
 
 // ── zakładka: powroty po 21:00
@@ -4102,8 +4211,8 @@ function rysujPo21() {
   const g = powrotDzis() !== null ? godzMin(powrotDzis()) : '21:00';
   const mies = MIESIACE_M[Number(ymd(teraz()).slice(5, 7)) - 1];
   const t = $('#pn-tresc');
-  t.innerHTML = `<div class="naglowek-karty"><div><h2>Powroty po ${esc(g)}</h2><p class="szary" style="margin:2px 0 0;max-width:640px">Lista tworzy się sama z każdego wyjścia z powrotem po ${esc(g)} (za zgodą) i z każdego powrotu po ${esc(g)} bez zgody. Uczeń zaznacza na tablecie, jak przyszła zgoda, i zgłasza to wychowawcy przy drzwiach.</p></div>
-      <span class="przyciski"><span class="filtry" id="po21-okres">${[['tydzien', 'Ten tydzień'], ['miesiac', mies.charAt(0).toUpperCase() + mies.slice(1)], ['rok', 'Cały rok']].map(o => `<button class="filtr ${p.okres === o[0] ? 'aktywny' : ''}" data-okres="${o[0]}">${o[1]}</button>`).join('')}</span>
+  t.innerHTML = `<div class="naglowek-karty"><div><h2>Powroty po ${esc(g)}</h2><p class="szary" style="margin:2px 0 0;max-width:640px">Wyjścia z powrotem po ${esc(g)} zapisane przez wychowawcę (za zgodą) i powroty po ${esc(g)} bez zgody.</p></div>
+      <span class="przyciski">${wyborSortowania('po21', ['czas', 'od najnowszych'])}<span class="filtry" id="po21-okres">${[['tydzien', 'Ten tydzień'], ['miesiac', mies.charAt(0).toUpperCase() + mies.slice(1)], ['rok', 'Cały rok']].map(o => `<button class="filtr ${p.okres === o[0] ? 'aktywny' : ''}" data-okres="${o[0]}">${o[1]}</button>`).join('')}</span>
       <button class="przycisk drugi maly" data-a="po21-druk">${ikona('drukuj')} Drukuj</button><button class="przycisk drugi maly" data-a="po21-excel">${ikona('pobierz')} Pobierz Excel</button></span></div>
     <div id="po21-wyniki">${ladowanieKarta()}</div>`;
   t.onclick = e => {
@@ -4114,6 +4223,7 @@ function rysujPo21() {
     if (b.dataset.a === 'po21-druk') drukujPo21();
     if (b.dataset.a === 'po21-excel') excelPo21();
   };
+  t.onchange = e => { const s = e.target.closest('[data-sortuj]'); if (s) { Pamiec.set('sort_po21', s.value); rysujWynikiPo21(); } };
   if (p.wpisy) rysujWynikiPo21(); else zaladujPo21();
 }
 async function zaladujPo21() {
@@ -4135,7 +4245,7 @@ function rysujWynikiPo21() {
   const p = Stan.po21;
   if (p.blad) { el.innerHTML = '<div class="karta pusto" style="color:var(--late)">' + esc(p.blad) + '</div>'; return; }
   if (!p.wpisy) { el.innerHTML = ladowanieKarta(); return; }
-  const w = p.wpisy.slice().sort((a, b) => (a.wrocil === null ? 0 : 1) - (b.wrocil === null ? 0 : 1) || b.wyj - a.wyj);
+  const w = posortujWiersze(p.wpisy.slice().sort((a, b) => (a.wrocil === null ? 0 : 1) - (b.wrocil === null ? 0 : 1) || b.wyj - a.wyj), sortowanieListy('po21', 'czas'));
   const z = zakresOkresu(p.okres);
   const wrocili = w.filter(x => x.wrocil !== null);
   const naCzas = wrocili.filter(x => !(x.sp > 0));
@@ -4144,31 +4254,32 @@ function rysujWynikiPo21() {
   const g = powrotDzis() !== null ? godzMin(powrotDzis()) : '21:00';
   el.innerHTML = `<div class="siatka3">
       <div class="mini-kpi"><div class="liczba" style="color:#8f1c1c">${w.length}</div><div class="opis">Powroty po ${esc(g)} ${esc(z.nazwa)}</div><div class="pod">${rozni} ${liczbaMnoga(rozni, 'uczeń', 'różnych uczniów', 'różnych uczniów')}</div></div>
-      <div class="mini-kpi"><div class="liczba" style="color:var(--in)">${naCzas.length}</div><div class="opis">Wrócili na czas</div><div class="pod">przed zgłoszoną godziną</div></div>
-      <div class="mini-kpi"><div class="liczba" style="color:var(--out)">${poCz.length}</div><div class="opis">Po zgłoszonej godzinie</div><div class="pod">${poCz.slice(0, 3).map(x => esc(x.u) + ' – ' + esc(czasTrwania(x.sp))).join(', ') || '—'}</div></div></div>
-    <div class="tabela-opak"><table class="tabela"><thead><tr><th>Dzień</th><th>Uczeń</th><th>Pokój</th><th class="tylko-szeroki">Cel / dokąd</th><th>Wyjście</th><th>Miał wrócić</th><th>Wrócił</th><th class="zgoda-n">Zgoda – jak przyszła</th></tr></thead><tbody>
+      <div class="mini-kpi"><div class="liczba" style="color:var(--in)">${naCzas.length}</div><div class="opis">Wrócili na czas</div><div class="pod">przed godziną ze zgody</div></div>
+      <div class="mini-kpi"><div class="liczba" style="color:var(--out)">${poCz.length}</div><div class="opis">Wrócili po czasie</div><div class="pod">${poCz.slice(0, 3).map(x => esc(x.u) + ' – ' + esc(czasTrwania(x.sp))).join(', ') || '—'}</div></div></div>
+    <div class="tabela-opak"><table class="tabela"><thead><tr><th>Dzień</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th class="tylko-szeroki">Cel / dokąd</th><th>Wyjście</th><th>Miał wrócić</th><th>Wrócił</th><th class="zgoda-n">Zgoda – jak przyszła</th></tr></thead><tbody>
     ${w.length ? w.map(x => {
       const otw = x.wrocil === null;
       const late = otw && x.mial && teraz() > x.mial;
-      return `<tr class="${otw ? 'w-LATE' : ''}"><td style="white-space:nowrap">${esc(opisDniaKr(ymd(x.wyj)))}</td><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td>
+      return `<tr class="${otw ? 'w-LATE' : ''}"><td style="white-space:nowrap">${esc(opisDniaKr(ymd(x.wyj)))}</td><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${grp(grupaWiersza(x))}</td>
         <td class="tylko-szeroki">${esc(x.cel)}</td><td>${esc(godz(x.wyj))}</td><td><b>${x.mial ? esc(godzinaZDniem(x.mial, x.wyj)) : '—'}</b></td>
         <td>${otw ? '<span class="late-zn">' + (late ? 'jeszcze nie wrócił(a)' : 'jeszcze poza') + '</span>' : x.sp > 0 ? '<span class="amb-zn">' + esc(godzinaZDniem(x.wrocil, x.wyj)) + ' · ' + esc(czasTrwania(x.sp)) + ' po czasie</span>' : '<span class="ok-zn">✓ ' + esc(godzinaZDniem(x.wrocil, x.wyj)) + '</span>'}</td>
         <td class="zgoda-k">${esc(x.zg)}</td></tr>`;
-    }).join('') : '<tr><td colspan="8" class="pusto">Brak powrotów po ' + esc(g) + ' ' + esc(z.nazwa) + '.</td></tr>'}</tbody></table></div>
-    <p class="szary" style="margin-top:10px"><b>Kto jeszcze nie wrócił</b>, jest na górze listy na czerwono. <b>Zgoda</b> zostaje w historii na stałe – do kontroli i rozmów z rodzicami.</p>`;
+    }).join('') : '<tr><td colspan="9" class="pusto">Brak powrotów po ' + esc(g) + ' ' + esc(z.nazwa) + '.</td></tr>'}</tbody></table></div>
+    <p class="szary" style="margin-top:10px"><b>Kto jeszcze nie wrócił</b> – na czerwono. <b>Zgoda</b> zostaje w historii na stałe.</p>`;
 }
 function drukujPo21() {
   const p = Stan.po21, z = zakresOkresu(p.okres);
   drukuj(`<h1>${esc(Stan.nazwa)} – powroty po 21:00</h1><div class="meta">${esc(z.nazwa)} (${esc(z.od.split('-').reverse().join('.'))} – ${esc(z.do.split('-').reverse().join('.'))}) · wydrukowano ${esc(dataGodz(teraz()))}</div>
-    <table><thead><tr><th>Dzień</th><th>Uczeń</th><th>Pokój</th><th>Cel / dokąd</th><th>Wyjście</th><th>Miał wrócić</th><th>Wrócił</th><th>Spóźnienie</th><th>Zgoda</th></tr></thead><tbody>
-    ${p.wpisy.map(x => `<tr><td>${esc(opisDniaKr(ymd(x.wyj)))}</td><td>${esc(x.u)}</td><td>${esc(x.p)}</td><td>${esc(x.cel)}</td><td>${esc(godz(x.wyj))}</td><td>${x.mial ? esc(godzinaZDniem(x.mial, x.wyj)) : ''}</td>
+    <table><thead><tr><th>Dzień</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Cel / dokąd</th><th>Wyjście</th><th>Miał wrócić</th><th>Wrócił</th><th>Spóźnienie</th><th>Zgoda</th></tr></thead><tbody>
+    ${posortujWiersze(p.wpisy, sortowanieListy('po21', 'czas')).map(x => `<tr><td>${esc(opisDniaKr(ymd(x.wyj)))}</td><td>${esc(x.u)}</td><td>${esc(x.p)}</td><td>${esc(nazwaGrupy(grupaWiersza(x)))}</td><td>${esc(x.cel)}</td><td>${esc(godz(x.wyj))}</td><td>${x.mial ? esc(godzinaZDniem(x.mial, x.wyj)) : ''}</td>
       <td>${x.wrocil ? esc(godzinaZDniem(x.wrocil, x.wyj)) : 'nie wrócił(a)'}</td><td>${x.sp > 0 ? esc(czasTrwania(x.sp)) : ''}</td><td>${esc(x.zg)}</td></tr>`).join('')}</tbody></table>`);
 }
 function excelPo21() {
   const p = Stan.po21, z = zakresOkresu(p.okres);
-  const wiersze = [['Wyjście', 'Uczeń', 'Pokój', 'Cel / dokąd', 'Miał wrócić', 'Wrócił', 'Spóźnienie (min)', 'Zgoda – jak przyszła']];
-  p.wpisy.slice().reverse().forEach(x => wiersze.push([{ data: x.wyj }, x.u, x.p, x.cel, x.mial ? { data: x.mial } : '', x.wrocil ? { data: x.wrocil } : 'nie wrócił(a)', x.sp > 0 ? x.sp : '', x.zg]));
-  pobierzPlik(zbudujXlsx('Powroty po 21', wiersze, [18, 22, 8, 36, 18, 18, 14, 28]), 'powroty_po_21_' + z.od + '_' + z.do + '.xlsx');
+  const wiersze = [['Wyjście', 'Uczeń', 'Pokój', 'Grupa', 'Cel / dokąd', 'Miał wrócić', 'Wrócił', 'Spóźnienie (min)', 'Zgoda – jak przyszła']];
+  const tryb = sortowanieListy('po21', 'czas');
+  posortujWiersze(tryb === 'czas' ? p.wpisy.slice().reverse() : p.wpisy, tryb).forEach(x => wiersze.push([{ data: x.wyj }, x.u, x.p, nazwaGrupy(grupaWiersza(x)), x.cel, x.mial ? { data: x.mial } : '', x.wrocil ? { data: x.wrocil } : 'nie wrócił(a)', x.sp > 0 ? x.sp : '', x.zg]));
+  pobierzPlik(zbudujXlsx('Powroty po 21', wiersze, [18, 22, 8, 10, 36, 18, 18, 14, 28]), 'powroty_po_21_' + z.od + '_' + z.do + '.xlsx');
 }
 
 // ── zakładka: Mój internat
@@ -4177,6 +4288,7 @@ function rysujMoj() {
   const t = $('#pn-tresc');
   t.innerHTML = `<div id="moj-wyniki">${ladowanieKarta()}</div>`;
   t.onclick = obsluzKlikMoj;
+  t.onchange = e => { const s = e.target.closest('[data-sortuj]'); if (s) { Pamiec.set('sort_moj', s.value); rysujWynikiMoj(); } };
   if (Stan.moj.dane) rysujWynikiMoj();
   zaladujMoj();
 }
@@ -4211,33 +4323,37 @@ function rysujWynikiMoj() {
   const piatekTen = piatekTygodnia(dzis);
   const ileZostaje = w.zapisani.length;
   const g = doMin !== null && doMin !== undefined ? godzMin(doMin) : '22:00';
+  const tryb = sortowanieListy('moj', 'czas');
+  const wydane = posortujWiersze(d.wydane, tryb), oddane = posortujWiersze(d.oddane, tryb);
+  const zapisani = tryb === 'czas' ? w.zapisani.slice().sort((a, b) => porownaj(a.u, b.u)) : posortujWiersze(w.zapisani, tryb);
   el.innerHTML = `<div class="siatka-moj"><div class="stos">
-      <div><h2 style="margin:0">Mój internat</h2><p class="szary" style="margin:2px 0 0">Kto ma teraz klucze i rzeczy. Oddaje zawsze osoba, która wzięła. Po ${esc(g)} niezwrócone świecą się na czerwono.</p></div>
+      <div class="naglowek-karty" style="margin:0"><div><h2 style="margin:0">Mój internat</h2><p class="szary" style="margin:2px 0 0">Kto ma teraz klucze i rzeczy. Oddaje zawsze osoba, która wzięła. Po ${esc(g)} niezwrócone świecą się na czerwono.</p></div>
+        ${wyborSortowania('moj', ['czas', 'kolejność wydania'])}</div>
       <div class="siatka3" style="margin:0">
         <div class="mini-kpi"><div class="liczba" style="color:var(--moj-mocny)">${d.wydane.length}</div><div class="opis">Wydane teraz</div><div class="pod">pralnia ${pralniaWolna ? 'wolna' : 'zajęta'} · ${Math.max(0, lodWolne)} ${liczbaMnoga(Math.max(0, lodWolne), 'lodówka wolna', 'lodówki wolne', 'lodówek wolnych')}</div></div>
         <div class="mini-kpi" style="${nieOdd.length ? 'background:#fff1f1' : ''}"><div class="liczba" style="color:${nieOdd.length ? 'var(--late)' : 'var(--tekst3)'}">${nieOdd.length}</div><div class="opis">Nie oddane po ${esc(g)}</div><div class="pod">${esc(nieOdd.map(x => malaLitera(x.nazwa)).join(', ') || 'wszystko oddane')}</div></div>
         <div class="mini-kpi"><div class="liczba" style="color:var(--home)">${ileZostaje}</div><div class="opis">Zostaje na weekend</div><div class="pod">${esc(opisDniaKr(w.piatek) + ' – ' + opisDniaKr(dodajDni(w.piatek, 2)))}</div></div></div>
       <div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8f6fd">Wydane teraz</div>
-        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela"><thead><tr><th>Rzecz</th><th>Uczeń</th><th>Pokój</th><th>Od</th><th>Stan</th><th></th></tr></thead><tbody>
-        ${d.wydane.length ? d.wydane.map(x => `<tr class="${po22(x) ? 'w-LATE' : ''}"><td class="uczen-nazwa">${esc(x.nazwa)}</td><td>${esc(x.u)}</td><td>${pok(x.p)}</td><td>${esc(godzinaZDniem(x.od))}</td>
+        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela"><thead><tr><th>Rzecz</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Od</th><th>Stan</th><th></th></tr></thead><tbody>
+        ${wydane.length ? wydane.map(x => `<tr class="${po22(x) ? 'w-LATE' : ''}"><td class="uczen-nazwa">${esc(x.nazwa)}</td><td>${esc(x.u)}</td><td>${pok(x.p)}</td><td>${grp(grupaWiersza(x))}</td><td>${esc(godzinaZDniem(x.od))}</td>
           <td>${po22(x) ? '<span class="late-zn">po ' + esc(g) + ' – nie oddano</span>' : '<span class="szary">' + esc(czasTrwania((teraz() - x.od) / 60000)) + '</span>'}</td>
-          <td class="akcje"><button class="przycisk drugi maly" data-zwrot="${esc(x.rid)}" data-id="${x.id}">Zapisz zwrot</button></td></tr>`).join('') : '<tr><td colspan="6" class="pusto">Nic nie jest teraz wydane.</td></tr>'}</tbody></table></div></div>
+          <td class="akcje"><button class="przycisk drugi maly" data-zwrot="${esc(x.rid)}" data-id="${x.id}">Zapisz zwrot</button></td></tr>`).join('') : '<tr><td colspan="7" class="pusto">Nic nie jest teraz wydane.</td></tr>'}</tbody></table></div></div>
       <div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8fafc">Dziś oddane</div>
-        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela"><thead><tr><th>Rzecz</th><th>Uczeń</th><th>Pokój</th><th>Pobranie</th><th>Zwrot</th></tr></thead><tbody>
-        ${d.oddane.length ? d.oddane.map(x => `<tr><td>${esc(x.nazwa)}</td><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${esc(godzinaZDniem(x.od))}</td><td>${esc(godz(x.zwrot))} <span class="szary">(${esc(czasTrwania(x.min))})</span></td></tr>`).join('') : '<tr><td colspan="5" class="pusto">Dziś jeszcze nic nie oddano.</td></tr>'}</tbody></table></div></div>
+        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela"><thead><tr><th>Rzecz</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Pobranie</th><th>Zwrot</th></tr></thead><tbody>
+        ${oddane.length ? oddane.map(x => `<tr><td>${esc(x.nazwa)}</td><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${grp(grupaWiersza(x))}</td><td>${esc(godzinaZDniem(x.od))}</td><td>${esc(godz(x.zwrot))} <span class="szary">(${esc(czasTrwania(x.min))})</span></td></tr>`).join('') : '<tr><td colspan="6" class="pusto">Dziś jeszcze nic nie oddano.</td></tr>'}</tbody></table></div></div>
     </div>
     <div class="stos">
       <div class="karta"><div class="naglowek-karty" style="margin-bottom:4px"><h2>Weekend ${esc(opisWeekendu(w.piatek))}</h2>
         <span class="filtry"><button class="filtr ${w.piatek === piatekTen ? 'aktywny' : ''}" data-wk="${piatekTen}">ten</button><button class="filtr ${w.piatek !== piatekTen ? 'aktywny' : ''}" data-wk="${dodajDni(piatekTen, 7)}">następny</button></span></div>
         <p class="szary" style="margin:0 0 8px">zostaje w internacie · ${ileZostaje} ${liczbaMnoga(ileZostaje, 'osoba', 'osoby', 'osób')} · zapisy ${esc(teraz() > w.termin ? 'zamknięte' : 'do ' + opisDniaKr(ymd(w.termin)) + ', ' + godz(w.termin))}</p>
-        <ul class="lista-weekend">${w.zapisani.length ? w.zapisani.slice().sort((a, b) => porownaj(a.u, b.u)).map(x => {
+        <ul class="lista-weekend">${zapisani.length ? zapisani.map(x => {
           const u = x.id ? Stan.poId.get(x.id) : null;
-          return `<li><span class="n">${esc(x.u)}<br><span class="d">${esc(x.z)}${u && u.s !== 'IN' ? ' · <span class="chip s-' + u.s + '">' + esc(STATUS_NAZWA[u.s]) + '</span>' : ''}</span></span>${pok(x.p)}
+          const gr = grupaWiersza(x);
+          return `<li><span class="n">${esc(x.u)}<br><span class="d">${esc(x.z)}${u && u.s !== 'IN' ? ' · <span class="chip s-' + u.s + '">' + esc(STATUS_NAZWA[u.s]) + '</span>' : ''}</span></span>${pok(x.p)}${gr ? grp(gr) : ''}
             ${x.id ? '<button class="przycisk drugi maly" data-wypisz="' + x.id + '" title="Wypisz z weekendu">Wypisz</button>' : ''}</li>`;
         }).join('') : '<li class="szary">Nikt się jeszcze nie zapisał.</li>'}</ul>
         ${w.wypisani.length ? '<p class="szary" style="margin:8px 0 0">' + w.wypisani.map(x => esc(x.u) + ' (' + esc(x.p) + ') wypisał(a) się: ' + esc(x.wypis.split(' · ')[0])).join('<br>') + '</p>' : ''}
         <button class="przycisk fiolet" data-a="dopisz" style="margin-top:12px">${ikona('plus')} Dopisz ucznia</button></div>
-      <div class="ramka-info">Wszystko jest też w arkuszu – w jednym pliku, każda lista to osobna karta na dole: „Mój internat – wydania”, „Weekend w internacie”, „Lodówki”.</div>
     </div></div>`;
 }
 async function obsluzKlikMoj(e) {
@@ -4263,6 +4379,7 @@ async function obsluzKlikMoj(e) {
   if (b) oknoDopiszWeekend();
 }
 async function zapiszZPanelu(ev, komunikat) {
+  if (!ev.wychowawca && Pamiec.get('wychowawca', '')) ev.wychowawca = Pamiec.get('wychowawca', '');
   try {
     const d = await api('zapisz', { zdarzenia: [ev] });
     if (!d.ok || !d.wyniki || !d.wyniki[0] || !d.wyniki[0].ok) throw new BladApi((d.wyniki && d.wyniki[0] && d.wyniki[0].blad) || d.blad || 'Nie zapisano.', 'serwer');
@@ -4286,7 +4403,7 @@ function oknoDopiszWeekend() {
   const opcje = [['cały weekend · ' + opisDniaKr(pt) + ' – ' + opisDniaKr(nd), 'Cały weekend'], ['do soboty · ' + opisDniaKr(pt) + ' – ' + opisDniaKr(sob), 'Do soboty'], ['od soboty · ' + opisDniaKr(sob) + ' – ' + opisDniaKr(nd), 'Od soboty']];
   const n = otworzNakladke(`<div class="okno" role="dialog" aria-modal="true"><h2>Dopisz do weekendu ${esc(opisWeekendu(pt))}</h2>
       <p class="szary">Wychowawca może dopisać ucznia także po zamknięciu zapisów.</p>
-      <label for="dw-uczen">Uczeń</label><select id="dw-uczen"><option value="">— wybierz —</option>${uczniowie.map(u => `<option value="${u.id}">${esc(imieNazwisko(u))} · pokój ${esc(u.p)}</option>`).join('')}</select>
+      <label for="dw-uczen">Uczeń</label><select id="dw-uczen"><option value="">— wybierz —</option>${uczniowie.map(u => `<option value="${u.id}">${esc(imieNazwisko(u))} · pokój ${esc(u.p)}${u.g ? ' · ' + esc(nazwaGrupy(u.g).toLowerCase()) : ''}</option>`).join('')}</select>
       <label for="dw-opcja">Zostaje</label><select id="dw-opcja">${opcje.map(o => `<option value="${esc(o[0])}">${esc(o[1])} (${esc(o[0].split(' · ')[1])})</option>`).join('')}</select>
       <p class="blad-tekst" id="dw-blad"></p>
       <div class="stopka"><button class="przycisk drugi" data-a="zamknij">Anuluj</button><button class="przycisk fiolet" data-a="zapisz">Dopisz</button></div></div>`);
@@ -4307,10 +4424,11 @@ function rysujNieob() {
   Stan.nieob = Stan.nieob || { dane: null };
   const t = $('#pn-tresc');
   t.innerHTML = `<div id="nieob-wyniki">${ladowanieKarta()}</div>`;
+  t.onchange = e => { const s = e.target.closest('[data-sortuj]'); if (s) { Pamiec.set('sort_nieob', s.value); rysujWynikiNieob(); } };
   t.onclick = async e => {
     const b = e.target.closest('[data-a="wyslij-email"]');
     if (!b) return;
-    const ok = await potwierdz({ tytul: 'Wysłać teraz e-mail do sekretariatu?', tresc: 'Pójdą zgłoszenia, które jeszcze nie zostały wysłane (nieobecności dłuższe niż próg z ustawień).', tak: 'Wyślij', ikona: false });
+    const ok = await potwierdz({ tytul: 'Wysłać teraz e-mail do sekretariatu?', tresc: 'Pójdą zgłoszenia, które jeszcze nie zostały wysłane.', tak: 'Wyślij', ikona: false });
     if (!ok) return;
     b.disabled = true;
     try {
@@ -4345,29 +4463,46 @@ function rysujWynikiNieob() {
   if (s.blad && !s.dane) { el.innerHTML = '<div class="karta pusto" style="color:var(--late)">' + esc(s.blad) + '</div>'; return; }
   if (!s.dane) { el.innerHTML = ladowanieKarta(); return; }
   const d = s.dane, em = d.email;
-  const otwarte = d.wpisy.filter(x => x.wrocil === null);
-  const zamkn = d.wpisy.filter(x => x.wrocil !== null);
-  const czeka = new Set(em.oczekuje.map(x => x.u + '|' + x.p));
+  const tryb = sortowanieListy('nieob', 'czas');
+  const otwarte = posortujWiersze(d.wpisy.filter(x => x.wrocil === null), tryb);
+  const zamkn = posortujWiersze(d.wpisy.filter(x => x.wrocil !== null), tryb);
+  const czeka = new Map(em.oczekuje.map(x => [x.u + '|' + x.p, x]));
+  const dzis = ymd(teraz());
   const opisEmail = x => {
     if (x.email) return esc(x.email);
-    if (czeka.has(x.u + '|' + x.p)) return '<span class="amb-zn">' + (em.adres.length ? 'czeka na wysyłkę' : 'do wypisu') + '</span>';
-    return '<span class="szary">' + (x.wrocil !== null ? 'wrócił' : (/^\d{4}-/.test(x.wypis) ? 'za późno na wypis' : '—')) + '</span>';
+    if (czeka.has(x.u + '|' + x.p) && x.wrocil === null) return '<span class="amb-zn">' + (em.adres.length ? 'czeka na wysyłkę' : 'do wypisu') + '</span>';
+    if (x.wrocil !== null) return '<span class="szary">wrócił</span>';
+    if (x.po === 0) return '<span class="szary">bez posiłków</span>';
+    return '<span class="szary">' + (/^\d{4}-/.test(x.wypis) ? 'za późno na wypis' : '—') + '</span>';
   };
-  const wiersz = x => `<tr class="${x.wrocil === null && x.powrot && x.powrot < ymd(teraz()) ? 'w-LATE' : ''}"><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${esc(x.r)}</td>
+  /** Wypis z posiłków: dla „do wypisu” – data aktualna (najbliższa kolacja, którą jeszcze da się odwołać). */
+  const opisWypisuW = x => {
+    const c = x.wrocil === null ? czeka.get(x.u + '|' + x.p) : null;
+    if (c && c.wypisOd) return '<b style="color:var(--akcent2)">od kolacji ' + esc(opisDniaKr(c.wypisOd)) + '</b>';
+    if (/^\d{4}-/.test(x.wypis)) return '<span class="szary">od kolacji ' + esc(opisDniaKr(x.wypis)) + '</span>';
+    return esc(x.wypis);
+  };
+  /** Zgł. 13: czerwone tylko wtedy, gdy dzień powrotu wpisał wychowawca, a uczeń jeszcze nie wrócił. */
+  const poTerminie = x => {
+    if (x.wrocil !== null || !x.powrot || x.powrot >= dzis) return false;
+    const u = x.id ? Stan.poId.get(Number(x.id)) : null;
+    return x.pz !== undefined ? !!x.pz : !!(u && u.s === 'HOME' && u.pz);
+  };
+  const wiersz = x => `<tr class="${poTerminie(x) ? 'w-LATE' : ''}"><td class="uczen-nazwa">${esc(x.u)}</td><td>${pok(x.p)}</td><td>${grp(grupaWiersza(x))}</td><td>${esc(x.r)}</td>
     <td style="white-space:nowrap">${x.zgl ? esc(opisDniaKr(ymd(x.zgl)) + ', ' + godz(x.zgl)) : ''}</td>
-    <td style="white-space:nowrap">${x.wrocil !== null ? '<span class="ok-zn">✓ ' + esc(kiedy(x.wrocil)) + '</span><div class="szary">plan: ' + esc(x.powrot ? opisDniaKr(x.powrot) : '—') + '</div>' : '<b>' + (x.powrot ? esc(opisPowrotuKr(x.powrot)) : '—') + '</b>'}</td><td class="num">${x.dni}</td>
-    <td>${/^\d{4}-/.test(x.wypis) ? '<b style="color:var(--akcent2)">' + esc(opisDniaKr(x.wypis)) + '</b>' : esc(x.wypis)}</td><td class="tylko-szeroki">${esc(x.potw)}</td><td class="tylko-szeroki">${esc(x.powod)}</td>
+    <td style="white-space:nowrap">${x.wrocil !== null ? '<span class="ok-zn">✓ ' + esc(kiedy(x.wrocil)) + '</span><div class="szary">plan: ' + esc(x.powrot ? opisDniaKr(x.powrot) : '—') + '</div>' : '<b>' + (x.powrot ? esc(opisPowrotuKr(x.powrot)) : '—') + '</b>'}</td><td class="num">${x.dni || '—'}</td>
+    <td>${opisWypisuW(x)}</td><td class="tylko-szeroki">${esc(x.potw)}</td><td class="tylko-szeroki">${esc(x.powod)}</td>
     <td>${opisEmail(x)}</td></tr>`;
-  const naglowek = '<thead><tr><th>Uczeń</th><th>Pokój</th><th>Rodzaj</th><th>Wyjazd</th><th>Powrót</th><th class="num">Dni</th><th>Wypis z posiłków od</th><th class="tylko-szeroki">Potwierdzenie</th><th class="tylko-szeroki">Powód</th><th>Sekretariat</th></tr></thead>';
+  const naglowek = '<thead><tr><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Rodzaj</th><th>Wyjazd</th><th>Powrót</th><th class="num">Dni</th><th>Wypis z posiłków</th><th class="tylko-szeroki">Potwierdzenie</th><th class="tylko-szeroki">Powód</th><th>Sekretariat</th></tr></thead>';
   el.innerHTML = `<div class="stos">
-      <div><h2 style="margin:0">Nieobecności w dni nauki</h2><p class="szary" style="margin:2px 0 0">Wyjazdy, przy których uczeń opuszcza dni nauki. Nieobecności dłuższe niż ${em.prog} dni – liczone razem z sobotą i niedzielą – sekretariat sprawdza w arkuszu, w karcie „Nieobecności”, i wypisuje ucznia z posiłków najwcześniej na pojutrze (gdy pojutrze to sobota lub niedziela – od poniedziałku; w poniedziałek pierwszy posiłek to kolacja).</p></div>
+      <div class="naglowek-karty" style="margin:0"><h2 style="margin:0">Nieobecności w dni nauki</h2>${wyborSortowania('nieob', ['czas', 'kolejność wyjazdów'])}</div>
       <div class="karta"><div class="email-pasek"><h2>${ikona('mail')} ${em.adres.length ? 'E-mail do sekretariatu' : 'Sekretariat – wypis z posiłków'}</h2>
       ${em.adres.length ? `<dl class="ustawienia-lista"><dt>Adres</dt><dd>${esc(em.adres.join(', '))}</dd><dt>Wysyłka</dt><dd>${em.godzina !== null ? 'codziennie ok. ' + esc(godzMin(em.godzina)) + ' – tylko gdy są nowe zgłoszenia' : 'nie ustawiono godziny'}</dd>
-          <dt>Ostatnio</dt><dd>${em.ostatni ? esc(dataGodz(em.ostatni)) : 'jeszcze nie wysłano'}</dd><dt>Czeka</dt><dd>${em.oczekuje.length ? esc(em.oczekuje.map(x => x.u + ' (wypis od ' + opisDniaKr(x.wypisOd) + ')').join(', ')) : 'nic'}</dd></dl>
+          <dt>Ostatnio</dt><dd>${em.ostatni ? esc(dataGodz(em.ostatni)) : 'jeszcze nie wysłano'}</dd><dt>Czeka</dt><dd>${em.oczekuje.length ? esc(em.oczekuje.map(x => x.u + ' (od kolacji ' + opisDniaKr(x.wypisOd) + ')').join(', ')) : 'nic'}</dd></dl>
           <button class="przycisk drugi" data-a="wyslij-email" ${em.oczekuje.length ? '' : 'disabled'}>${ikona('mail')} Wyślij teraz</button>`
-        : `<div class="ramka-info" style="flex:1;min-width:260px">Sekretariat sprawdza wypisy w arkuszu „Internat – obecność”, w karcie <b>Nieobecności</b>: do zrobienia są wiersze z datą w kolumnie „Wypis z posiłków od” i pustą kolumną „Sekretariat” (zaznaczone na żółto). Po wypisaniu sekretariat wpisuje tam „wypisano”.<br>${em.oczekuje.length ? 'Do wypisu teraz: <b>' + esc(em.oczekuje.map(x => x.u + ' (od ' + opisDniaKr(x.wypisOd) + ')').join(', ')) + '</b>.' : 'Teraz nie ma nikogo do wypisu.'}</div>`}</div></div>
+        : `<div class="ramka-info" style="flex:1;min-width:260px">Uczniowie do wypisu z posiłków są zaznaczeni na żółto.</div>`}</div></div>
       <div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8fafc">Teraz nieobecni (${otwarte.length})</div>
-        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela">${naglowek}<tbody>${otwarte.length ? otwarte.map(wiersz).join('') : '<tr><td colspan="10" class="pusto">Nikt nie jest teraz nieobecny w dni nauki.</td></tr>'}</tbody></table></div></div>
+        <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela">${naglowek}<tbody>${otwarte.length ? otwarte.map(wiersz).join('') : '<tr><td colspan="11" class="pusto">Nikt nie jest teraz nieobecny w dni nauki.</td></tr>'}</tbody></table></div></div>
       ${zamkn.length ? `<div class="karta" style="padding:0;overflow:hidden"><div style="padding:12px 16px;font-weight:800;background:#f8fafc">Wrócili (ostatnie 30 dni)</div>
         <div class="tabela-opak plaska" style="border:0;border-radius:0"><table class="tabela">${naglowek}<tbody>${zamkn.map(wiersz).join('')}</tbody></table></div></div>` : ''}
     </div>`;
@@ -4383,7 +4518,7 @@ function rysujHistorie() {
   t.innerHTML = `<div class="karta" style="margin-bottom:16px"><form id="f-hist" class="formularz-historii">
       <div><label for="h-od">Od</label><input type="date" id="h-od" value="${h.od}"></div>
       <div><label for="h-do">Do</label><input type="date" id="h-do" value="${h.do}"></div>
-      <div><label for="h-uczen">Uczeń</label><select id="h-uczen"><option value="">Wszyscy uczniowie</option>${uczniowie.map(u => `<option value="${u.id}" ${String(u.id) === String(h.id) ? 'selected' : ''}>${esc(imieNazwisko(u))} · pokój ${esc(u.p)}</option>`).join('')}</select></div>
+      <div><label for="h-uczen">Uczeń</label><select id="h-uczen"><option value="">Wszyscy uczniowie</option>${uczniowie.map(u => `<option value="${u.id}" ${String(u.id) === String(h.id) ? 'selected' : ''}>${esc(imieNazwisko(u))} · pokój ${esc(u.p)}${u.g ? ' · ' + esc(nazwaGrupy(u.g).toLowerCase()) : ''}</option>`).join('')}</select></div>
       <div><label for="h-rodzaj">Rodzaj</label><select id="h-rodzaj">
         ${[['', 'Wszystkie wpisy'], ['WYJSCIE', 'Wyjścia'], ['WEJSCIE', 'Powroty'], ['DOM', 'Wyjazdy do domu'], ['MOJ', 'Mój internat (klucze, rzeczy, weekend)'], ['SPOZNIENIA', 'Tylko spóźnienia'], ['NOTATKA', 'Notatki']].map(o => `<option value="${o[0]}" ${o[0] === h.rodzaj ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></div>
       <div><button class="przycisk" type="submit">Pokaż</button></div></form>
@@ -4426,7 +4561,7 @@ async function zaladujHistorie() {
     if (Stan.zakladka === 'historia') rysujWynikiHistorii();
   }
 }
-const CHIP_CZYNNOSCI = { 'Wyjście': 'OUT', 'Powrót': 'IN', 'Wyjazd do domu': 'HOME', 'Wyjazd poza weekendem': 'HOME', 'Notatka': 'NOTA' };
+const CHIP_CZYNNOSCI = { 'Wyjście': 'OUT', 'Powrót': 'IN', 'Wyjazd do domu': 'HOME', 'Wyjazd poza weekendem': 'HOME', 'Dzień powrotu': 'HOME', 'Notatka': 'NOTA' };
 function rysujWynikiHistorii() {
   const el = $('#h-wyniki');
   if (!el) return;
@@ -4434,7 +4569,7 @@ function rysujWynikiHistorii() {
   if (h.laduje) { el.innerHTML = '<div class="karta pusto">Pobieranie rejestru…</div>'; return; }
   if (h.blad) { el.innerHTML = '<div class="karta pusto" style="color:var(--late)">' + esc(h.blad) + '</div>'; return; }
   if (!h.wpisy) { el.innerHTML = ''; return; }
-  const w = h.wpisy;
+  const w = posortujWiersze(h.wpisy, sortowanieListy('hist', 'czas'));
   const licz = f => w.filter(f).length;
   const sp = w.filter(x => x.sp > 0);
   const suma = sp.reduce((s, x) => s + x.sp, 0);
@@ -4444,30 +4579,33 @@ function rysujWynikiHistorii() {
       <div class="podsumowanie"><span class="chip neutral">Wpisów: ${w.length}</span><span class="chip s-OUT">Wyjścia: ${licz(x => x.a === 'Wyjście')}</span>
       <span class="chip s-IN">Powroty: ${licz(x => x.a === 'Powrót')}</span><span class="chip s-HOME">Wyjazdy do domu: ${licz(x => x.a.indexOf('Wyjazd') === 0)}</span>
       <span class="chip s-MOJ">Mój internat: ${licz(x => x.r === 'Mój internat')}</span>
-      <span class="chip s-LATE">Po zgłoszonej godzinie: ${sp.length}${sp.length ? ' (łącznie ' + esc(czasTrwania(suma)) + ')' : ''}</span>${licz(x => x.a === 'Notatka') ? '<span class="chip s-NOTA">Notatki: ' + licz(x => x.a === 'Notatka') + '</span>' : ''}</div></div>
-      <span class="przyciski"><button class="przycisk drugi maly" data-a="h-excel" ${w.length ? '' : 'disabled'}>${ikona('pobierz')} Pobierz do Excela</button>
+      <span class="chip s-LATE">Spóźnienia: ${sp.length}${sp.length ? ' (łącznie ' + esc(czasTrwania(suma)) + ')' : ''}</span>${licz(x => x.a === 'Notatka') ? '<span class="chip s-NOTA">Notatki: ' + licz(x => x.a === 'Notatka') + '</span>' : ''}</div></div>
+      <span class="przyciski">${wyborSortowania('hist', ['czas', 'od najnowszych'])}<button class="przycisk drugi maly" data-a="h-excel" ${w.length ? '' : 'disabled'}>${ikona('pobierz')} Pobierz do Excela</button>
       <button class="przycisk drugi maly" data-a="h-drukuj" ${w.length ? '' : 'disabled'}>${ikona('drukuj')} Drukuj</button></span></div>
     ${h.obciete ? '<p class="szary">Pokazano pierwsze 5000 wpisów – zawęź zakres dat.</p>' : ''}
-    <div class="tabela-opak"><table class="tabela"><thead><tr><th>Data i godzina</th><th>Uczeń</th><th>Pokój</th><th>Czynność</th><th>Szczegóły</th><th class="tylko-szeroki">Planowany powrót</th><th class="tylko-szeroki">Zgoda</th><th class="tylko-szeroki">Podpis</th></tr></thead><tbody>
-    ${w.length ? w.map(x => `<tr><td style="white-space:nowrap">${esc(dataGodz(x.t))}</td><td><div class="uczen-nazwa">${esc(x.u)}</div></td><td>${pok(x.p)}</td>
+    <div class="tabela-opak"><table class="tabela"><thead><tr><th>Data i godzina</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Czynność</th><th>Szczegóły</th><th class="tylko-szeroki">Planowany powrót</th><th class="tylko-szeroki">Zgoda</th><th class="tylko-szeroki">Podpis</th></tr></thead><tbody>
+    ${w.length ? w.map(x => `<tr><td style="white-space:nowrap">${esc(dataGodz(x.t))}</td><td><div class="uczen-nazwa">${esc(x.u)}</div></td><td>${pok(x.p)}</td><td>${grp(grupaWiersza(x))}</td>
       <td><span class="chip ${CHIP_CZYNNOSCI[x.a] ? 's-' + CHIP_CZYNNOSCI[x.a] : 's-MOJ'}">${esc(x.a)}</span></td>
       <td>${esc(x.sz)}${x.sp > 0 ? ' <span class="amb-zn">' + esc(czasTrwania(x.sp)) + ' po czasie</span>' : ''}${x.uw ? '<div class="szary">' + esc(x.uw) + '</div>' : ''}</td>
       <td class="tylko-szeroki">${esc(x.pw)}</td><td class="tylko-szeroki">${esc(x.zg)}</td>
-      <td class="tylko-szeroki szary">${esc([x.pd, x.urz].filter((v, i, a) => v && a.indexOf(v) === i).join(' · '))}</td></tr>`).join('') : '<tr><td colspan="8" class="pusto">Brak wpisów w wybranym okresie.</td></tr>'}</tbody></table></div>`;
+      <td class="tylko-szeroki szary">${esc([x.pd, x.urz].filter((v, i, a) => v && a.indexOf(v) === i && !(i === 1 && /^panel wychowawcy/i.test(x.pd || '') && /^panel wychowawcy$/i.test(v))).join(' · '))}</td></tr>`).join('') : '<tr><td colspan="9" class="pusto">Brak wpisów w wybranym okresie.</td></tr>'}</tbody></table></div>`;
+  const so = el.querySelector('[data-sortuj]');
+  if (so) so.addEventListener('change', () => { Pamiec.set('sort_hist', so.value); rysujWynikiHistorii(); });
   const ex = el.querySelector('[data-a="h-excel"]');
   if (ex) ex.addEventListener('click', eksportujHistorie);
   const dr = el.querySelector('[data-a="h-drukuj"]');
   if (dr) dr.addEventListener('click', () => {
     drukuj(`<h1>${esc(Stan.nazwa)} – rejestr</h1><div class="meta">Zakres: ${zakres} · wpisów: ${w.length} · wydrukowano ${esc(dataGodz(teraz()))}</div>
-      <table><thead><tr><th>Data i godzina</th><th>Uczeń</th><th>Pokój</th><th>Czynność</th><th>Szczegóły</th><th>Plan. powrót</th><th>Zgoda</th><th>Spóźn.</th></tr></thead><tbody>
-      ${w.map(x => `<tr><td>${esc(dataGodz(x.t))}</td><td>${esc(x.u)}</td><td>${esc(x.p)}</td><td>${esc(x.a)}</td><td>${esc(x.sz)}</td><td>${esc(x.pw)}</td><td>${esc(x.zg)}</td><td>${x.sp > 0 ? esc(czasTrwania(x.sp)) : ''}</td></tr>`).join('')}</tbody></table>`);
+      <table><thead><tr><th>Data i godzina</th><th>Uczeń</th><th>Pokój</th><th>Grupa</th><th>Czynność</th><th>Szczegóły</th><th>Plan. powrót</th><th>Zgoda</th><th>Spóźn.</th></tr></thead><tbody>
+      ${w.map(x => `<tr><td>${esc(dataGodz(x.t))}</td><td>${esc(x.u)}</td><td>${esc(x.p)}</td><td>${esc(nazwaGrupy(grupaWiersza(x)))}</td><td>${esc(x.a)}</td><td>${esc(x.sz)}</td><td>${esc(x.pw)}</td><td>${esc(x.zg)}</td><td>${x.sp > 0 ? esc(czasTrwania(x.sp)) : ''}</td></tr>`).join('')}</tbody></table>`);
   });
 }
 function eksportujHistorie() {
   const h = Stan.hist;
-  const wiersze = [['Data i godzina', 'Uczeń', 'Pokój', 'Rodzaj', 'Czynność', 'Szczegóły', 'Planowany powrót', 'Zgoda', 'Spóźnienie (min)', 'Podpis', 'Uwagi', 'Urządzenie']];
-  h.wpisy.slice().reverse().forEach(x => wiersze.push([{ data: x.t }, x.u, x.p, x.r, x.a, x.sz, x.pw, x.zg, x.sp > 0 ? x.sp : '', x.pd, x.uw, x.urz]));
-  const blob = zbudujXlsx('Rejestr', wiersze, [18, 22, 8, 16, 20, 36, 18, 26, 14, 24, 40, 22]);
+  const wiersze = [['Data i godzina', 'Uczeń', 'Pokój', 'Grupa', 'Rodzaj', 'Czynność', 'Szczegóły', 'Planowany powrót', 'Zgoda', 'Spóźnienie (min)', 'Podpis', 'Uwagi', 'Urządzenie']];
+  const tryb = sortowanieListy('hist', 'czas');
+  posortujWiersze(tryb === 'czas' ? h.wpisy.slice().reverse() : h.wpisy, tryb).forEach(x => wiersze.push([{ data: x.t }, x.u, x.p, nazwaGrupy(grupaWiersza(x)), x.r, x.a, x.sz, x.pw, x.zg, x.sp > 0 ? x.sp : '', x.pd, x.uw, x.urz]));
+  const blob = zbudujXlsx('Rejestr', wiersze, [18, 22, 8, 10, 16, 20, 36, 18, 26, 14, 24, 40, 22]);
   pobierzPlik(blob, 'rejestr_' + h.od + (h.do !== h.od ? '_' + h.do : '') + '.xlsx');
 }
 
@@ -4484,12 +4622,12 @@ function rysujUczniow() {
         <button class="przycisk drugi" data-a="qr-druk">${ikona('drukuj')} Drukuj karty (A4)</button></span></div>
       <p class="szary">Każdy uczeń dostaje swój obrazek z kodem (np. przez e-dziennik lub e-mail), zapisuje go w galerii telefonu i pokazuje przy drzwiach.
         Można też wydrukować karty i rozdać je uczniom bez telefonu. Kod nie zawiera danych osobowych – tylko losowy identyfikator.</p>
-      <input type="search" id="qr-szukaj" placeholder="Szukaj ucznia…" aria-label="Szukaj ucznia">
+      <div class="narzedzia" style="margin:0"><input type="search" id="qr-szukaj" placeholder="Szukaj ucznia…" aria-label="Szukaj ucznia">${wyborSortowania('qr', ['karty', 'klasa i pokój'])}</div>
       <div class="siatka-qr" id="siatka-qr"></div>
     </div>
     <div class="karta">
       <h2>Dodaj uczniów z Excela</h2>
-      <p class="szary">Zaznacz w Excelu kolumny <b>Nazwisko, Imię, Klasa, Pokój</b> (razem z nagłówkami), skopiuj (Ctrl+C) i wklej poniżej (Ctrl+V). Możesz też wybrać plik .xlsx lub .csv.
+      <p class="szary">Zaznacz w Excelu kolumny <b>Nazwisko, Imię, Klasa, Pokój</b> (opcjonalnie <b>Grupa</b> i <b>Posiłki</b> – TAK/NIE) razem z nagłówkami, skopiuj (Ctrl+C) i wklej poniżej (Ctrl+V). Możesz też wybrać plik .xlsx lub .csv.
         Osoby, które już są na liście (to samo imię, nazwisko, klasa i pokój), zostaną pominięte.</p>
       <textarea id="imp-tekst" placeholder="Nazwisko&#9;Imię&#9;Klasa&#9;Pokój&#10;Kowalski&#9;Jan&#9;2B&#9;14"></textarea>
       <div class="przyciski" style="margin-top:10px">
@@ -4516,6 +4654,7 @@ function rysujUczniow() {
     </div></div>`;
   rysujQr($('#qr-urzadzenie'), link, 4, 2);
   $('#qr-szukaj').addEventListener('input', odswiezSiatkeQr);
+  t.querySelector('[data-sortuj="qr"]').addEventListener('change', e => { Pamiec.set('sort_qr', e.target.value); Stan.podpisQr = null; odswiezSiatkeQr(); });
   $('#imp-plik').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) wczytajPlikImportu(f); e.target.value = ''; });
   t.onclick = obsluzKlikUczniow;
   Stan.podpisQr = null;
@@ -4537,13 +4676,17 @@ function obsluzKlikUczniow(e) {
   else if (a === 'qr-druk') drukujKartyQr();
   else if (a === 'qr-png') { const u = Stan.poId.get(Number(b.dataset.id)); if (u) kartaQr(u).toBlob(blob => pobierzPlik(blob, nazwaPlikuQr(u))); }
   else if (a === 'imp-podglad') podgladImportu(parsujTekstTabeli($('#imp-tekst').value));
-  else if (a === 'imp-szablon') pobierzPlik(zbudujXlsx('Uczniowie', [['Nazwisko', 'Imię', 'Klasa', 'Pokój']], [22, 18, 10, 10]), 'lista_uczniow_szablon.xlsx');
+  else if (a === 'imp-szablon') pobierzPlik(zbudujXlsx('Uczniowie', [['Nazwisko', 'Imię', 'Klasa', 'Pokój', 'Grupa', 'Posiłki']], [22, 18, 10, 10, 10, 10]), 'lista_uczniow_szablon.xlsx');
   else if (a === 'imp-dodaj') wykonajImport(b);
   else if (a === 'kopiuj-link') kopiuj(linkDlaUrzadzenia());
 }
-/** Kolejność kart z kodami: klasa, pokój, nazwisko, imię (łatwo rozdać kody pokojami). */
-function kolejnoscKart(a, b) { return porownaj(a.k, b.k) || porownaj(a.p, b.p) || porownaj(a.n, b.n) || porownaj(a.i, b.i); }
-function opisKlasaPokoj(u) { return [u.k ? 'klasa ' + u.k : '', u.p ? 'pokój ' + u.p : ''].filter(Boolean).join(' · '); }
+/** Kolejność kart z kodami: klasa, pokój, nazwisko, imię (łatwo rozdać kody pokojami) – albo wybrana nad listą. */
+function kolejnoscKart(a, b) {
+  const tryb = sortowanieListy('qr', 'karty');
+  if (tryb !== 'karty') return porownajWiersze({ u: a.n + ' ' + a.i, p: a.p, g: a.g }, { u: b.n + ' ' + b.i, p: b.p, g: b.g }, tryb);
+  return porownaj(a.k, b.k) || porownaj(a.p, b.p) || porownaj(a.n, b.n) || porownaj(a.i, b.i);
+}
+function opisKlasaPokoj(u) { return [u.k ? 'klasa ' + u.k : '', u.p ? 'pokój ' + u.p : '', u.g ? nazwaGrupy(u.g).toLowerCase() : ''].filter(Boolean).join(' · '); }
 function odswiezSiatkeQr() {
   const el = $('#siatka-qr');
   if (!el) return;
@@ -4551,7 +4694,7 @@ function odswiezSiatkeQr() {
   if (licz) licz.textContent = Stan.uczniowie.length;
   const qEl = $('#qr-szukaj');
   const q = norm(qEl ? qEl.value : '');
-  const podpis = q + '|' + Stan.uczniowie.map(u => u.id + ':' + u.kod + ':' + u.n + ':' + u.i + ':' + u.k + ':' + u.p).join(',');
+  const podpis = q + '|' + Stan.uczniowie.map(u => u.id + ':' + u.kod + ':' + u.n + ':' + u.i + ':' + u.k + ':' + u.p + ':' + u.g).join(',');
   if (podpis === Stan.podpisQr) return;          // nic się nie zmieniło – nie rysuj od nowa
   Stan.podpisQr = podpis;
   const lista = Stan.uczniowie.filter(u => !q || norm(u.n + ' ' + u.i + ' ' + u.k + ' ' + u.p).indexOf(q) >= 0)
@@ -4668,7 +4811,7 @@ function wierszeNaUczniow(wiersze) {
     const iN = n.findIndex(x => x.indexOf('nazwisko') === 0 && x.indexOf('imie') < 0);
     const iI = n.findIndex(x => x.indexOf('imie') === 0 && x.indexOf('nazwisko') < 0);
     if (iN >= 0 && iI >= 0) {
-      mapa = { n: iN, i: iI, k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0) };
+      mapa = { n: iN, i: iI, k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0), g: n.findIndex(x => x.indexOf('grupa') === 0), po: n.findIndex(x => x.indexOf('posilki') === 0) };
       start = i + 1;
       break;
     }
@@ -4680,7 +4823,7 @@ function wierszeNaUczniow(wiersze) {
       const n = wiersze[i].map(norm);
       const iNI = n.findIndex(x => x.indexOf('nazwisko') >= 0 && x.indexOf('imie') >= 0);
       if (iNI >= 0) {
-        mapa = { ni: iNI, imieNajpierw: n[iNI].indexOf('imie') < n[iNI].indexOf('nazwisko'), k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0) };
+        mapa = { ni: iNI, imieNajpierw: n[iNI].indexOf('imie') < n[iNI].indexOf('nazwisko'), k: n.findIndex(x => x.indexOf('klasa') === 0), p: n.findIndex(x => x.indexOf('pokoj') === 0 || x.indexOf('nr pokoju') === 0), g: n.findIndex(x => x.indexOf('grupa') === 0), po: n.findIndex(x => x.indexOf('posilki') === 0) };
         start = i + 1;
         uwagi.push('Imię i nazwisko są w jednej kolumnie – rozdzielono je automatycznie. Sprawdź podgląd (osoby z dwoma nazwiskami mogą wymagać poprawki).');
       }
@@ -4708,6 +4851,8 @@ function wierszeNaUczniow(wiersze) {
       u = { nazwisko: r[mapa.n] || '', imie: r[mapa.i] || '', klasa: mapa.k >= 0 ? (r[mapa.k] || '') : '', pokoj: mapa.p >= 0 ? (r[mapa.p] || '') : '' };
     }
     if (!u.nazwisko && !u.imie) continue;
+    u.grupa = mapa.g >= 0 ? String(r[mapa.g] || '').replace(/^\s*gr(upa)?\.?\s*/i, '').trim() : '';
+    u.posilki = mapa.po >= 0 ? (/^(tak|t|x|1|yes)$/i.test(String(r[mapa.po] || '').trim()) ? 'TAK' : 'NIE') : '';
     uczniowie.push(u);
   }
   return { uczniowie, uwagi };
@@ -4743,10 +4888,11 @@ function podgladImportu(wiersze) {
     widziane.add(k);
     if (u._stan === 'nowy') nowi++;
   });
-  Stan.import = uczniowie.filter(u => u._stan === 'nowy').map(u => ({ nazwisko: u.nazwisko, imie: u.imie, klasa: u.klasa, pokoj: u.pokoj }));
+  Stan.import = uczniowie.filter(u => u._stan === 'nowy').map(u => ({ nazwisko: u.nazwisko, imie: u.imie, klasa: u.klasa, pokoj: u.pokoj, grupa: u.grupa || '', posilki: u.posilki || '' }));
+  const zGr = uczniowie.some(u => u.grupa), zPo = uczniowie.some(u => u.posilki);
   wynik.innerHTML = `${uwagi.map(x => '<p class="szary">' + ikona('uwaga') + ' ' + esc(x) + '</p>').join('')}
-    <div class="podglad-importu"><table class="tabela"><thead><tr><th>Nazwisko</th><th>Imię</th><th>Klasa</th><th>Pokój</th><th></th></tr></thead><tbody>
-    ${uczniowie.map(u => `<tr class="${u._stan === 'zly' ? 'zly' : u._stan === 'istnieje' ? 'istnieje' : ''}"><td>${esc(u.nazwisko)}</td><td>${esc(u.imie)}</td><td>${esc(u.klasa)}</td><td>${esc(u.pokoj)}</td>
+    <div class="podglad-importu"><table class="tabela"><thead><tr><th>Nazwisko</th><th>Imię</th><th>Klasa</th><th>Pokój</th>${zGr ? '<th>Grupa</th>' : ''}${zPo ? '<th>Posiłki</th>' : ''}<th></th></tr></thead><tbody>
+    ${uczniowie.map(u => `<tr class="${u._stan === 'zly' ? 'zly' : u._stan === 'istnieje' ? 'istnieje' : ''}"><td>${esc(u.nazwisko)}</td><td>${esc(u.imie)}</td><td>${esc(u.klasa)}</td><td>${esc(u.pokoj)}</td>${zGr ? '<td>' + esc(u.grupa) + '</td>' : ''}${zPo ? '<td>' + esc(u.posilki) + '</td>' : ''}
       <td>${u._stan === 'nowy' ? '<span class="chip s-IN">nowy</span>' : u._stan === 'istnieje' ? '<span class="szary">już jest</span>' : '<span class="chip s-LATE">brak imienia lub nazwiska</span>'}</td></tr>`).join('')}</tbody></table></div>
     <div class="przyciski"><button class="przycisk" data-a="imp-dodaj" ${nowi ? '' : 'disabled'}>Dodaj ${nowi} ${nowi === 1 ? 'ucznia' : 'uczniów'}</button>
     <span class="szary">Pominięci: ${uczniowie.length - nowi}</span></div>`;
