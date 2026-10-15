@@ -134,20 +134,21 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .wielki small { font-size: clamp(.95rem, 1.7vw, 1.3rem); opacity: .95; }
 .wielki.k-wyj { background: var(--out-mocny); } .wielki.k-wr { background: var(--in-mocny); } .wielki.k-dom { background: var(--home-mocny); }
 .st-tresc.moj { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto; }
-.kafel { border-radius: 22px; background: var(--moj-mocny); color: #fff; display: flex; align-items: center; gap: 18px; padding: 16px 22px; text-align: left; border: 2px solid transparent; min-height: 0; }
+.kafel { border-radius: 22px; background: var(--moj-mocny); color: #fff; display: flex; align-items: center; gap: 18px; padding: clamp(8px, 2.2vh, 16px) 22px; text-align: left; border: 2px solid transparent; min-height: 0; }
 .kafel.jasny { background: #f3effc; color: #2e1d5c; border-color: #d7caf3; }
 .kafel .ik { width: clamp(52px, 6vw, 66px); height: clamp(52px, 6vw, 66px); border-radius: 16px; background: rgba(255, 255, 255, .2); display: flex; align-items: center; justify-content: center; flex: none; }
 .kafel .ik .ikona { width: 55%; height: 55%; }
 .kafel.jasny .ik { background: #e4dafc; color: var(--moj-mocny); }
 .kafel .tr { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.kafel b { font-size: clamp(1.35rem, 2.6vw, 2.05rem); font-weight: 800; line-height: 1.15; }
-.kafel .pod { font-size: clamp(.9rem, 1.4vw, 1.1rem); opacity: .92; }
-.kafel .ch { align-self: flex-start; background: rgba(255, 255, 255, .2); border-radius: 999px; padding: 3px 12px; font-weight: 800; font-size: clamp(.85rem, 1.3vw, 1rem); }
+.kafel b { font-size: clamp(1.25rem, min(2.6vw, 4.4vh), 2.05rem); font-weight: 800; line-height: 1.15; }
+.kafel .pod { font-size: clamp(.88rem, min(1.4vw, 2.5vh), 1.1rem); opacity: .92; }
+.kafel .ch { align-self: flex-start; background: rgba(255, 255, 255, .2); border-radius: 999px; padding: 2px 12px; font-weight: 800; font-size: clamp(.82rem, min(1.3vw, 2.3vh), 1rem); }
+.kafel .pod, .kafel .ch { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* jedna linia – treść mieści się w kafelku także na niższym ekranie */
 .kafel.jasny .ch { background: #e4dafc; color: #3b1f8a; }
 .kafel .ch.zajety { background: var(--nota-tlo); color: var(--nota); }
 .kafel .ch.zamkniete { background: rgba(0, 0, 0, .25); }
 .kafel > .ikona { width: 30px; height: 30px; opacity: .9; }
-.st-zasady { grid-column: 1 / -1; background: #2a2410; border: 1px solid #6b5a1a; color: #f5d77a; border-radius: 14px; padding: 10px 18px 12px; display: flex; flex-direction: column; gap: 6px; font-size: clamp(1rem, 1.7vw, 1.22rem); line-height: 1.3; }
+.st-zasady { grid-column: 1 / -1; background: #2a2410; border: 1px solid #6b5a1a; color: #f5d77a; border-radius: 14px; padding: clamp(6px, 1.4vh, 10px) 18px clamp(8px, 1.6vh, 12px); display: flex; flex-direction: column; gap: clamp(3px, .8vh, 6px); font-size: clamp(.92rem, min(1.7vw, 2.7vh), 1.22rem); line-height: 1.3; }
 .st-zasady .tyt { font-weight: 800; font-size: .78em; letter-spacing: .07em; text-transform: uppercase; color: #d9bf63; }
 .st-zasady .w { display: flex; align-items: center; gap: 12px; }
 .st-zasady .w .ikona { width: 1.45em; height: 1.45em; }
@@ -1753,7 +1754,7 @@ QRCode.createBytes = function(buffer, rsBlocks) {
 // Gdy jest wpisany, każde urządzenie od razu łączy się z serwerem. Puste = aplikacja zapyta o adres przy pierwszym uruchomieniu.
 const ADRES_SERWERA = 'https://script.google.com/macros/s/AKfycbztsxYwsqmiAg4l0KrRAgZWXLWaJw3Y5nYJTZ2NQr3BPOOqp1nCb5-UERSxlKbqhnM7/exec';
 
-const WERSJA = '2.3';
+const WERSJA = '2.3.1';
 const STREFA = 'Europe/Warsaw';
 const GRANICA_DOBY = 5 * 60;
 const JSQR_ZRODLA = ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js'];
@@ -2912,7 +2913,7 @@ function tresciMojInternat() {
   return kafel('weekend', 'lozko', 'Weekend w internacie', 'zapis na pobyt w weekend', chipWeekend, false) +
     kafel('pralnia', 'pralka', 'Pralnia', 'jeden klucz do pralni', chipPralnia, !!(pralnia && pralnia.ma)) +
     kafel('lodowki', 'lodowka', 'Lodówki', 'klucz tylko do lodówki Twojego pokoju', chipLod, false) +
-    kafel('aktywnosci', 'pad', 'Aktywności', esc(akt.map(r => malaLitera(r.nazwa)).join(', ') || 'brak rzeczy w ustawieniach'), chipAkt, false) +
+    kafel('aktywnosci', 'pad', 'Aktywności', akt.length ? 'gry i sprzęt do wypożyczenia' : 'brak rzeczy w ustawieniach', chipAkt, false) +
     zasadyMojInternat(po22);
 }
 /** Zgł. 2: trzy zasady, czytelnie; po godzinie wydawania pierwszy wiersz na czerwono. */
